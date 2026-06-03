@@ -1,0 +1,5000 @@
+[
+{
+"nome": "Abdominal Alternado com Rotacao",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-alternado-com-rotacao.gif"
+},
+{
+"nome": "Abdominal Alternando Pernas",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-alternando-pernas.gif"
+},
+{
+"nome": "Abdominal Banco",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-banco.gif"
+},
+{
+"nome": "Abdominal Banco Declinado Completo",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-banco-declinado-completo.gif"
+},
+{
+"nome": "Abdominal Bicleta",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdominal-bicleta.gif"
+},
+{
+"nome": "Abdominal Bola Flexao de Quadril",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-bola-flexao-de-quadril.gif"
+},
+{
+"nome": "Abdominal Borboleta",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-borboleta.gif"
+},
+{
+"nome": "Abdominal Carga Nos Pes",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-carga-nos-pes.gif"
+},
+{
+"nome": "Abdominal Completo",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-completo.gif"
+},
+{
+"nome": "Abdominal Completo Tocando os Pes",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-completo-tocando-os-pes.gif"
+},
+{
+"nome": "Abdominal Concentrado",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdominal-concentrado.gif"
+},
+{
+"nome": "Abdominal Curto Pernas Elevadas",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-curto-pernas-elevadas.gif"
+},
+{
+"nome": "Abdominal Declinado",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdominal-declinado.gif"
+},
+{
+"nome": "Abdominal Flog",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-flog.gif"
+},
+{
+"nome": "Abdominal Infra",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-infra.gif"
+},
+{
+"nome": "Abdominal Infra Apoiado",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-infra-apoiado.gif"
+},
+{
+"nome": "Abdominal Isometrico Alternando Pernas",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-isometrico-alternando-pernas.gif"
+},
+{
+"nome": "Abdominal Lateral",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-lateral.gif"
+},
+{
+"nome": "Abdominal Maquina",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-maquina.gif"
+},
+{
+"nome": "Abdominal Obliquo",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-obliquo.gif"
+},
+{
+"nome": "Abdominal Obliquo Pernas Extendidas",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-obliquo-pernas-extendidas.gif"
+},
+{
+"nome": "Abdominal Pegando a Bola",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdominal-pegando-a-bola.gif"
+},
+{
+"nome": "Abdominal Pernas Alternando",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-pernas-alternando.gif"
+},
+{
+"nome": "Abdominal Polia Alta",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-polia-alta.gif"
+},
+{
+"nome": "Abdominal Remador Pernas Extendidas",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-remador-pernas-extendidas.gif"
+},
+{
+"nome": "Abdominal Rolinho",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-rolinho.gif"
+},
+{
+"nome": "Abdominal Rolinho com Barra",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-rolinho-com-barra.gif"
+},
+{
+"nome": "Abdominal Tesoura",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-tesoura.gif"
+},
+{
+"nome": "Abdominal Tocando os Pes",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-tocando-os-pes.gif"
+},
+{
+"nome": "Abdominal com Carga",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdominal-com-carga.gif"
+},
+{
+"nome": "Abdominal com Flexao Lateral",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abs-com-flexao-lateral.gif"
+},
+{
+"nome": "Abdominal com Rotacao de Tronco",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdominal-com-rotacao-de-tronco.gif"
+},
+{
+"nome": "Ball Sit Up",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/ball-sit-up.gif"
+},
+{
+"nome": "Conventional Sit Up",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/conventional-sit-up.gif"
+},
+{
+"nome": "Crunch",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crunch.gif"
+},
+{
+"nome": "Crunch Floor",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crunch-floor.gif"
+},
+{
+"nome": "Crunch Pernas Elevadas",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crunch-pernas-elevadas.gif"
+},
+{
+"nome": "Crunch Reverso",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crunch-reverso.gif"
+},
+{
+"nome": "Crunch With Leg Raise",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crunch-with-leg-raise.gif"
+},
+{
+"nome": "Crunch com Carga",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crunch-com-carga.gif"
+},
+{
+"nome": "Dead Bug",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dead-bug.gif"
+},
+{
+"nome": "Flexao de Quadril Abdominal",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-de-quadril-abs.gif"
+},
+{
+"nome": "Frog Crunch",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/frog-crunch.gif"
+},
+{
+"nome": "Hanging Knee Raises",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hanging-knee-raises.gif"
+},
+{
+"nome": "Obliquo Banco",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/obliquo-banco.gif"
+},
+{
+"nome": "Obliquo Polia Baixa",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/obliquo-polia-baixa.gif"
+},
+{
+"nome": "Prancha",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/prancha.gif"
+},
+{
+"nome": "Prancha Dinamica Bola",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/prancha-dinamica-bola.gif"
+},
+{
+"nome": "Prancha Frente Tras",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/prancha-frente-tras.gif"
+},
+{
+"nome": "Prancha Lateral com Flexao Lateral",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/prancha-lateral-com-flexao-lateral.gif"
+},
+{
+"nome": "Prancha com Flexao Lateral de Quadril",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/prancha-com-flexao-lateral-de-quadril.gif"
+},
+{
+"nome": "Russian Twist",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/russian-twist.gif"
+},
+{
+"nome": "V Sit Ups",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/v-sit-ups.gif"
+},
+{
+"nome": "Weightedsitups",
+"grupo_muscular_principal": "abdomen",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/weightedsitups.gif"
+},
+{
+"nome": "Hiperextensao de Punho com Barra",
+"grupo_muscular_principal": "antebraco",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hiperextensao-de-punho-com-barra.gif"
+},
+{
+"nome": "Hiperextensao de Punho com Halteres",
+"grupo_muscular_principal": "antebraco",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hiperextensao-de-punho-com-halteres.gif"
+},
+{
+"nome": "Remo com Barra no Punho",
+"grupo_muscular_principal": "antebraco",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remo-com-barra-no-punho.gif"
+},
+{
+"nome": "Barbell Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-curl.gif"
+},
+{
+"nome": "Bayesian Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bayesian-curl.gif"
+},
+{
+"nome": "Bicep Curl Machine",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bicep-curl-machine.gif"
+},
+{
+"nome": "Biceps Concentrado Unilateral no Cross",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/biceps-concentrado-unilateral-no-cross.gif"
+},
+{
+"nome": "Biceps Polia Alta Dupla",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/biceps-polia-alta-dupla.gif"
+},
+{
+"nome": "Biceps Unilateral Cross",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/biceps-unilateral-cross.gif"
+},
+{
+"nome": "Biceps Unilateral Polia Alta Cross",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/biceps-unilateral-polia-alta-cross.gif"
+},
+{
+"nome": "Biceps Unilateral com Banco Scort no Cross",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/biceps-unilateral-com-banco-scort-no-cross.gif"
+},
+{
+"nome": "Cable Bicep Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-bicep-curl.gif"
+},
+{
+"nome": "Cable One Arm Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-one-arm-curl.gif"
+},
+{
+"nome": "Cable Preacher Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-preacher-curl.gif"
+},
+{
+"nome": "Cross Body Hammer Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cross-body-hammer-curl.gif"
+},
+{
+"nome": "Dumbbell Bicep Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-bicep-curl.gif"
+},
+{
+"nome": "Dumbbell Hammer Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-hammer-curl.gif"
+},
+{
+"nome": "Dumbbell Incline Hammer Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-incline-hammer-curl.gif"
+},
+{
+"nome": "Dumbbell Jefferson Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-jefferson-curl.gif"
+},
+{
+"nome": "Dumbbell Preacher Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-preacher-curl.gif"
+},
+{
+"nome": "Dumbbell Reverse Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-reverse-curl.gif"
+},
+{
+"nome": "Dumbbell Seated Zottman Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-seated-zottman-curl.gif"
+},
+{
+"nome": "Dumbbell Wrist Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-wrist-curl.gif"
+},
+{
+"nome": "Ez Bar Bicep Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/ez-bar-bicep-curl.gif"
+},
+{
+"nome": "Ez Bar Preacher Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/ez-bar-preacher-curl.gif"
+},
+{
+"nome": "Incline Dumbbell Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/incline-dumbbell-curl.gif"
+},
+{
+"nome": "Overhead Cable Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/overhead-cable-curl.gif"
+},
+{
+"nome": "Prone Incline Dumbbell Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/prone-incline-dumbbell-curl.gif"
+},
+{
+"nome": "Rosca Agachado",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-agachado.gif"
+},
+{
+"nome": "Rosca Alta Unilateral",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alta-unilateral.gif"
+},
+{
+"nome": "Rosca Alternada",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada.gif"
+},
+{
+"nome": "Rosca Alternada Aparelho Biarticular",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada-aparelho-biarticular.gif"
+},
+{
+"nome": "Rosca Alternada Maquina",
+"grupo_muscular_principal": "biceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada-maquina.gif"
+},
+{
+"nome": "Rosca Alternada com Giro",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada-com-giro.gif"
+},
+{
+"nome": "Rosca Alternada no Banco Inclinado",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada-no-banco-inclinado.gif"
+},
+{
+"nome": "Rosca Alternada pegada Neutra",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada-pegada-neutra.gif"
+},
+{
+"nome": "Rosca Alternada pegada Neutra Sentado no Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-alternada-pegada-neutra-sentado-no-banco.gif"
+},
+{
+"nome": "Rosca Apoio Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-apoio-banco.gif"
+},
+{
+"nome": "Rosca Apoio no Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-apoio-no-banco.gif"
+},
+{
+"nome": "Rosca Biceps Diagonal",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-biceps-diagonal.gif"
+},
+{
+"nome": "Rosca Biceps no Cabo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-biceps-no-cabo.gif"
+},
+{
+"nome": "Rosca Cabo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-cabo.gif"
+},
+{
+"nome": "Rosca Concentrada",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-concentrada.gif"
+},
+{
+"nome": "Rosca Concentrada Feminino",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-concentrada-feminino.gif"
+},
+{
+"nome": "Rosca Concentrada Masculino",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-concentrada-masculino.gif"
+},
+{
+"nome": "Rosca Consentrada Unilateral no Banco Declinado",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-consentrada-unilateral-no-banco-declinado.gif"
+},
+{
+"nome": "Rosca Deitado no Banco Inclinado",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-deitado-no-banco-inclinado.gif"
+},
+{
+"nome": "Rosca Dierata pegada Invertida Barra W",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-dierata-pegada-invertida-barra-w.gif"
+},
+{
+"nome": "Rosca Dierta pegada Aberta",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-dierta-pegada-aberta.gif"
+},
+{
+"nome": "Rosca Dierta pegada Fechada",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-dierta-pegada-fechada.gif"
+},
+{
+"nome": "Rosca Direta",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta.gif"
+},
+{
+"nome": "Rosca Direta Apaiada no Banco Barra W",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-apaiada-no-banco-barra-w.gif"
+},
+{
+"nome": "Rosca Direta Apoio Braquial",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-apoio-braquial.gif"
+},
+{
+"nome": "Rosca Direta Barra W",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-barra-w.gif"
+},
+{
+"nome": "Rosca Direta Barra W Sentado Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-barra-w-sentado-banco.gif"
+},
+{
+"nome": "Rosca Direta Barra pegada Fechada Sentado no Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-barra-pegada-fechada-sentado-no-banco.gif"
+},
+{
+"nome": "Rosca Direta Curta",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-curta.gif"
+},
+{
+"nome": "Rosca Direta Deitado no Banco Reto no Cross",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-deitado-no-banco-reto-no-cross.gif"
+},
+{
+"nome": "Rosca Direta no Banco Scort",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-no-banco-scort.gif"
+},
+{
+"nome": "Rosca Direta no Cross Barra W",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-no-cross-barra-w.gif"
+},
+{
+"nome": "Rosca Direta pegada Fechada Barra W",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-direta-pegada-fechada-barra-w.gif"
+},
+{
+"nome": "Rosca Inclinada no Cabo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-inclinada-no-cabo.gif"
+},
+{
+"nome": "Rosca Inversa",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-inversa.gif"
+},
+{
+"nome": "Rosca Inversa com Halteres",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-inversa-com-halteres.gif"
+},
+{
+"nome": "Rosca Inversa no Cabo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-inversa-no-cabo.gif"
+},
+{
+"nome": "Rosca Lateral",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-lateral.gif"
+},
+{
+"nome": "Rosca Lateral Polia Alta",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-lateral-polia-alta.gif"
+},
+{
+"nome": "Rosca Lateral no Cabo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-lateral-no-cabo.gif"
+},
+{
+"nome": "Rosca Martelo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-martelo.gif"
+},
+{
+"nome": "Rosca Martelo Alternada",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-martelo-alternada.gif"
+},
+{
+"nome": "Rosca Martelo Corda",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-martelo-corda.gif"
+},
+{
+"nome": "Rosca Martelo Scott",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-martelo-scott.gif"
+},
+{
+"nome": "Rosca Martelo Suporte Braquial",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-martelo-suporte-braquial.gif"
+},
+{
+"nome": "Rosca Neutra Unilateral no Banco Scort",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-neutra-unilateral-no-banco-scort.gif"
+},
+{
+"nome": "Rosca Neutra com Halteres",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-neutra-com-halteres.gif"
+},
+{
+"nome": "Rosca Neutra com Halteres Sentado no Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-neutra-com-halteres-sentado-no-banco.gif"
+},
+{
+"nome": "Rosca Neutra no Banco Scort Aparelho",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-neutra-no-banco-scort-aparelho.gif"
+},
+{
+"nome": "Rosca Punho",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho.gif"
+},
+{
+"nome": "Rosca Punho Invertida",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-invertida.gif"
+},
+{
+"nome": "Rosca Punho Invertida Apoio Antebraco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-invertida-apoio-antebraco.gif"
+},
+{
+"nome": "Rosca Punho Invertida com Halteres",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-invertida-com-halteres.gif"
+},
+{
+"nome": "Rosca Punho Martelo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-martelo.gif"
+},
+{
+"nome": "Rosca Punho Por Tras",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-por-tras.gif"
+},
+{
+"nome": "Rosca Punho Unilatera",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-unilatera.gif"
+},
+{
+"nome": "Rosca Punho com Anilha",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-com-anilha.gif"
+},
+{
+"nome": "Rosca Punho com Barra",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-punho-com-barra.gif"
+},
+{
+"nome": "Rosca Scott Alternada",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-alternada.gif"
+},
+{
+"nome": "Rosca Scott Barra Reta",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-barra-reta.gif"
+},
+{
+"nome": "Rosca Scott Martelo",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-martelo.gif"
+},
+{
+"nome": "Rosca Scott Martelo Unilateral",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-martelo-unilateral.gif"
+},
+{
+"nome": "Rosca Scott Unil com Halteres",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-unil-com-halteres.gif"
+},
+{
+"nome": "Rosca Scott com Halteres em Pe",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-com-halteres-em-pe.gif"
+},
+{
+"nome": "Rosca Scott de Pe",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-de-pe.gif"
+},
+{
+"nome": "Rosca Scott na Maquina",
+"grupo_muscular_principal": "biceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-scott-na-maquina.gif"
+},
+{
+"nome": "Rosca Unilateral Corda",
+"grupo_muscular_principal": "biceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-unilateral-corda.gif"
+},
+{
+"nome": "Rosca Unilateral com Halteres",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-unilateral-com-halteres.gif"
+},
+{
+"nome": "Rosca Unilateral com Halteres Sentado no Banco",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-unilateral-com-halteres-sentado-no-banco.gif"
+},
+{
+"nome": "Rosca Unilateral pegada Neutra com Halteres",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-unilateral-pegada-neutra-com-halteres.gif"
+},
+{
+"nome": "Rosca com Rotacao",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-com-rotacao.gif"
+},
+{
+"nome": "Rosca no Banco Scort Barra W",
+"grupo_muscular_principal": "biceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-no-banco-scort-barra-w.gif"
+},
+{
+"nome": "Rosca no Scort",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rosca-no-scort.gif"
+},
+{
+"nome": "Roscadireta Aberta",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/roscadireta-aberta.gif"
+},
+{
+"nome": "Wide Grip Ez Bar Curl",
+"grupo_muscular_principal": "biceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/wide-grip-ez-bar-curl.gif"
+},
+{
+"nome": "Back Extension",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/back-extension.gif"
+},
+{
+"nome": "Band Assisted Pull Up",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/band-assisted-pull-up.gif"
+},
+{
+"nome": "Banded Wide Grip Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/banded-wide-grip-row.gif"
+},
+{
+"nome": "Barbell Pullover",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-pullover.gif"
+},
+{
+"nome": "Barra Fixa Nuca",
+"grupo_muscular_principal": "costas",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-fixa-nuca.gif"
+},
+{
+"nome": "Barra Fixa pegada Aberta",
+"grupo_muscular_principal": "costas",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-fixa-pegada-aberta.gif"
+},
+{
+"nome": "Cable Seated Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-seated-row.gif"
+},
+{
+"nome": "Cable Wide Grip Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-wide-grip-row.gif"
+},
+{
+"nome": "Chin Ups",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/chin-ups.gif"
+},
+{
+"nome": "Dumbbell Back Extension",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-back-extension.gif"
+},
+{
+"nome": "Dumbbell Pullover",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-pullover.gif"
+},
+{
+"nome": "Eccentric Pull Up",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/eccentric-pull-up.gif"
+},
+{
+"nome": "Inverted Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/inverted-row.gif"
+},
+{
+"nome": "Kick Back Sentado com Halteres",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/kick-back-sentado-com-halteres.gif"
+},
+{
+"nome": "Landmine Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/landmine-row.gif"
+},
+{
+"nome": "Levantamento Terra",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/levantamento-terra.gif"
+},
+{
+"nome": "Levantamento Terra com Barra",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/levantamento-terra-com-barra.gif"
+},
+{
+"nome": "Levantamento Terra no Smith",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/levantamento-terra-no-smith.gif"
+},
+{
+"nome": "Pull Up",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pull-up.gif"
+},
+{
+"nome": "Pulldown com Corda",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulldown-com-corda.gif"
+},
+{
+"nome": "Pulldown1",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulldown1.gif"
+},
+{
+"nome": "Pullover Apoio Dorsal",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pullover-apoio-dorsal.gif"
+},
+{
+"nome": "Pullover Maquina",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pullover-maquina.gif"
+},
+{
+"nome": "Pullover com Instabilidade",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pullover-com-instabilidade.gif"
+},
+{
+"nome": "Puxada Alta Fechada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-alta-fechada.gif"
+},
+{
+"nome": "Puxada Alta Nuca",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-alta-nuca.gif"
+},
+{
+"nome": "Puxada Alta Polia",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-alta-polia.gif"
+},
+{
+"nome": "Puxada Alta Tradicional",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-alta-tradicional.gif"
+},
+{
+"nome": "Puxada Alta Triangulo",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-alta-triangulo.gif"
+},
+{
+"nome": "Puxada Alta com Elastico",
+"grupo_muscular_principal": "costas",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-alta-com-elastico.gif"
+},
+{
+"nome": "Puxada Cruzada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-cruzada.gif"
+},
+{
+"nome": "Puxada Maquina",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-maquina.gif"
+},
+{
+"nome": "Puxada Maquina pegada Supinada",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-maquina-pegada-supinada.gif"
+},
+{
+"nome": "Puxada Unilateral",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-unilateral.gif"
+},
+{
+"nome": "Puxada Unilateral Cabo",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxada-unilateral-cabo.gif"
+},
+{
+"nome": "Puxador Costas Por Tras Maquina",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/puxador-costas-por-tras-maquina.gif"
+},
+{
+"nome": "Remada Aberta Pronada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-aberta-pronada.gif"
+},
+{
+"nome": "Remada Aberta no Banco Inclinada Pega Supinada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-aberta-no-banco-inclinada-pega-supinada.gif"
+},
+{
+"nome": "Remada Aberta no Banco Inclinado com Halteres",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-aberta-no-banco-inclinado-com-halteres.gif"
+},
+{
+"nome": "Remada Ajoelhado",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-ajoelhado.gif"
+},
+{
+"nome": "Remada Apoio Banco Inclinado",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-apoio-banco-inclinado.gif"
+},
+{
+"nome": "Remada Apoio Banco com Halteres",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-apoio-banco-com-halteres.gif"
+},
+{
+"nome": "Remada Articulada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-articulada.gif"
+},
+{
+"nome": "Remada Articulada pegada Supinada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-articulada-pegada-supinada.gif"
+},
+{
+"nome": "Remada Baixa Unilateral no Cross",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-baixa-unilateral-no-cross.gif"
+},
+{
+"nome": "Remada Baixa Unilateral pegada Neutra",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-baixa-unilateral-pegada-neutra.gif"
+},
+{
+"nome": "Remada Baixa no Pulley pegada Aberta Supinada",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-baixa-no-pulley-pegada-aberta-supinada.gif"
+},
+{
+"nome": "Remada Beixa no Pulley Triangulo",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-beixa-no-pulley-triangulo.gif"
+},
+{
+"nome": "Remada Cabo",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-cabo.gif"
+},
+{
+"nome": "Remada Cavalinha pegada Aberta",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-cavalinha-pegada-aberta.gif"
+},
+{
+"nome": "Remada Cavalinho",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-cavalinho.gif"
+},
+{
+"nome": "Remada Cavalinho Barra",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-cavalinho-barra.gif"
+},
+{
+"nome": "Remada Cavalinho Unilateral",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-cavalinho-unilateral.gif"
+},
+{
+"nome": "Remada Cavalino com Barra",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-cavalino-com-barra.gif"
+},
+{
+"nome": "Remada Curvada Pronada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-curvada-pronada.gif"
+},
+{
+"nome": "Remada Curvada Pronada Aberta",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-curvada-pronada-aberta.gif"
+},
+{
+"nome": "Remada Curvada no Cabo",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-curvada-no-cabo.gif"
+},
+{
+"nome": "Remada Fechada Supinada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-fechada-supinada.gif"
+},
+{
+"nome": "Remada Inclinada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-inclinada.gif"
+},
+{
+"nome": "Remada Inclinada no Smith",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-inclinada-no-smith.gif"
+},
+{
+"nome": "Remada Inclinda no Banco pegada Supinda Puxada Fechada",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-inclinda-no-banco-pegada-supinda-puxada-fechada.gif"
+},
+{
+"nome": "Remada Invertida Trx",
+"grupo_muscular_principal": "costas",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-invertida-trx.gif"
+},
+{
+"nome": "Remada Livre com Barra",
+"grupo_muscular_principal": "costas",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-livre-com-barra.gif"
+},
+{
+"nome": "Remada Livre com Halteres",
+"grupo_muscular_principal": "costas",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-livre-com-halteres.gif"
+},
+{
+"nome": "Remada Maquina",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-maquina.gif"
+},
+{
+"nome": "Remada Maquina Pronada",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-maquina-pronada.gif"
+},
+{
+"nome": "Remada Serrote",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-serrote.gif"
+},
+{
+"nome": "Remada Unilateral",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-unilateral.gif"
+},
+{
+"nome": "Remada Unilateral Cavalindo Barra Puxada Fechada",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-unilateral-cavalindo-barra-puxada-fechada.gif"
+},
+{
+"nome": "Remada com Banco Inclinado com Haltres",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-com-banco-inclinado-com-haltres.gif"
+},
+{
+"nome": "Remada com Barra",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-com-barra.gif"
+},
+{
+"nome": "Remada com Halteres",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-com-halteres.gif"
+},
+{
+"nome": "Remada com Triangulo",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-com-triangulo.gif"
+},
+{
+"nome": "Remada no Banco Inclinado pegada Pronada com Barra",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-no-banco-inclinado-pegada-pronada-com-barra.gif"
+},
+{
+"nome": "Remada no Smith",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-no-smith.gif"
+},
+{
+"nome": "Single Arm Dumbbell Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/single-arm-dumbbell-row.gif"
+},
+{
+"nome": "Standing Cable Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/standing-cable-row.gif"
+},
+{
+"nome": "T Bar Row Muscles",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/t-bar-row-muscles.gif"
+},
+{
+"nome": "Terra Barra Hexagonal",
+"grupo_muscular_principal": "costas",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/terra-barra-hexagonal.gif"
+},
+{
+"nome": "Terra na Maquina",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/terra-na-maquina.gif"
+},
+{
+"nome": "Upright Cable Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/upright-cable-row.gif"
+},
+{
+"nome": "Wide Grip Lat Pulldown",
+"grupo_muscular_principal": "costas",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/wide-grip-lat-pulldown.gif"
+},
+{
+"nome": "Yates Row",
+"grupo_muscular_principal": "costas",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/yates-row.gif"
+},
+{
+"nome": "Abd Concentrado Bracos Estendidos",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abd-concentrado-bracos-estendidos.gif"
+},
+{
+"nome": "Abdutora em Pe",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abdutora-em-pe.gif"
+},
+{
+"nome": "Aducao Deitada Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aducao-deitada-unilateral.gif"
+},
+{
+"nome": "Aducao Maquina em Pe",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aducao-maquina-em-pe.gif"
+},
+{
+"nome": "Aducao na Polia",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aducao-na-polia.gif"
+},
+{
+"nome": "Aducao no Cabo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aducao-no-cabo.gif"
+},
+{
+"nome": "Adutora na Tracao do Cabo Cross",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/adutora-na-tracao-do-cabo-cross.gif"
+},
+{
+"nome": "Agchamento Smith",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agchamento-smith.gif"
+},
+{
+"nome": "Apoio Batendo Palmas",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/apoio-batendo-palmas.gif"
+},
+{
+"nome": "Apoio de Frente com Medball",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/apoio-de-frente-com-medball.gif"
+},
+{
+"nome": "Apoio de Frente com Step",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/apoio-de-frente-com-step.gif"
+},
+{
+"nome": "Apoio de Frente de Joelhos",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/apoio-de-frente-de-joelhos.gif"
+},
+{
+"nome": "Apoio de Frente pegada Fechada Parede",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/apoio-de-frente-pegada-fechada-parede.gif"
+},
+{
+"nome": "Arm Blaster Benefits",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/arm-blaster-benefits.gif"
+},
+{
+"nome": "Arnol Press Femino",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/arnol-press-femino.gif"
+},
+{
+"nome": "Aviaao com Halteres",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aviaao-com-halteres.gif"
+},
+{
+"nome": "Aviao Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aviao-unilateral.gif"
+},
+{
+"nome": "Aviao com Barra",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/aviao-com-barra.gif"
+},
+{
+"nome": "Banco Romano",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/banco-romano.gif"
+},
+{
+"nome": "Banco Romano sem Peso",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/banco-romano-sem-peso.gif"
+},
+{
+"nome": "Band Standing Hip Extension",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/band-standing-hip-extension.gif"
+},
+{
+"nome": "Barbell Push Jerk Muscles",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-push-jerk-muscles.gif"
+},
+{
+"nome": "Barra Livre com Peso",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-livre-com-peso.gif"
+},
+{
+"nome": "Barra Livre pegada Aberta",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-livre-pegada-aberta.gif"
+},
+{
+"nome": "Barra Livre pegada Aberta Joelhos Flexionados",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-livre-pegada-aberta-joelhos-flexionados.gif"
+},
+{
+"nome": "Barra Livre pegada Aberta no Cross",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-livre-pegada-aberta-no-cross.gif"
+},
+{
+"nome": "Barra Livre pegada Fechada Pronada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-livre-pegada-fechada-pronada.gif"
+},
+{
+"nome": "Barra Livre pegada Pronada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-livre-pegada-pronada.gif"
+},
+{
+"nome": "Barra no Gravitan",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-no-gravitan.gif"
+},
+{
+"nome": "Barra no Graviton",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-no-graviton.gif"
+},
+{
+"nome": "Barra no Graviton em Pe",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-no-graviton-em-pe.gif"
+},
+{
+"nome": "Barra pegada Fechada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-pegada-fechada.gif"
+},
+{
+"nome": "Barra pegada Supinada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barra-pegada-supinada.gif"
+},
+{
+"nome": "Benefits Of Farmers Walks",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/benefits-of-farmers-walks.gif"
+},
+{
+"nome": "Bicicleta",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bicicleta.gif"
+},
+{
+"nome": "Bulgarian Split Spuat",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bulgarian-split-spuat.gif"
+},
+{
+"nome": "Cable Cross Over",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-cross-over.gif"
+},
+{
+"nome": "Cadeira Abdutora",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cadeira-abdutora.gif"
+},
+{
+"nome": "Cadeira Adutora",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cadeira-adutora.gif"
+},
+{
+"nome": "Cadeira Flex",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cadeira-flex.gif"
+},
+{
+"nome": "Clean",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/clean.gif"
+},
+{
+"nome": "Crcifixo Inverto Maquina",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crcifixo-inverto-maquina.gif"
+},
+{
+"nome": "Cross Over",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cross-over.gif"
+},
+{
+"nome": "Cross Over Alto",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cross-over-alto.gif"
+},
+{
+"nome": "Cross Over Polia Baixa",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cross-over-polia-baixa.gif"
+},
+{
+"nome": "Declinado Smith",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/declinado-smith.gif"
+},
+{
+"nome": "Desenvolmento Frontal com Elastico",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolmento-frontal-com-elastico.gif"
+},
+{
+"nome": "Desenvolmento Maquina",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolmento-maquina.gif"
+},
+{
+"nome": "Desenvolmento com Halteres",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolmento-com-halteres.gif"
+},
+{
+"nome": "Desnvolvimento Barra Frente Sentado",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desnvolvimento-barra-frente-sentado.gif"
+},
+{
+"nome": "Desvio Radial",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desvio-radial.gif"
+},
+{
+"nome": "Dragon Flag",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dragon-flag.gif"
+},
+{
+"nome": "Dumbbell Covers com Bracos Estendidos",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-covers-com-bracos-estendidos.gif"
+},
+{
+"nome": "Dumbbell Covers com Halteres",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-covers-com-halteres.gif"
+},
+{
+"nome": "Dumbbell Covers na Bola Suica",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-covers-na-bola-suica.gif"
+},
+{
+"nome": "Dumbbell Floor Press",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-floor-press.gif"
+},
+{
+"nome": "Elevacao Bilateral na Maquina",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-bilateral-na-maquina.gif"
+},
+{
+"nome": "Elevacao Letaral com Haltrers",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-letaral-com-haltrers.gif"
+},
+{
+"nome": "Elevacao Leteral Cruzada no Cross",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-leteral-cruzada-no-cross.gif"
+},
+{
+"nome": "Elevacao Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-unilateral.gif"
+},
+{
+"nome": "Elevacao Unilateral Frontal",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-unilateral-frontal.gif"
+},
+{
+"nome": "Elevacao Unilateral no Cross",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-unilateral-no-cross.gif"
+},
+{
+"nome": "Elevacao de Pernas Banco",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-de-pernas-banco.gif"
+},
+{
+"nome": "Elevacao de Pernas Solo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-de-pernas-solo.gif"
+},
+{
+"nome": "Elevacao do Cotovelo Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-do-cotovelo-unilateral.gif"
+},
+{
+"nome": "Enge Klimmzuege Obergriff",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/enge-klimmzuege-obergriff.gif"
+},
+{
+"nome": "Enrolar",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/enrolar.gif"
+},
+{
+"nome": "Escalador",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/escalador.gif"
+},
+{
+"nome": "Escalador Cruzado",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/escalador-cruzado.gif"
+},
+{
+"nome": "Extensao Apoios",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-apoios.gif"
+},
+{
+"nome": "Extensao Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-unilateral.gif"
+},
+{
+"nome": "Extensao Unilateral no Cabo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-unilateral-no-cabo.gif"
+},
+{
+"nome": "Extensao de Quadril",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril.gif"
+},
+{
+"nome": "Extensao de Quadril Banco Romano",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril-banco-romano.gif"
+},
+{
+"nome": "Extensao de Quadril Elastico",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril-elastico.gif"
+},
+{
+"nome": "Extensao de Quadril Graviton",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril-graviton.gif"
+},
+{
+"nome": "Extensao de Quadril em Pe",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril-em-pe.gif"
+},
+{
+"nome": "Extensao de Quadril em Pe com Joelhos Flexionados",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril-em-pe-com-joelhos-flexionados.gif"
+},
+{
+"nome": "Extensao de Quadril em Pe na Polia",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-quadril-em-pe-na-polia.gif"
+},
+{
+"nome": "Extensao de Tronco Maquina",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-de-tronco-maquina.gif"
+},
+{
+"nome": "Extensao no Elastico",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-no-elastico.gif"
+},
+{
+"nome": "Facepull",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/facepull.gif"
+},
+{
+"nome": "Fitness Gifs U",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/fitness-gifs-u.gif"
+},
+{
+"nome": "Flex de Cotovelo Bracos Aberto",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-bracos-aberto.gif"
+},
+{
+"nome": "Flex de Cotovelo Completa",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-completa.gif"
+},
+{
+"nome": "Flex de Cotovelo Declinado",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-declinado.gif"
+},
+{
+"nome": "Flex de Cotovelo Declinado Utilizando o Banco",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-declinado-utilizando-o-banco.gif"
+},
+{
+"nome": "Flex de Cotovelo Fechado",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-fechado.gif"
+},
+{
+"nome": "Flex de Cotovelo Fechado Livre",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-fechado-livre.gif"
+},
+{
+"nome": "Flex de Cotovelo Fechado com Halteres",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-cotovelo-fechado-com-halteres.gif"
+},
+{
+"nome": "Flex de Joelho em Pe no Cabo Cross",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flex-de-joelho-em-pe-no-cabo-cross.gif"
+},
+{
+"nome": "Flexora Maquina",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexora-maquina.gif"
+},
+{
+"nome": "Flexora em Pe Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexora-em-pe-unilateral.gif"
+},
+{
+"nome": "Flexora no Cabo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexora-no-cabo.gif"
+},
+{
+"nome": "Frog Pump",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/frog-pump.gif"
+},
+{
+"nome": "Frontal Lateral Invertido",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/frontal-lateral-invertido.gif"
+},
+{
+"nome": "Hand Grip",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hand-grip.gif"
+},
+{
+"nome": "Hiperextensao do Tronco",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hiperextensao-do-tronco.gif"
+},
+{
+"nome": "Hiperextensoes sem Dispositivo Banco",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hiperextensoes-sem-dispositivo-banco.gif"
+},
+{
+"nome": "Inclinado no Smith",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/inclinado-no-smith.gif"
+},
+{
+"nome": "Kick Back",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/kick-back.gif"
+},
+{
+"nome": "Landmine Press",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/landmine-press.gif"
+},
+{
+"nome": "Levantamento Tarra com Halteres",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/levantamento-tarra-com-halteres.gif"
+},
+{
+"nome": "Levantamento Terrra com Halteres Frente",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/levantamento-terrra-com-halteres-frente.gif"
+},
+{
+"nome": "Maquina Adutora",
+"grupo_muscular_principal": "full_body",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/maquina-adutora.gif"
+},
+{
+"nome": "Mesa Flex",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/mesa-flex.gif"
+},
+{
+"nome": "Mesa Flex Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/mesa-flex-unilateral.gif"
+},
+{
+"nome": "Press Alto Inclinado",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/press-alto-inclinado.gif"
+},
+{
+"nome": "Pull Over com Barra",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pull-over-com-barra.gif"
+},
+{
+"nome": "Pull Over na Polia com Corda",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pull-over-na-polia-com-corda.gif"
+},
+{
+"nome": "Pulley Costa Maquina",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-costa-maquina.gif"
+},
+{
+"nome": "Pulley Costa Unilateral",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-costa-unilateral.gif"
+},
+{
+"nome": "Pulley Frente Pegaga Fechda Pronada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-frente-pegaga-fechda-pronada.gif"
+},
+{
+"nome": "Pulley Frente pegada Supinada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-frente-pegada-supinada.gif"
+},
+{
+"nome": "Pulley pegada Aberta",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-pegada-aberta.gif"
+},
+{
+"nome": "Pulley pegada Aberta Atras da Nuca",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-pegada-aberta-atras-da-nuca.gif"
+},
+{
+"nome": "Pulley pegada Aberta Pronada",
+"grupo_muscular_principal": "full_body",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pulley-pegada-aberta-pronada.gif"
+},
+{
+"nome": "Push Press",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/push-press.gif"
+},
+{
+"nome": "Recuo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/recuo.gif"
+},
+{
+"nome": "Remanda Alta com Barra",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remanda-alta-com-barra.gif"
+},
+{
+"nome": "Remanda Curvada Barra",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remanda-curvada-barra.gif"
+},
+{
+"nome": "Remanda Unil com Apoio Banco",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remanda-unil-com-apoio-banco.gif"
+},
+{
+"nome": "Retrocesso com Barra",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/retrocesso-com-barra.gif"
+},
+{
+"nome": "Retrocesso com Halteres",
+"grupo_muscular_principal": "full_body",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/retrocesso-com-halteres.gif"
+},
+{
+"nome": "Reverse Hyperextension",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/reverse-hyperextension.gif"
+},
+{
+"nome": "Rolinho Completo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rolinho-completo.gif"
+},
+{
+"nome": "Rotacao Externa",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rotacao-externa.gif"
+},
+{
+"nome": "Rotacao Interna",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rotacao-interna.gif"
+},
+{
+"nome": "Rotacao de Tronco Diagonal Baixa",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/rotacao-de-tronco-diagonal-baixa.gif"
+},
+{
+"nome": "Seitlicher Ausfallschritt Mit Langhantel",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/seitlicher-ausfallschritt-mit-langhantel.gif"
+},
+{
+"nome": "Soleo",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/soleo.gif"
+},
+{
+"nome": "Superman",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/superman.gif"
+},
+{
+"nome": "Supindo Reto Barra",
+"grupo_muscular_principal": "full_body",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supindo-reto-barra.gif"
+},
+{
+"nome": "Tiefe Langhantel Kniebeuge",
+"grupo_muscular_principal": "full_body",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/tiefe-langhantel-kniebeuge.gif"
+},
+{
+"nome": "Abducao Maquina",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abducao-maquina.gif"
+},
+{
+"nome": "Abducao de Quadril em Pe",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abducao-de-quadril-em-pe.gif"
+},
+{
+"nome": "Abducao no Cabo",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/abducao-no-cabo.gif"
+},
+{
+"nome": "Barbell Hip Thrust",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-hip-thrust.gif"
+},
+{
+"nome": "Bodyweight Hip Thrust",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bodyweight-hip-thrust.gif"
+},
+{
+"nome": "Cable Kickback",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-kickback.gif"
+},
+{
+"nome": "Cable Tricep Kickback",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-tricep-kickback.gif"
+},
+{
+"nome": "Dumbbell Tricep Kickback",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-tricep-kickback.gif"
+},
+{
+"nome": "Elevacao Pelvica",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-pelvica.gif"
+},
+{
+"nome": "Elevacao Pelvica Apoio Unilateral",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-pelvica-apoio-unilateral.gif"
+},
+{
+"nome": "Elevacao Pelvica Livre",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-pelvica-livre.gif"
+},
+{
+"nome": "Elevacao Pelvica Pes Elevados",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-pelvica-pes-elevados.gif"
+},
+{
+"nome": "Elevacao Pelvica Unilateral",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-pelvica-unilateral.gif"
+},
+{
+"nome": "Extensao Gluteo no Cabo",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/extensao-gluteo-no-cabo.gif"
+},
+{
+"nome": "Glute Bridge",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/glute-bridge.gif"
+},
+{
+"nome": "Gluteo Apoios Maquina",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/gluteo-apoios-maquina.gif"
+},
+{
+"nome": "Gluteo Maquina",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/gluteo-maquina.gif"
+},
+{
+"nome": "Gluteos no Banco",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/gluteos-no-banco.gif"
+},
+{
+"nome": "Heel Elevated Hip Thrust",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/heel-elevated-hip-thrust.gif"
+},
+{
+"nome": "Hip Thrust",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hip-thrust.gif"
+},
+{
+"nome": "Hip Thrust Smith",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/hip-thrust-smith.gif"
+},
+{
+"nome": "Single Leg Glute Bridge",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/single-leg-glute-bridge.gif"
+},
+{
+"nome": "Single Leg Hip Thrust Muscles",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/single-leg-hip-thrust-muscles.gif"
+},
+{
+"nome": "Straight Leg Glute Bridge",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/straight-leg-glute-bridge.gif"
+},
+{
+"nome": "Triceps Coice com Halteres",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-coice-com-halteres.gif"
+},
+{
+"nome": "Triceps Coice no Cabo",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-coice-no-cabo.gif"
+},
+{
+"nome": "Triceps com Coice com Halteres",
+"grupo_muscular_principal": "gluteos",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-com-coice-com-halteres.gif"
+},
+{
+"nome": "Arnolda Press",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/arnolda-press.gif"
+},
+{
+"nome": "Cable Face Pull",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-face-pull.gif"
+},
+{
+"nome": "Cable Rear Delt Fly",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-rear-delt-fly.gif"
+},
+{
+"nome": "Crucifixo Inverso",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inverso.gif"
+},
+{
+"nome": "Crucifixo Inverso no Banco Inclinado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inverso-no-banco-inclinado.gif"
+},
+{
+"nome": "Crucifixo Inverso no Cross em Pe",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inverso-no-cross-em-pe.gif"
+},
+{
+"nome": "Crucifixo Inverso no Cross no Banco Reto",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inverso-no-cross-no-banco-reto.gif"
+},
+{
+"nome": "Crucifixo Invertido Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-invertido-cabo.gif"
+},
+{
+"nome": "Crucifixo Invertido Elastico",
+"grupo_muscular_principal": "ombros",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-invertido-elastico.gif"
+},
+{
+"nome": "Crucifixo Invertido Polia Baixa",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-invertido-polia-baixa.gif"
+},
+{
+"nome": "Crucifixo Invertido com Halter",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-invertido-com-halter.gif"
+},
+{
+"nome": "Crucifixo Invertido com Halteres",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-invertido-com-halteres.gif"
+},
+{
+"nome": "Crucifixo Invertido na Maqina",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-invertido-na-maqina.gif"
+},
+{
+"nome": "Desenvolvimento",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento.gif"
+},
+{
+"nome": "Desenvolvimento Barra Atras da Nuca",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-barra-atras-da-nuca.gif"
+},
+{
+"nome": "Desenvolvimento Barra Sentado Atras Nuca",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-barra-sentado-atras-nuca.gif"
+},
+{
+"nome": "Desenvolvimento Cabo Cross",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-cabo-cross.gif"
+},
+{
+"nome": "Desenvolvimento Maquina",
+"grupo_muscular_principal": "ombros",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-maquina.gif"
+},
+{
+"nome": "Desenvolvimento Nuca",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-nuca.gif"
+},
+{
+"nome": "Desenvolvimento Por Tras com Barra",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-por-tras-com-barra.gif"
+},
+{
+"nome": "Desenvolvimento Sentado Smith",
+"grupo_muscular_principal": "ombros",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-sentado-smith.gif"
+},
+{
+"nome": "Desenvolvimento Sentado com Halteres",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-sentado-com-halteres.gif"
+},
+{
+"nome": "Desenvolvimento Smith",
+"grupo_muscular_principal": "ombros",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-smith.gif"
+},
+{
+"nome": "Desenvolvimento Unilateral",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-unilateral.gif"
+},
+{
+"nome": "Desenvolvimento com Barra",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-com-barra.gif"
+},
+{
+"nome": "Desenvolvimento com Barra Sentado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-com-barra-sentado.gif"
+},
+{
+"nome": "Desenvolvimento com Halteres",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-com-halteres.gif"
+},
+{
+"nome": "Desenvolvimento com Rotacao",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-com-rotacao.gif"
+},
+{
+"nome": "Desenvolvimento na Barra",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-na-barra.gif"
+},
+{
+"nome": "Desenvolvimento no Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-no-cabo.gif"
+},
+{
+"nome": "Desenvolvimento no Smith",
+"grupo_muscular_principal": "ombros",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-no-smith.gif"
+},
+{
+"nome": "Desenvolvimento no Smith Barra na Nuca",
+"grupo_muscular_principal": "ombros",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/desenvolvimento-no-smith-barra-na-nuca.gif"
+},
+{
+"nome": "Dumbbell Face Pull",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-face-pull.gif"
+},
+{
+"nome": "Elevacao Frontal Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-cabo.gif"
+},
+{
+"nome": "Elevacao Frontal Crossover",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-crossover.gif"
+},
+{
+"nome": "Elevacao Frontal Diagonal",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-diagonal.gif"
+},
+{
+"nome": "Elevacao Frontal Inclinado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-inclinado.gif"
+},
+{
+"nome": "Elevacao Frontal Mao Juntas",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-mao-juntas.gif"
+},
+{
+"nome": "Elevacao Frontal Sentado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-sentado.gif"
+},
+{
+"nome": "Elevacao Frontal Unilateral",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-unilateral.gif"
+},
+{
+"nome": "Elevacao Frontal com Barra",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-com-barra.gif"
+},
+{
+"nome": "Elevacao Frontal com Halteres",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-com-halteres.gif"
+},
+{
+"nome": "Elevacao Frontal no Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-frontal-no-cabo.gif"
+},
+{
+"nome": "Elevacao Lateral",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral.gif"
+},
+{
+"nome": "Elevacao Lateral Descida Frontal",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-descida-frontal.gif"
+},
+{
+"nome": "Elevacao Lateral Inclinado Apoio Banco",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-inclinado-apoio-banco.gif"
+},
+{
+"nome": "Elevacao Lateral Inclinado Sentado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-inclinado-sentado.gif"
+},
+{
+"nome": "Elevacao Lateral Inclinado no Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-inclinado-no-cabo.gif"
+},
+{
+"nome": "Elevacao Lateral Pegda Neutra Inversa",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-pegda-neutra-inversa.gif"
+},
+{
+"nome": "Elevacao Lateral Sentado no Banco",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-sentado-no-banco.gif"
+},
+{
+"nome": "Elevacao Lateral Tronco Apoiado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-tronco-apoiado.gif"
+},
+{
+"nome": "Elevacao Lateral Uni no Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-uni-no-cabo.gif"
+},
+{
+"nome": "Elevacao Lateral com Inclinacao",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-com-inclinacao.gif"
+},
+{
+"nome": "Elevacao Lateral no Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-no-cabo.gif"
+},
+{
+"nome": "Elevacao Lateral no Cross Cruzado",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/elevacao-lateral-no-cross-cruzado.gif"
+},
+{
+"nome": "Lateral Raise Machine",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/lateral-raise-machine.gif"
+},
+{
+"nome": "Military Press",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/military-press.gif"
+},
+{
+"nome": "Remada Alta",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta.gif"
+},
+{
+"nome": "Remada Alta Barra",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-barra.gif"
+},
+{
+"nome": "Remada Alta com Barra W",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-com-barra-w.gif"
+},
+{
+"nome": "Remada Alta com Barra no Cross",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-com-barra-no-cross.gif"
+},
+{
+"nome": "Remada Alta com Barra pegada Aberta",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-com-barra-pegada-aberta.gif"
+},
+{
+"nome": "Remada Alta com Halteres",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-com-halteres.gif"
+},
+{
+"nome": "Remada Alta com Halteres Bilateral",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-com-halteres-bilateral.gif"
+},
+{
+"nome": "Remada Alta no Cabo",
+"grupo_muscular_principal": "ombros",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-no-cabo.gif"
+},
+{
+"nome": "Remada Alta no Cross",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-no-cross.gif"
+},
+{
+"nome": "Remada Alta pegada Abeta com Barra",
+"grupo_muscular_principal": "ombros",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-alta-pegada-abeta-com-barra.gif"
+},
+{
+"nome": "Seated Overhead Press",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/seated-overhead-press.gif"
+},
+{
+"nome": "Shoulder Pin Press",
+"grupo_muscular_principal": "ombros",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/shoulder-pin-press.gif"
+},
+{
+"nome": "Cable Standing Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-standing-calf-raise.gif"
+},
+{
+"nome": "Calf Squats",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/calf-squats.gif"
+},
+{
+"nome": "Donkey Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/donkey-calf-raise.gif"
+},
+{
+"nome": "Dumbbell Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-calf-raise.gif"
+},
+{
+"nome": "Gemeos Sentado",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/gemeos-sentado.gif"
+},
+{
+"nome": "Leg Press Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/leg-press-calf-raise.gif"
+},
+{
+"nome": "Negative Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/negative-calf-raise.gif"
+},
+{
+"nome": "Panturrilha Leg",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrilha-leg.gif"
+},
+{
+"nome": "Panturrilha Leg Press Horizontal",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrilha-leg-press-horizontal.gif"
+},
+{
+"nome": "Panturrilha Maquina",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrilha-maquina.gif"
+},
+{
+"nome": "Panturrilha com Halteres",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrilha-com-halteres.gif"
+},
+{
+"nome": "Panturrilha em Pe Maquina",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrilha-em-pe-maquina.gif"
+},
+{
+"nome": "Panturrilha em Pe Unilateral",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrilha-em-pe-unilateral.gif"
+},
+{
+"nome": "Seated Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/seated-calf-raise.gif"
+},
+{
+"nome": "Seated Calf Raise Dumbbell",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/seated-calf-raise-dumbbell.gif"
+},
+{
+"nome": "Single Leg Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/single-leg-calf-raise.gif"
+},
+{
+"nome": "Smith Machine Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/smith-machine-calf-raise.gif"
+},
+{
+"nome": "Standing Calf Raise",
+"grupo_muscular_principal": "panturrilha",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/standing-calf-raise.gif"
+},
+{
+"nome": "Barbell Decline Bench Press",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-decline-bench-press.gif"
+},
+{
+"nome": "Bench Press Feet Up",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bench-press-feet-up.gif"
+},
+{
+"nome": "Cable Fly",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-fly.gif"
+},
+{
+"nome": "Chest Press Machine",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/chest-press-machine.gif"
+},
+{
+"nome": "Crossover",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crossover.gif"
+},
+{
+"nome": "Crucifico com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifico-com-halteres.gif"
+},
+{
+"nome": "Crucifixo Beixo no Croos em Pe",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-beixo-no-croos-em-pe.gif"
+},
+{
+"nome": "Crucifixo I Nvertido Polia Alta",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-i-nvertido-polia-alta.gif"
+},
+{
+"nome": "Crucifixo Inclinado Banco com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inclinado-banco-com-halteres.gif"
+},
+{
+"nome": "Crucifixo Inclinado com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inclinado-com-halteres.gif"
+},
+{
+"nome": "Crucifixo Inclinado no Cabo",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inclinado-no-cabo.gif"
+},
+{
+"nome": "Crucifixo Inverto com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-inverto-com-halteres.gif"
+},
+{
+"nome": "Crucifixo Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-maquina.gif"
+},
+{
+"nome": "Crucifixo Polia Baixa",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-polia-baixa.gif"
+},
+{
+"nome": "Crucifixo Unilateral Declinado",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-unilateral-declinado.gif"
+},
+{
+"nome": "Crucifixo no Cross Banco Reto",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-no-cross-banco-reto.gif"
+},
+{
+"nome": "Crucifixo no Cross Polia Alta",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-no-cross-polia-alta.gif"
+},
+{
+"nome": "Crucifixo no Cross em Pe",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-no-cross-em-pe.gif"
+},
+{
+"nome": "Crucifixo pegada Pronada",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/crucifixo-pegada-pronada.gif"
+},
+{
+"nome": "Decline Cable Fly",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/decline-cable-fly.gif"
+},
+{
+"nome": "Decline Push Up",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/decline-push-up.gif"
+},
+{
+"nome": "Deficit Push Ups",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/deficit-push-ups.gif"
+},
+{
+"nome": "Dumbbell Chest Press",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-chest-press.gif"
+},
+{
+"nome": "Dumbbell Fly Uitvoering En Uitleg Men Spower",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-fly-uitvoering-en-uitleg-men-spower.gif"
+},
+{
+"nome": "Dumbbell One Arm Chest Press",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-one-arm-chest-press.gif"
+},
+{
+"nome": "Flexao Aberta Lateral",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-aberta-lateral.gif"
+},
+{
+"nome": "Flexao Apoio Alto",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-apoio-alto.gif"
+},
+{
+"nome": "Flexao Apoio Alto Banco",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-apoio-alto-banco.gif"
+},
+{
+"nome": "Flexao Assistida",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-assistida.gif"
+},
+{
+"nome": "Flexao Diamante",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-diamante.gif"
+},
+{
+"nome": "Flexao Lateral Bola",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-lateral-bola.gif"
+},
+{
+"nome": "Flexao Nordica",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-nordica.gif"
+},
+{
+"nome": "Flexao Plantar com Peso Corporal",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-plantar-com-peso-corporal.gif"
+},
+{
+"nome": "Flexao com Apoio Dos Joelhos",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-com-apoio-dos-joelhos.gif"
+},
+{
+"nome": "Flexao de Punho com Barra",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-de-punho-com-barra.gif"
+},
+{
+"nome": "Flexao de Punho com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-de-punho-com-halteres.gif"
+},
+{
+"nome": "Flexao de Quadril Banco",
+"grupo_muscular_principal": "peito",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/flexao-de-quadril-banco.gif"
+},
+{
+"nome": "High Cable Fly",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/high-cable-fly.gif"
+},
+{
+"nome": "Incline Barbell Bench Press",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/incline-barbell-bench-press.gif"
+},
+{
+"nome": "Knee Push Ups",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/knee-push-ups.gif"
+},
+{
+"nome": "Low Cable Chest Flys",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/low-cable-chest-flys.gif"
+},
+{
+"nome": "Peck Deck",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/peck-deck.gif"
+},
+{
+"nome": "Pike Push Up",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pike-push-up.gif"
+},
+{
+"nome": "Plyometric Push Ups",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/plyometric-push-ups.gif"
+},
+{
+"nome": "Press Peitoral",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/press-peitoral.gif"
+},
+{
+"nome": "Press Peitoral Cabo",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/press-peitoral-cabo.gif"
+},
+{
+"nome": "Push Up Bars",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/push-up-bars.gif"
+},
+{
+"nome": "Remada Apoio Peitoral Banco",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/remada-apoio-peitoral-banco.gif"
+},
+{
+"nome": "Reverse Pec Dec Machine",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/reverse-pec-dec-machine.gif"
+},
+{
+"nome": "Sphinx Push Up",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/sphinx-push-up.gif"
+},
+{
+"nome": "Supino",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino.gif"
+},
+{
+"nome": "Supino Alternado com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-alternado-com-halteres.gif"
+},
+{
+"nome": "Supino Articulado Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-articulado-maquina.gif"
+},
+{
+"nome": "Supino Barra",
+"grupo_muscular_principal": "peito",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-barra.gif"
+},
+{
+"nome": "Supino Canadense",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-canadense.gif"
+},
+{
+"nome": "Supino Crucifixo com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-crucifixo-com-halteres.gif"
+},
+{
+"nome": "Supino Declinado Barra",
+"grupo_muscular_principal": "peito",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-declinado-barra.gif"
+},
+{
+"nome": "Supino Declinado Barrapegada Aberta",
+"grupo_muscular_principal": "peito",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-declinado-barrapegada-aberta.gif"
+},
+{
+"nome": "Supino Declinado com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-declinado-com-halteres.gif"
+},
+{
+"nome": "Supino Declinado no Smit",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-declinado-no-smit.gif"
+},
+{
+"nome": "Supino Declinado pegada Fechada",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-declinado-pegada-fechada.gif"
+},
+{
+"nome": "Supino Fechado com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-fechado-com-halteres.gif"
+},
+{
+"nome": "Supino Horizontal Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-horizontal-maquina.gif"
+},
+{
+"nome": "Supino Incliado Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-incliado-maquina.gif"
+},
+{
+"nome": "Supino Incliando com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-incliando-com-halteres.gif"
+},
+{
+"nome": "Supino Inclinado",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado.gif"
+},
+{
+"nome": "Supino Inclinado Aparelho Articulado",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-aparelho-articulado.gif"
+},
+{
+"nome": "Supino Inclinado Banco",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-banco.gif"
+},
+{
+"nome": "Supino Inclinado Banco Cross",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-banco-cross.gif"
+},
+{
+"nome": "Supino Inclinado Banco no Smith",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-banco-no-smith.gif"
+},
+{
+"nome": "Supino Inclinado Cabo",
+"grupo_muscular_principal": "peito",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-cabo.gif"
+},
+{
+"nome": "Supino Inclinado com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-com-halteres.gif"
+},
+{
+"nome": "Supino Inclinado no Smith",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-inclinado-no-smith.gif"
+},
+{
+"nome": "Supino Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-maquina.gif"
+},
+{
+"nome": "Supino Reto com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-reto-com-halteres.gif"
+},
+{
+"nome": "Supino Reto no Cross",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-reto-no-cross.gif"
+},
+{
+"nome": "Supino Reto pegada Aberta",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-reto-pegada-aberta.gif"
+},
+{
+"nome": "Supino Smith",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-smith.gif"
+},
+{
+"nome": "Supino Vertical pegada Neutra Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-vertical-pegada-neutra-maquina.gif"
+},
+{
+"nome": "Supino com Halteres",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-com-halteres.gif"
+},
+{
+"nome": "Supino pegada Fechada",
+"grupo_muscular_principal": "peito",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/supino-pegada-fechada.gif"
+},
+{
+"nome": "Voador Inverso",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/voador-inverso.gif"
+},
+{
+"nome": "Voador Invertido",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/voador-invertido.gif"
+},
+{
+"nome": "Voador Maquina",
+"grupo_muscular_principal": "peito",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/voador-maquina.gif"
+},
+{
+"nome": "Barbell Good Morning",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-good-morning.gif"
+},
+{
+"nome": "Barbell Romanian Deadlift Movement",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/barbell-romanian-deadlift-movement.gif"
+},
+{
+"nome": "Cadeira Flexora",
+"grupo_muscular_principal": "posterior",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cadeira-flexora.gif"
+},
+{
+"nome": "Dumbbell Good Morning",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/dumbbell-good-morning.gif"
+},
+{
+"nome": "Good Morning",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/good-morning.gif"
+},
+{
+"nome": "Mesa Flexora",
+"grupo_muscular_principal": "posterior",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/mesa-flexora.gif"
+},
+{
+"nome": "Mesa Flexora Unilateral",
+"grupo_muscular_principal": "posterior",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/mesa-flexora-unilateral.gif"
+},
+{
+"nome": "Stiff",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff.gif"
+},
+{
+"nome": "Stiff Unil com Medball",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-unil-com-medball.gif"
+},
+{
+"nome": "Stiff Unilateral",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-unilateral.gif"
+},
+{
+"nome": "Stiff Unilateral com Kettibel",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-unilateral-com-kettibel.gif"
+},
+{
+"nome": "Stiff com Barra",
+"grupo_muscular_principal": "posterior",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-com-barra.gif"
+},
+{
+"nome": "Stiff com Halteres",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-com-halteres.gif"
+},
+{
+"nome": "Stiff no Smth",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-no-smth.gif"
+},
+{
+"nome": "Stiff no Smth Unilateral",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff-no-smth-unilateral.gif"
+},
+{
+"nome": "Stiff02",
+"grupo_muscular_principal": "posterior",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/stiff02.gif"
+},
+{
+"nome": "Afundo Cruzando Perna de Tras",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/afundo-cruzando-perna-de-tras.gif"
+},
+{
+"nome": "Afundo Lateral com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/afundo-lateral-com-barra.gif"
+},
+{
+"nome": "Afundo Livre",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/afundo-livre.gif"
+},
+{
+"nome": "Afundo com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/afundo-com-barra.gif"
+},
+{
+"nome": "Afundo no Smith",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/afundo-no-smith.gif"
+},
+{
+"nome": "Agachamento",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento.gif"
+},
+{
+"nome": "Agachamento Apoio Bola",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-apoio-bola.gif"
+},
+{
+"nome": "Agachamento Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-barra.gif"
+},
+{
+"nome": "Agachamento Bulgaro",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-bulgaro.gif"
+},
+{
+"nome": "Agachamento Bulgaro com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-bulgaro-com-barra.gif"
+},
+{
+"nome": "Agachamento Frontal",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-frontal.gif"
+},
+{
+"nome": "Agachamento Hack",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-hack.gif"
+},
+{
+"nome": "Agachamento Livre Pes Juntos",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-livre-pes-juntos.gif"
+},
+{
+"nome": "Agachamento Livre com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-livre-com-barra.gif"
+},
+{
+"nome": "Agachamento Pes Afastados",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-pes-afastados.gif"
+},
+{
+"nome": "Agachamento Sumo",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-sumo.gif"
+},
+{
+"nome": "Agachamento Sumo Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-sumo-barra.gif"
+},
+{
+"nome": "Agachamento Sumo Livre",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-sumo-livre.gif"
+},
+{
+"nome": "Agachamento Sumo Peso Corporal",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-sumo-peso-corporal.gif"
+},
+{
+"nome": "Agachamento Sumo com Halter",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-sumo-com-halter.gif"
+},
+{
+"nome": "Agachamento Sumo com Halteres",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-sumo-com-halteres.gif"
+},
+{
+"nome": "Agachamento Terra com Halteres do Lado",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-terra-com-halteres-do-lado.gif"
+},
+{
+"nome": "Agachamento com Cabo",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-com-cabo.gif"
+},
+{
+"nome": "Agachamento com Halteres com Uma Perna",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-com-halteres-com-uma-perna.gif"
+},
+{
+"nome": "Agachamento com Salto",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-com-salto.gif"
+},
+{
+"nome": "Agachamento na Maquina",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-na-maquina.gif"
+},
+{
+"nome": "Agachamento no Banco",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-no-banco.gif"
+},
+{
+"nome": "Agachamento no Cross",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachamento-no-cross.gif"
+},
+{
+"nome": "Agachmento Sumo",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachmento-sumo.gif"
+},
+{
+"nome": "Agachmento Sumo com Halter",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/agachmento-sumo-com-halter.gif"
+},
+{
+"nome": "Avanco",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/avanco.gif"
+},
+{
+"nome": "Avanco com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/avanco-com-barra.gif"
+},
+{
+"nome": "Bulgaro com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bulgaro-com-barra.gif"
+},
+{
+"nome": "Bulgaro com Halteres",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bulgaro-com-halteres.gif"
+},
+{
+"nome": "Cable Step Up",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-step-up.gif"
+},
+{
+"nome": "Cadeira Extensora",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cadeira-extensora.gif"
+},
+{
+"nome": "Cadeira Extensora Unilateral",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cadeira-extensora-unilateral.gif"
+},
+{
+"nome": "Front Squat",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/front-squat.gif"
+},
+{
+"nome": "Leg Press",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/leg-press.gif"
+},
+{
+"nome": "Leg Press Horizontal",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/leg-press-horizontal.gif"
+},
+{
+"nome": "Leg Press Pes Afastados",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/leg-press-pes-afastados.gif"
+},
+{
+"nome": "Leg Press Unilateral",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/leg-press-unilateral.gif"
+},
+{
+"nome": "Panturrinha no Leg Press",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/panturrinha-no-leg-press.gif"
+},
+{
+"nome": "Passada a Frente com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/passada-a-frente-com-barra.gif"
+},
+{
+"nome": "Passada a Frente com Halteres",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/passada-a-frente-com-halteres.gif"
+},
+{
+"nome": "Passada com Halteres",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/passada-com-halteres.gif"
+},
+{
+"nome": "Passada para Tras com Barra",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/passada-para-tras-com-barra.gif"
+},
+{
+"nome": "Passadas com Halteres",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/passadas-com-halteres.gif"
+},
+{
+"nome": "Pistol",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/pistol.gif"
+},
+{
+"nome": "Step Up",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/step-up.gif"
+},
+{
+"nome": "Terra Sumo",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/terra-sumo.gif"
+},
+{
+"nome": "Triceps Afundo no Banco",
+"grupo_muscular_principal": "quadriceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-afundo-no-banco.gif"
+},
+{
+"nome": "Encolhimento",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento.gif"
+},
+{
+"nome": "Encolhimento Barra",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-barra.gif"
+},
+{
+"nome": "Encolhimento Barra Atras",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-barra-atras.gif"
+},
+{
+"nome": "Encolhimento Livre com Halteres",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-livre-com-halteres.gif"
+},
+{
+"nome": "Encolhimento Maquina",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-maquina.gif"
+},
+{
+"nome": "Encolhimento Sentado no Banco Inlinado com Halteres",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-sentado-no-banco-inlinado-com-halteres.gif"
+},
+{
+"nome": "Encolhimento Sentado no Banco com Halteres",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-sentado-no-banco-com-halteres.gif"
+},
+{
+"nome": "Encolhimento com Halteres",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-com-halteres.gif"
+},
+{
+"nome": "Encolhimento na Barra Livre",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-na-barra-livre.gif"
+},
+{
+"nome": "Encolhimento no Smith",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-no-smith.gif"
+},
+{
+"nome": "Encolhimento pegada Fechada Barra no Cross",
+"grupo_muscular_principal": "trapezio",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/encolhimento-pegada-fechada-barra-no-cross.gif"
+},
+{
+"nome": "Arnold Dips Maschine",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/arnold-dips-maschine.gif"
+},
+{
+"nome": "Bench Tricep Dips",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/bench-tricep-dips.gif"
+},
+{
+"nome": "Cable Tricep Overhead Extensions",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/cable-tricep-overhead-extensions.gif"
+},
+{
+"nome": "Close Grip Bench Press Movement",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/close-grip-bench-press-movement.gif"
+},
+{
+"nome": "Close Grip Lat Pulldown Standard Bar Attachment",
+"grupo_muscular_principal": "triceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/close-grip-lat-pulldown-standard-bar-attachment.gif"
+},
+{
+"nome": "Ez Bar Tricep Pushdown",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/ez-bar-tricep-pushdown.gif"
+},
+{
+"nome": "Mergulho Banco",
+"grupo_muscular_principal": "triceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/mergulho-banco.gif"
+},
+{
+"nome": "Overhead Cable Tricep Extension",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/overhead-cable-tricep-extension.gif"
+},
+{
+"nome": "Paralelas",
+"grupo_muscular_principal": "triceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/paralelas.gif"
+},
+{
+"nome": "Paralelas Graviton",
+"grupo_muscular_principal": "triceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/paralelas-graviton.gif"
+},
+{
+"nome": "Paralelas no Graviton",
+"grupo_muscular_principal": "triceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/paralelas-no-graviton.gif"
+},
+{
+"nome": "Peito na Paralela",
+"grupo_muscular_principal": "triceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/peito-na-paralela.gif"
+},
+{
+"nome": "Tricep Overhead Extensions",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/tricep-overhead-extensions.gif"
+},
+{
+"nome": "Triceps",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps.gif"
+},
+{
+"nome": "Triceps Apoaiado na Pareda",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-apoaiado-na-pareda.gif"
+},
+{
+"nome": "Triceps Cord",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-cord.gif"
+},
+{
+"nome": "Triceps Extencao de Cotovelo Unilateral",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-extencao-de-cotovelo-unilateral.gif"
+},
+{
+"nome": "Triceps Extensao Unilateral",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-extensao-unilateral.gif"
+},
+{
+"nome": "Triceps Fechado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-fechado.gif"
+},
+{
+"nome": "Triceps Frances",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances.gif"
+},
+{
+"nome": "Triceps Frances Barra W",
+"grupo_muscular_principal": "triceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-barra-w.gif"
+},
+{
+"nome": "Triceps Frances Bilateral no Cross",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-bilateral-no-cross.gif"
+},
+{
+"nome": "Triceps Frances Inclinado com Halter",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-inclinado-com-halter.gif"
+},
+{
+"nome": "Triceps Frances Sentado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-sentado.gif"
+},
+{
+"nome": "Triceps Frances Unilateral Cabo",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-unilateral-cabo.gif"
+},
+{
+"nome": "Triceps Frances Unilateral Deitado no Banco",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-unilateral-deitado-no-banco.gif"
+},
+{
+"nome": "Triceps Frances Unilateral Sentado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-unilateral-sentado.gif"
+},
+{
+"nome": "Triceps Frances Unilateral no Corss",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-unilateral-no-corss.gif"
+},
+{
+"nome": "Triceps Frances com Barra",
+"grupo_muscular_principal": "triceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-com-barra.gif"
+},
+{
+"nome": "Triceps Frances no Cabo com Corda",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-frances-no-cabo-com-corda.gif"
+},
+{
+"nome": "Triceps Inclinado no Cross Bilateral",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-inclinado-no-cross-bilateral.gif"
+},
+{
+"nome": "Triceps Maquina",
+"grupo_muscular_principal": "triceps",
+"equipamento": "maquina",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-maquina.gif"
+},
+{
+"nome": "Triceps Paralelo no Banco",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-paralelo-no-banco.gif"
+},
+{
+"nome": "Triceps Patada Blateral com Halteres",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-patada-blateral-com-halteres.gif"
+},
+{
+"nome": "Triceps Patada Unilateral com Halteres",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-patada-unilateral-com-halteres.gif"
+},
+{
+"nome": "Triceps Pateda com Alteres",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-pateda-com-alteres.gif"
+},
+{
+"nome": "Triceps Pulley",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-pulley.gif"
+},
+{
+"nome": "Triceps Pulley Pronado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-pulley-pronado.gif"
+},
+{
+"nome": "Triceps Pulley Supinado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-pulley-supinado.gif"
+},
+{
+"nome": "Triceps Supinado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-supinado.gif"
+},
+{
+"nome": "Triceps Testa",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa.gif"
+},
+{
+"nome": "Triceps Testa Incliando",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-incliando.gif"
+},
+{
+"nome": "Triceps Testa Inclinado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-inclinado.gif"
+},
+{
+"nome": "Triceps Testa Polia Alta",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-polia-alta.gif"
+},
+{
+"nome": "Triceps Testa Supinado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-supinado.gif"
+},
+{
+"nome": "Triceps Testa Unilateral",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-unilateral.gif"
+},
+{
+"nome": "Triceps Testa com Barra",
+"grupo_muscular_principal": "triceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-com-barra.gif"
+},
+{
+"nome": "Triceps Testa com Halteres",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-com-halteres.gif"
+},
+{
+"nome": "Triceps Testa no Cabo",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-no-cabo.gif"
+},
+{
+"nome": "Triceps Testa pegada Neutra Deitado no Banco",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-testa-pegada-neutra-deitado-no-banco.gif"
+},
+{
+"nome": "Triceps Tresta com Halteres",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-tresta-com-halteres.gif"
+},
+{
+"nome": "Triceps Unilateral 90g Deitado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-unilateral-90g-deitado.gif"
+},
+{
+"nome": "Triceps Unilateral Cabo Ajoelhado",
+"grupo_muscular_principal": "triceps",
+"equipamento": "polia",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-unilateral-cabo-ajoelhado.gif"
+},
+{
+"nome": "Triceps Unilateral Deitado no Banco",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-unilateral-deitado-no-banco.gif"
+},
+{
+"nome": "Triceps Unilateral pegada Supinada",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-unilateral-pegada-supinada.gif"
+},
+{
+"nome": "Triceps com Halteres no Banco Reto",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-com-halteres-no-banco-reto.gif"
+},
+{
+"nome": "Triceps na Paralela Maquiba",
+"grupo_muscular_principal": "triceps",
+"equipamento": "peso_corporal",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-na-paralela-maquiba.gif"
+},
+{
+"nome": "Triceps no Aparelho Scort",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-no-aparelho-scort.gif"
+},
+{
+"nome": "Triceps no Cross Barra Triangulo",
+"grupo_muscular_principal": "triceps",
+"equipamento": "barra",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-no-cross-barra-triangulo.gif"
+},
+{
+"nome": "Triceps no Cross Deitado no Banco Reto",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-no-cross-deitado-no-banco-reto.gif"
+},
+{
+"nome": "Triceps pegada Pronada Uniatres no Cross",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/triceps-pegada-pronada-uniatres-no-cross.gif"
+},
+{
+"nome": "V Bar Tricep Pushdown",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/v-bar-tricep-pushdown.gif"
+},
+{
+"nome": "Weighted Dips",
+"grupo_muscular_principal": "triceps",
+"equipamento": "halteres",
+"dificuldade": 2,
+"gif_url": "https://cdn.jsdelivr.net/gh/viniciusdesimmcees-droid/vc-fisiocoach-gifs@main/gifs/weighted-dips.gif"
+}
+]
