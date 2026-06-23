@@ -80,13 +80,11 @@ def write_summary_json(
     return summary
 
 
-def write_annotated_video(
-    in_path: str,
-    out_path: str,
-    trajectory: list[Detection],
-    result: SpeedResult,
-) -> None:
-    """Reescreve o vídeo com o esqueleto da trajetória e a velocidade sobreposta."""
+def _annotated_frames(in_path: str, trajectory: list[Detection], result: SpeedResult):
+    """Gera (yield) cada quadro do vídeo anotado com trajetória + velocidade.
+
+    Usado tanto pelo escritor de MP4 quanto pelo de GIF.
+    """
     by_frame = {d.frame: d for d in trajectory}
     speed_by_frame = {s.frame: s.speed_kmh for s in result.samples}
 
@@ -94,8 +92,6 @@ def write_annotated_video(
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-    out = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
 
     trail: list[tuple[int, int]] = []
     frame_idx = -1
@@ -119,25 +115,62 @@ def write_annotated_video(
             frame, label, (16, 38), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2
         )
         cv2.putText(
-            frame,
-            f"pico {result.peak_kmh:.0f} km/h",
-            (16, 68),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
-            (0, 200, 255),
-            2,
+            frame, f"pico {result.peak_kmh:.0f} km/h", (16, 68),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 200, 255), 2,
         )
         if result.impact_frame == frame_idx:
             cv2.putText(
-                frame,
-                "IMPACTO",
-                (width // 2 - 80, 50),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1.0,
-                (0, 0, 255),
-                3,
+                frame, "IMPACTO", (width // 2 - 80, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 3,
             )
-        out.write(frame)
+        yield frame, fps
 
-    cap.release()
-    out.release()
+
+def write_annotated_video(
+    in_path: str,
+    out_path: str,
+    trajectory: list[Detection],
+    result: SpeedResult,
+) -> None:
+    """Reescreve o vídeo (MP4) com o esqueleto da trajetória e a velocidade."""
+    out = None
+    for frame, fps in _annotated_frames(in_path, trajectory, result):
+        if out is None:
+            h, w = frame.shape[:2]
+            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+            out = cv2.VideoWriter(out_path, fourcc, fps, (w, h))
+        out.write(frame)
+    if out is not None:
+        out.release()
+
+
+def write_annotated_gif(
+    in_path: str,
+    out_path: str,
+    trajectory: list[Detection],
+    result: SpeedResult,
+    max_width: int = 640,
+    fps_out: float = 20.0,
+) -> None:
+    """Gera um GIF anotado (toca nativamente em qualquer navegador).
+
+    Reduz largura para `max_width` e limita o fps para um arquivo leve.
+    """
+    from PIL import Image
+
+    pil_frames = []
+    for frame, _ in _annotated_frames(in_path, trajectory, result):
+        h, w = frame.shape[:2]
+        if w > max_width:
+            scale = max_width / w
+            frame = cv2.resize(frame, (max_width, int(h * scale)))
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        pil_frames.append(Image.fromarray(rgb))
+
+    if not pil_frames:
+        return
+    duration = int(1000 / fps_out)
+    pil_frames[0].save(
+        out_path, save_all=True, append_images=pil_frames[1:],
+        duration=duration, loop=0, optimize=True,
+    )

@@ -3,6 +3,7 @@ __pycache__/
 *.pt
 output/t.mp4
 output/_probe.jpg
-# artefatos de treino e datasets (reproduzíveis via tools/)
 dataset/
 runs/
+webapp/uploads/
+webapp/static/results/

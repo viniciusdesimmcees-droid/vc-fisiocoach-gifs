@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resultado — {{ athlete }}</title>
+  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF">
+    <div>
+      <h1>Resultado — {{ athlete }}</h1>
+      <span>VC Fisiocoach — Analisador de Saque</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('index') }}">← Analisar outro saque</a>
+
+    <div class="card">
+      <h2>Velocidade do saque <span class="tag">detector: {{ detector }}</span></h2>
+      <div class="metric">
+        <div class="big">{{ summary.resultado.velocidade_pico_kmh }}</div>
+        <div class="unit">km/h (pico no impacto)</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="v">{{ summary.resultado.velocidade_media_kmh }}</div><div class="k">média km/h</div></div>
+        <div class="stat"><div class="v">{{ summary.captura.fps }}</div><div class="k">fps</div></div>
+        <div class="stat"><div class="v">{{ summary.captura.deteccoes_bola }}</div><div class="k">detecções</div></div>
+      </div>
+      {% if summary.observacoes %}
+        {% for obs in summary.observacoes %}<p class="note">⚠ {{ obs }}</p>{% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Vídeo anotado</h2>
+      <img class="result" src="{{ gif }}" alt="Saque anotado">
+      <div class="downloads">
+        <a href="{{ mp4 }}" download>Baixar MP4</a>
+        <a href="{{ csv }}" download>Baixar CSV (trajetória)</a>
+        <a href="{{ json }}" download>Baixar JSON (resumo)</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Perfil de velocidade</h2>
+      <img class="result" src="{{ plot }}" alt="Gráfico de velocidade">
+    </div>
+
+    {% if biomech %}
+    <div class="card">
+      <h2>Biomecânica — lado {{ biomech.summary.lado_dominante }}</h2>
+      <div class="stats">
+        <div class="stat"><div class="v">{{ biomech.summary.fases.contato }}</div><div class="k">quadro do contato</div></div>
+        <div class="stat"><div class="v">{{ biomech.summary.captura.quadros_com_pose }}</div><div class="k">quadros c/ pose</div></div>
+        <div class="stat"><div class="v">{{ "sim" if biomech.summary.cadeia_cinetica.proximal_para_distal else "não" }}</div><div class="k">cadeia prox→distal</div></div>
+      </div>
+      {% if biomech.summary.angulos_no_contato %}
+      <h2 style="margin-top:18px">Ângulos no contato</h2>
+      <table class="angles">
+        {% for k, v in biomech.summary.angulos_no_contato.items() %}
+        <tr><td>{{ k.replace('_',' ')|capitalize }}</td><td>{{ v }}°</td></tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+      <h2 style="margin-top:18px">Ângulos articulares ao longo do saque</h2>
+      <img class="result" src="{{ biomech.plot }}" alt="Ângulos articulares">
+      <div class="downloads">
+        <a href="{{ biomech.json }}" download>Baixar JSON (biomecânica)</a>
+      </div>
+      {% for obs in biomech.summary.cadeia_cinetica.observacoes %}
+        <p class="note">• {{ obs }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <p class="note">Relatório gerado pelo motor VC Fisiocoach. Para precisão pericial,
+      siga o protocolo de captura (slow-motion, câmera lateral fixa, objeto de referência).</p>
+  </div>
+</body>
+</html>

@@ -10,6 +10,27 @@ duas análises do saque:
 Gera vídeos anotados, gráficos, CSV e resumos JSON prontos para protocolar e
 entregar à equipe do atleta. Faz parte do ecossistema **VC Fisiocoach**.
 
+## Abrir o app (interface web)
+
+A forma visual de usar — abre no navegador do celular ou do computador:
+
+```bash
+pip install -r requirements.txt          # inclui o Flask
+python webapp/app.py                      # sobe o servidor
+```
+
+Depois abra **http://localhost:5000** no navegador. Você envia o vídeo do saque,
+informa a calibração e o app mostra, na mesma tela: a **velocidade** em destaque,
+o **GIF anotado** (com a bola rastreada), o **gráfico de velocidade** e, se marcar
+a opção, a **biomecânica** (ângulos e fases). Tudo com botões para baixar os
+relatórios (MP4, CSV, JSON).
+
+> O app roda na sua máquina. Para usar do celular na mesma rede, acesse
+> `http://IP-DO-COMPUTADOR:5000`. O detector clássico é o padrão (rápido); o
+> deep learning e a biomecânica exigem `requirements-dl.txt`.
+
+Prefere automação/integração? Há também a CLI (abaixo).
+
 ## Como funciona
 
 ```
@@ -223,7 +244,11 @@ tennis-serve-analyzer/
 │   ├── train_detector.py         # fine-tuning do YOLOv8
 │   ├── test_biomechanics.py      # testes determinísticos da biomecânica
 │   └── demo_biomech.py           # relatório-exemplo de biomecânica
+├── webapp/                 # app web (Flask): abra http://localhost:5000
+│   ├── app.py
+│   ├── templates/          # index.html (upload) e result.html (resultado)
+│   └── static/             # estilo + logo (resultados gerados ficam aqui)
 ├── output/                 # exemplos gerados (velocidade e biomech)
-├── requirements.txt        # núcleo
+├── requirements.txt        # núcleo + Flask (app web)
 └── requirements-dl.txt     # detector DL + pose + treino (opcional)
 ```

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VC Fisiocoach — Analisador de Saque</title>
+  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF">
+    <div>
+      <h1>Analisador de Saque de Tênis</h1>
+      <span>VC Fisiocoach — velocidade e biomecânica</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+    <form class="card" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
+      <h2>Enviar vídeo do saque</h2>
+
+      <label>Vídeo do saque <span class="hint">(slow-motion 120/240 fps, câmera lateral)</span></label>
+      <input type="file" name="video" accept="video/*" required>
+
+      <label>Nome do atleta</label>
+      <input type="text" name="athlete" placeholder="Ex.: João Silva" value="Atleta">
+
+      <div class="grid">
+        <div>
+          <label>fps real da captura <span class="hint">(0 = usar o do arquivo)</span></label>
+          <input type="number" name="fps" step="1" min="0" value="240">
+        </div>
+        <div>
+          <label>Detector da bola</label>
+          <select name="detector">
+            <option value="classic">Clássico (rápido, sem GPU)</option>
+            <option value="dl">Deep learning (YOLOv8)</option>
+          </select>
+        </div>
+      </div>
+
+      <h2 style="margin-top:20px">Calibração <span class="hint">(converte pixels em metros)</span></h2>
+      <div class="grid">
+        <div>
+          <label>Comprimento real da referência (m)</label>
+          <input type="number" name="ref_length_m" step="0.001" value="0.914">
+        </div>
+        <div>
+          <label>Referência no vídeo (pixels)</label>
+          <input type="number" name="ref_length_px" step="1" value="220">
+        </div>
+      </div>
+      <p class="hint">Use um objeto de tamanho conhecido no plano do saque (ex.: rede = 0,914 m
+        no centro) e meça quantos pixels ele ocupa no quadro.</p>
+
+      <div class="check">
+        <input type="checkbox" name="biomech" id="biomech">
+        <label for="biomech">Incluir análise biomecânica (pose, ângulos, fases) — requer deep learning</label>
+      </div>
+
+      <button type="submit">Analisar saque</button>
+      <p class="note">A análise roda no seu computador. Vídeos longos/alta resolução demoram mais.</p>
+    </form>
+  </div>
+</body>
+</html>
