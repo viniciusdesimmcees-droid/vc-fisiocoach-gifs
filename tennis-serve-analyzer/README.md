@@ -15,19 +15,39 @@ entregar à equipe do atleta. Faz parte do ecossistema **VC Fisiocoach**.
 A forma visual de usar — abre no navegador do celular ou do computador:
 
 ```bash
-pip install -r requirements.txt          # inclui o Flask
-python webapp/app.py                      # sobe o servidor
+pip install -r requirements.txt          # inclui Flask e Pillow
+python webapp/app.py                      # sobe o servidor (http://localhost:5000)
 ```
 
-Depois abra **http://localhost:5000** no navegador. Você envia o vídeo do saque,
-informa a calibração e o app mostra, na mesma tela: a **velocidade** em destaque,
-o **GIF anotado** (com a bola rastreada), o **gráfico de velocidade** e, se marcar
-a opção, a **biomecânica** (ângulos e fases). Tudo com botões para baixar os
-relatórios (MP4, CSV, JSON).
+No app você pode **gravar pela câmera na hora** (aba “Gravar agora”) ou
+**enviar um vídeo** (aba “Enviar vídeo”). Informa a calibração e vê na mesma
+tela: a **velocidade** em destaque, o **GIF anotado** (bola rastreada), o
+**gráfico de velocidade** e, opcionalmente, a **biomecânica** (ângulos e fases),
+com botões para baixar os relatórios (MP4, CSV, JSON).
 
-> O app roda na sua máquina. Para usar do celular na mesma rede, acesse
-> `http://IP-DO-COMPUTADOR:5000`. O detector clássico é o padrão (rápido); o
-> deep learning e a biomecânica exigem `requirements-dl.txt`.
+### Gravar pela câmera (e a questão da câmera lenta)
+
+A gravação usa a câmera do navegador. **Importante:** o navegador não acessa o
+modo câmera-lenta nativo do celular — costuma capturar a 30/60 fps. O app pede o
+maior fps possível e **mostra o fps real** que conseguiu. Para saque rápido
+(150–220 km/h) com precisão, grave no **app de câmera nativo em câmera lenta
+(240 fps)** e use a aba “Enviar vídeo”.
+
+A câmera no celular exige **HTTPS**. Rode com certificado autoassinado:
+
+```bash
+python webapp/app.py --https            # gera o certificado via openssl
+# no celular (mesma rede): https://IP-DO-COMPUTADOR:5000  (aceite o certificado)
+```
+
+### Instalar como app (PWA)
+
+O app é instalável: no navegador, use “Adicionar à tela inicial”. Ele passa a
+abrir com a **logomarca** em tela cheia, no celular e no computador.
+
+> O app roda na sua máquina; seus vídeos não saem do aparelho. O detector
+> clássico é o padrão (rápido); deep learning e biomecânica exigem
+> `requirements-dl.txt`. A logo é gerada por `python tools/make_logo.py`.
 
 Prefere automação/integração? Há também a CLI (abaixo).
 

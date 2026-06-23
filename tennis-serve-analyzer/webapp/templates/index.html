@@ -4,7 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VC Fisiocoach — Analisador de Saque</title>
-  <link rel="icon" href="{{ url_for('static', filename='logo.png') }}">
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Fisiocoach">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -20,18 +26,45 @@
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
     <form class="card" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
-      <h2>Enviar vídeo do saque</h2>
+      <div class="tabs">
+        <button type="button" id="tab-record" class="tab active">📹 Gravar agora</button>
+        <button type="button" id="tab-upload" class="tab">⬆️ Enviar vídeo</button>
+      </div>
 
-      <label>Vídeo do saque <span class="hint">(slow-motion 120/240 fps, câmera lateral)</span></label>
-      <input type="file" name="video" accept="video/*" required>
+      <!-- ABA: GRAVAR -->
+      <div id="pane-record" class="pane">
+        <div class="video-box">
+          <video id="preview" playsinline muted></video>
+        </div>
+        <div class="cam-controls">
+          <button type="button" id="btn-camera" class="ghost">Abrir câmera</button>
+          <button type="button" id="btn-switch" class="ghost" disabled>Trocar câmera</button>
+          <button type="button" id="btn-record" class="rec-btn" disabled>● Gravar</button>
+        </div>
+        <p id="cam-status" class="note">Toque em “Abrir câmera” para começar.</p>
+        <div id="recorded-wrap" style="display:none">
+          <label>Prévia da gravação</label>
+          <video id="recorded" class="result" controls playsinline></video>
+        </div>
+        <p class="note">⚠️ Para câmera lenta real (240 fps), grave no app de câmera nativo do
+          celular e use a aba “Enviar vídeo”. O navegador costuma gravar a 30/60 fps.</p>
+      </div>
 
+      <!-- ABA: ENVIAR -->
+      <div id="pane-upload" class="pane" style="display:none">
+        <label>Vídeo do saque <span class="hint">(slow-motion 120/240 fps, câmera lateral)</span></label>
+        <input type="file" id="video" name="video" accept="video/*">
+      </div>
+
+      <!-- CAMPOS COMUNS -->
+      <h2 style="margin-top:20px">Dados do atleta</h2>
       <label>Nome do atleta</label>
       <input type="text" name="athlete" placeholder="Ex.: João Silva" value="Atleta">
 
       <div class="grid">
         <div>
-          <label>fps real da captura <span class="hint">(0 = usar o do arquivo)</span></label>
-          <input type="number" name="fps" step="1" min="0" value="240">
+          <label>fps real da captura <span class="hint">(0 = automático)</span></label>
+          <input type="number" id="fps" name="fps" step="1" min="0" value="0">
         </div>
         <div>
           <label>Detector da bola</label>
@@ -62,8 +95,17 @@
       </div>
 
       <button type="submit">Analisar saque</button>
-      <p class="note">A análise roda no seu computador. Vídeos longos/alta resolução demoram mais.</p>
+      <p class="note">A análise roda no seu computador. Seus vídeos não saem do seu aparelho.</p>
     </form>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
   </div>
+
+  <script src="{{ url_for('static', filename='camera.js') }}"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("{{ url_for('service_worker') }}").catch(function(){});
+    }
+  </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 {
   "atleta": "Atleta",
-  "gerado_em": "2026-06-23T10:36:37.359625+00:00",
+  "desenvolvido_por": "Sistema criado e desenvolvido por Vinícius Camargos da Fonseca.",
+  "gerado_em": "2026-06-23T12:21:42.690016+00:00",
   "captura": {
     "fps": 240.0,
     "resolucao": "1280x720",

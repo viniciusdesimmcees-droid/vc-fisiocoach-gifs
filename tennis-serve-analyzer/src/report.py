@@ -16,6 +16,9 @@ import matplotlib.pyplot as plt
 from tracking import Detection
 from speed_estimator import SpeedResult
 
+# Assinatura presente em todas as saídas do sistema.
+CREDIT = "Sistema criado e desenvolvido por Vinícius Camargos da Fonseca."
+
 
 def write_trajectory_csv(path: str, trajectory: list[Detection]) -> None:
     with open(path, "w", newline="") as f:
@@ -45,7 +48,8 @@ def write_speed_plot(path: str, result: SpeedResult, athlete: str) -> None:
     ax.set_title(f"Perfil de velocidade do saque — {athlete}")
     ax.grid(True, alpha=0.3)
     ax.legend()
-    fig.tight_layout()
+    fig.text(0.5, 0.005, CREDIT, ha="center", fontsize=7, color="#9aa39c")
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
     fig.savefig(path, dpi=120)
     plt.close(fig)
 
@@ -59,6 +63,7 @@ def write_summary_json(
 ) -> dict:
     summary = {
         "atleta": athlete,
+        "desenvolvido_por": CREDIT,
         "gerado_em": datetime.now(timezone.utc).isoformat(),
         "captura": {
             "fps": meta.get("fps"),

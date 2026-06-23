@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 from biomechanics import FrameAngles, Phases, KinematicChain
 from pose_estimator import KP
 
+CREDIT = "Sistema criado e desenvolvido por Vinícius Camargos da Fonseca."
+
 # Conexões do esqueleto COCO para desenhar.
 SKELETON = [
     ("left_shoulder", "right_shoulder"), ("left_shoulder", "left_elbow"),
@@ -49,7 +51,8 @@ def write_angles_plot(path: str, angles: list[FrameAngles], phases: Phases,
     ax.set_title(f"Ângulos articulares no saque — {athlete}")
     ax.grid(True, alpha=0.3)
     ax.legend(loc="lower right")
-    fig.tight_layout()
+    fig.text(0.5, 0.005, CREDIT, ha="center", fontsize=7, color="#9aa39c")
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
     fig.savefig(path, dpi=120)
     plt.close(fig)
 
@@ -70,6 +73,7 @@ def write_summary_json(path: str, athlete: str, side: str, angles: list[FrameAng
 
     summary = {
         "atleta": athlete,
+        "desenvolvido_por": CREDIT,
         "gerado_em": datetime.now(timezone.utc).isoformat(),
         "lado_dominante": side,
         "captura": {
