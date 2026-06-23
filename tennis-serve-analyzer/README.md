@@ -1,12 +1,14 @@
-# Medidor de Velocidade de Saque — Protótipo
+# Analisador de Saque de Tênis — Protótipo
 
-Protótipo de visão computacional que mede a **velocidade da bola no saque de
-tênis** a partir de um vídeo gravado com a câmera do celular, gera vídeo
-anotado, gráfico de velocidade, CSV da trajetória e um resumo JSON pronto para
-protocolar e entregar à equipe do atleta.
+Protótipo de visão computacional que, a partir de um vídeo do celular, entrega
+duas análises do saque:
 
-Faz parte do ecossistema **VC Fisiocoach** (análise técnica + acompanhamento
-fisio/performance do atleta).
+1. **Velocidade da bola** — rastreio + calibração + velocidade no impacto.
+2. **Biomecânica do gesto** — pose do atleta, ângulos articulares, fases do
+   saque e sequência da cadeia cinética (proximal→distal).
+
+Gera vídeos anotados, gráficos, CSV e resumos JSON prontos para protocolar e
+entregar à equipe do atleta. Faz parte do ecossistema **VC Fisiocoach**.
 
 ## Como funciona
 
@@ -119,6 +121,57 @@ Para a velocidade ser confiável, padronize a filmagem:
    linha). Meça quantos pixels ele ocupa e passe em `--ref-length-px`.
 4. **Boa iluminação** e fundo contrastante com a bola.
 
+## Camada de biomecânica (análise do gesto)
+
+Mede o GESTO do atleta, não só a bola. Pipeline:
+`pose (YOLOv8-pose) → ângulos articulares → fases do saque → cadeia cinética`.
+
+```bash
+python src/analyze_biomech.py --video saque.mp4 --athlete "Nome" --fps 240
+```
+
+Mede, por quadro: ângulos de **cotovelo, ombro, joelho, quadril** e inclinação
+do tronco; segmenta as fases (**loading → cocking → contato → follow-through**)
+pela trajetória do punho; e avalia a **sequência da cadeia cinética** — no saque
+eficiente os picos de velocidade angular vão de proximal a distal
+(quadril/tronco → ombro → cotovelo). Saídas: `biomech_angulos.png`,
+`biomech_resumo.json` e `biomech_esqueleto.mp4` (vídeo com esqueleto + fases).
+
+A matemática dos ângulos é geometria pura e tem testes determinísticos:
+
+```bash
+python tools/test_biomechanics.py     # ângulo reto=90, fases, cadeia, etc.
+python tools/demo_biomech.py          # gera um relatório-exemplo (keypoints sintéticos)
+```
+
+A pose foi validada em foto real (17/17 keypoints; cotovelo 98°, joelho 174°).
+Como a pose só funciona em pessoas reais filmadas, a `demo_biomech` usa
+keypoints sintéticos apenas para mostrar o FORMATO do relatório.
+
+## Fine-tuning do detector de bola
+
+O YOLOv8 pré-treinado já detecta a bola, mas o ganho de robustez vem do
+fine-tuning com dados anotados. O harness está pronto:
+
+```bash
+# 1) dataset (troque por imagens REAIS anotadas no formato YOLO p/ produção)
+python tools/make_dataset.py --out dataset --n-train 200 --n-val 40
+# 2) treino
+python tools/train_detector.py --data dataset/data.yaml --base yolov8n.pt \
+    --epochs 50 --imgsz 960 --name tennis_ball
+# 3) usar os pesos treinados no medidor de velocidade
+python src/analyze.py --video saque.mp4 --detector dl \
+    --model runs/detect/tennis_ball/weights/best.pt ...
+```
+
+Estrutura esperada dos dados (compatível com export do Roboflow/CVAT):
+`images/{train,val}/*.jpg` + `labels/{train,val}/*.txt` (`classe cx cy w h`
+normalizado) + `data.yaml`.
+
+Pipeline validado no dataset sintético: o fine-tuning convergiu para
+**mAP50 ≈ 0,99 / mAP50-95 ≈ 0,95** no conjunto de validação held-out,
+confirmando que o loop de treino aprende e exporta o `best.pt`.
+
 ## Limitações (transparência técnica)
 
 - **Velocidade absoluta da bola não é "radar Doppler".** A escala vale no plano
@@ -129,14 +182,20 @@ Para a velocidade ser confiável, padronize a filmagem:
   real use `--detector dl` (YOLOv8). O YOLOv8 pré-treinado detecta bola de tênis
   como "sports ball", mas o recall cai com a bola muito pequena/borrada — o
   ganho real vem de **fine-tuning** com dataset de bola de tênis (`--model`).
+- A biomecânica usa pose 2D: ângulos no plano da imagem. Movimentos fora do
+  plano da câmera têm erro de projeção. Pose 3D / multi-câmera é trabalho futuro.
+- Os números de validação de bola (mAP ~0,99) e a `demo_biomech` vêm de dados
+  **sintéticos** — provam que os pipelines funcionam, não a acurácia em quadra.
+  Validação real exige filmagem do atleta.
 - Sem correção de distorção de lente nem de perspectiva 3D (roadmap).
 
 ## Roadmap
 
 - [x] Detector de bola por deep learning (YOLOv8, `--detector dl`).
-- [ ] Fine-tuning do detector com dataset de bola de tênis.
+- [x] Harness de fine-tuning do detector (dataset YOLO + treino + val).
+- [x] Estimativa de pose + biomecânica (ângulos, fases, cadeia cinética).
+- [ ] Fine-tuning com dataset REAL de bola de tênis (Roboflow/CVAT).
 - [ ] Calibração assistida (clicar 2 pontos / detectar a quadra automaticamente).
-- [ ] Estimativa de pose para biomecânica do gesto (ângulos, cadeia cinética).
 - [ ] Correção de perspectiva via homografia da quadra.
 - [ ] Banco de dados do atleta + gráficos evolutivos e comparativos.
 - [ ] Relatório PDF protocolável e integração com a biblioteca de exercícios.
@@ -146,17 +205,25 @@ Para a velocidade ser confiável, padronize a filmagem:
 ```
 tennis-serve-analyzer/
 ├── src/
-│   ├── analyze.py          # CLI principal
+│   ├── analyze.py          # CLI velocidade da bola
+│   ├── analyze_biomech.py  # CLI biomecânica do gesto
 │   ├── tracking.py         # associação temporal + interface de detector
 │   ├── ball_tracker.py     # detector clássico (cor + movimento)
 │   ├── detector_dl.py      # detector deep learning (YOLOv8)
+│   ├── pose_estimator.py   # pose do atleta (YOLOv8-pose)
+│   ├── biomechanics.py     # ângulos, fases, cadeia cinética (geometria pura)
 │   ├── calibration.py      # conversão pixel → metro
 │   ├── speed_estimator.py  # cálculo de velocidade
-│   └── report.py           # CSV, gráfico, vídeo anotado, JSON
+│   ├── report.py           # saídas da velocidade
+│   └── biomech_report.py   # saídas da biomecânica
 ├── tools/
 │   ├── generate_test_video.py    # saque sintético p/ validação
-│   └── render_realistic_ball.py  # bola sombreada p/ testar o detector DL
-├── output/                 # exemplos gerados (classic) e output/dl (DL)
+│   ├── render_realistic_ball.py  # bola sombreada p/ testar o detector DL
+│   ├── make_dataset.py           # dataset YOLO rotulado (fine-tuning)
+│   ├── train_detector.py         # fine-tuning do YOLOv8
+│   ├── test_biomechanics.py      # testes determinísticos da biomecânica
+│   └── demo_biomech.py           # relatório-exemplo de biomecânica
+├── output/                 # exemplos gerados (velocidade e biomech)
 ├── requirements.txt        # núcleo
-└── requirements-dl.txt     # detector DL (opcional)
+└── requirements-dl.txt     # detector DL + pose + treino (opcional)
 ```

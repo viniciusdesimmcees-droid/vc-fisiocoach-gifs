@@ -76,6 +76,13 @@ def main() -> int:
         "--conf", type=float, default=0.10, help="Confiança mínima do detector DL"
     )
     p.add_argument(
+        "--ball-class",
+        type=int,
+        default=32,
+        help="ID da classe da bola: 32 (COCO 'sports ball', modelo base) ou "
+        "0 (modelo com fine-tuning single-class)",
+    )
+    p.add_argument(
         "--no-color",
         action="store_true",
         help="Desliga o filtro de cor (use se a bola não for amarelo-esverdeada)",
@@ -93,7 +100,9 @@ def main() -> int:
         from detector_dl import DLBallDetector
 
         print(f"[0/4] Carregando detector DL ({args.model}) ...")
-        tracker = DLBallDetector(model_path=args.model, conf=args.conf)
+        tracker = DLBallDetector(
+            model_path=args.model, conf=args.conf, classes=(args.ball_class,)
+        )
     else:
         tracker = BallTracker(use_color=not args.no_color)
     print(f"[1/4] Rastreando bola ({args.detector}) em {args.video} ...")

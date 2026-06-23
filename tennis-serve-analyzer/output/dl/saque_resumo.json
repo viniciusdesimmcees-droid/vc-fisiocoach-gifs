@@ -1,18 +1,18 @@
 {
-  "atleta": "Atleta",
-  "gerado_em": "2026-06-23T10:37:26.278892+00:00",
+  "atleta": "Atleta Finetune",
+  "gerado_em": "2026-06-23T11:39:03.563913+00:00",
   "captura": {
     "fps": 240.0,
     "resolucao": "1280x720",
     "quadros": 61,
-    "deteccoes_bola": 18,
+    "deteccoes_bola": 61,
     "metros_por_pixel": 0.005
   },
   "resultado": {
-    "velocidade_pico_kmh": 180.6,
-    "velocidade_pico_ms": 50.16,
-    "velocidade_media_kmh": 106.1,
-    "quadro_impacto": 43
+    "velocidade_pico_kmh": 180.2,
+    "velocidade_pico_ms": 50.06,
+    "velocidade_media_kmh": 90.4,
+    "quadro_impacto": 39
   },
   "observacoes": []
 }

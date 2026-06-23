@@ -1,4 +1,5 @@
-# Detector por deep learning (opcional). torch via PyPI (o índice
-# download.pytorch.org pode estar bloqueado em alguns ambientes).
+# Recursos opcionais de deep learning: detector DL de bola, pose/biomecânica e
+# fine-tuning. torch via PyPI (o índice download.pytorch.org pode estar
+# bloqueado em alguns ambientes — o PyPI funciona).
 torch>=2.2
 ultralytics>=8.3

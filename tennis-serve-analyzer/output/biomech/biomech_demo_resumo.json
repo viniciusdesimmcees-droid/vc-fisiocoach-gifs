@@ -1,0 +1,42 @@
+{
+  "atleta": "Atleta Demo (sintético)",
+  "gerado_em": "2026-06-23T11:36:10.665299+00:00",
+  "lado_dominante": "right",
+  "captura": {
+    "fps": 240.0,
+    "quadros": 60,
+    "quadros_com_pose": 60
+  },
+  "fases": {
+    "loading": 0,
+    "cocking": 17,
+    "contato": 35,
+    "follow_through": 59
+  },
+  "angulos_no_contato": {
+    "cotovelo": 114.0,
+    "ombro": 119.5,
+    "joelho": 172.3,
+    "quadril": 139.7,
+    "inclinacao_tronco": 16.6
+  },
+  "angulos_no_loading": {
+    "cotovelo": 159.1,
+    "ombro": 26.6,
+    "joelho": 179.8,
+    "quadril": 179.5,
+    "inclinacao_tronco": 0.0
+  },
+  "cadeia_cinetica": {
+    "picos_velocidade_angular": {
+      "quadril": 13,
+      "tronco": 19,
+      "ombro": 29,
+      "cotovelo": 29
+    },
+    "proximal_para_distal": true,
+    "observacoes": [
+      "Sequência proximal->distal preservada (eficiente)."
+    ]
+  }
+}
