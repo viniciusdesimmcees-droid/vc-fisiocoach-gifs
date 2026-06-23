@@ -14,9 +14,14 @@ Cena:
 from __future__ import annotations
 
 import argparse
+import os
+import sys
 
 import cv2
 import numpy as np
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from render_realistic_ball import draw_tennis_ball
 
 
 def main() -> int:
@@ -34,6 +39,14 @@ def main() -> int:
     p.add_argument(
         "--ref-length-px", type=float, default=200.0, help="comprimento da referência em px"
     )
+    p.add_argument(
+        "--realistic",
+        action="store_true",
+        help="desenha bola com sombreamento/costura (p/ testar o detector DL)",
+    )
+    p.add_argument(
+        "--ball-radius", type=int, default=7, help="raio da bola em px"
+    )
     args = p.parse_args()
 
     mpp = args.ref_length_m / args.ref_length_px  # metros por pixel (ground truth)
@@ -43,7 +56,7 @@ def main() -> int:
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     out = cv2.VideoWriter(args.out, fourcc, args.fps, (args.width, args.height))
 
-    ball_r = 7
+    ball_r = args.ball_radius
     ref_x = 120
     ref_top = args.height - 120 - int(args.ref_length_px)
 
@@ -81,8 +94,11 @@ def main() -> int:
             frame, (ref_x, ref_top), (ref_x, ref_top + int(args.ref_length_px)),
             (255, 255, 255), 6,
         )
-        # bola amarelo-esverdeada (BGR)
-        cv2.circle(frame, (int(pt[0]), int(pt[1])), ball_r, (60, 230, 220), -1)
+        # bola: chapada (clássico) ou sombreada/realista (p/ detector DL)
+        if args.realistic:
+            draw_tennis_ball(frame, int(pt[0]), int(pt[1]), ball_r)
+        else:
+            cv2.circle(frame, (int(pt[0]), int(pt[1])), ball_r, (60, 230, 220), -1)
         out.write(frame)
 
     out.release()

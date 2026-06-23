@@ -12,7 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from calibration import Calibration
-from ball_tracker import Detection
+from tracking import Detection
 
 
 @dataclass

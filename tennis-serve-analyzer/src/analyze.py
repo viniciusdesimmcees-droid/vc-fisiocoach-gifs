@@ -28,6 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from calibration import Calibration
 from ball_tracker import BallTracker
 from speed_estimator import estimate
+
 from report import (
     write_trajectory_csv,
     write_speed_plot,
@@ -60,6 +61,21 @@ def main() -> int:
     )
     p.add_argument("--outdir", default="output", help="Diretório de saída")
     p.add_argument(
+        "--detector",
+        choices=["classic", "dl"],
+        default="classic",
+        help="classic = cor+movimento (sem deps pesadas); "
+        "dl = YOLOv8 (robusto em quadra real, requer ultralytics/torch)",
+    )
+    p.add_argument(
+        "--model",
+        default="yolov8n.pt",
+        help="Pesos do detector DL (use seu fine-tuning de bola de tênis aqui)",
+    )
+    p.add_argument(
+        "--conf", type=float, default=0.10, help="Confiança mínima do detector DL"
+    )
+    p.add_argument(
         "--no-color",
         action="store_true",
         help="Desliga o filtro de cor (use se a bola não for amarelo-esverdeada)",
@@ -73,8 +89,14 @@ def main() -> int:
 
     os.makedirs(args.outdir, exist_ok=True)
 
-    tracker = BallTracker(use_color=not args.no_color)
-    print(f"[1/4] Rastreando bola em {args.video} ...")
+    if args.detector == "dl":
+        from detector_dl import DLBallDetector
+
+        print(f"[0/4] Carregando detector DL ({args.model}) ...")
+        tracker = DLBallDetector(model_path=args.model, conf=args.conf)
+    else:
+        tracker = BallTracker(use_color=not args.no_color)
+    print(f"[1/4] Rastreando bola ({args.detector}) em {args.video} ...")
     trajectory, meta = tracker.track(args.video)
     print(
         f"      {meta['detections']} detecções em {meta['frames']} quadros "

@@ -13,7 +13,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ball_tracker import Detection
+from tracking import Detection
 from speed_estimator import SpeedResult
 
 

@@ -1,3 +1,5 @@
 __pycache__/
 *.pyc
+*.pt
 output/t.mp4
+output/_probe.jpg

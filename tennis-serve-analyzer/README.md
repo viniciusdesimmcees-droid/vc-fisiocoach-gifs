@@ -27,10 +27,26 @@ vídeo  →  rastreio da bola  →  calibração px→m  →  velocidade  →  r
    velocidade sobreposta), `*_velocidade.png`, `*_trajetoria.csv` e
    `*_resumo.json`.
 
+## Dois detectores de bola (intercambiáveis)
+
+O rastreio é dividido em **detector de candidatos** (por quadro) + **associação
+temporal** (`tracking.py`). Há duas implementações com a mesma interface:
+
+| Detector | Flag | Quando usar | Dependências |
+|----------|------|-------------|--------------|
+| Clássico (cor + movimento) | `--detector classic` (padrão) | Fundo controlado, sem GPU, zero setup | numpy, opencv |
+| Deep learning (YOLOv8) | `--detector dl` | Quadra real, fundo poluído, robustez | + torch, ultralytics |
+
+O detector DL usa a classe COCO 32 ("sports ball"), que os pesos pré-treinados
+do YOLOv8 já reconhecem — **não exige treinar nada para começar**. Para máxima
+robustez, faça fine-tuning com um dataset de bola de tênis e aponte `--model`
+para esses pesos.
+
 ## Instalação
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt        # núcleo (detector clássico)
+pip install -r requirements-dl.txt     # opcional (detector DL: torch + YOLOv8)
 ```
 
 ## Uso
@@ -48,13 +64,33 @@ python src/analyze.py \
 Saídas em `output/`: `saque_anotado.mp4`, `saque_velocidade.png`,
 `saque_trajetoria.csv`, `saque_resumo.json`.
 
+Com o detector por deep learning:
+
+```bash
+python src/analyze.py --video saque.mp4 --athlete "Nome" \
+  --detector dl --model yolov8m.pt --conf 0.05 \
+  --ref-length-m 0.914 --ref-length-px 220 --fps 240
+```
+
 ### Testar sem filmagem (vídeo sintético com velocidade conhecida)
 
 ```bash
+# bola chapada (detector clássico)
 python tools/generate_test_video.py --serve-kmh 180 --fps 240
 python src/analyze.py --video output/saque_sintetico.mp4 \
   --ref-length-m 1.0 --ref-length-px 200 --fps 240
+
+# bola sombreada/realista (detector DL)
+python tools/generate_test_video.py --serve-kmh 180 --fps 240 \
+  --realistic --ball-radius 22 --out output/saque_realista.mp4
+python src/analyze.py --video output/saque_realista.mp4 \
+  --detector dl --model yolov8m.pt --conf 0.05 \
+  --ref-length-m 1.0 --ref-length-px 200 --fps 240
 ```
+
+> O detector DL foi treinado em **fotos reais**; o círculo chapado do sintético
+> não dispara. Por isso o gerador tem `--realistic`. Validação de precisão de
+> verdade exige filmagem real.
 
 ## Precisão validada (vídeo sintético, ground truth conhecido)
 
@@ -89,14 +125,16 @@ Para a velocidade ser confiável, padronize a filmagem:
   da referência; se a bola sai muito desse plano há erro de perspectiva. É
   honesto chamar de *estimativa de alta precisão sob protocolo padronizado*,
   não de medição pericial certificada.
-- O rastreador atual é clássico (cor + movimento). Em fundo poluído ou
-  iluminação ruim erra mais. Em produção, trocar por um detector treinado
-  (YOLO/TrackNet para bola de tênis) mantendo a mesma interface.
+- O detector clássico (cor + movimento) erra mais em fundo poluído; para quadra
+  real use `--detector dl` (YOLOv8). O YOLOv8 pré-treinado detecta bola de tênis
+  como "sports ball", mas o recall cai com a bola muito pequena/borrada — o
+  ganho real vem de **fine-tuning** com dataset de bola de tênis (`--model`).
 - Sem correção de distorção de lente nem de perspectiva 3D (roadmap).
 
 ## Roadmap
 
-- [ ] Detector de bola por deep learning (robustez em quadra real).
+- [x] Detector de bola por deep learning (YOLOv8, `--detector dl`).
+- [ ] Fine-tuning do detector com dataset de bola de tênis.
 - [ ] Calibração assistida (clicar 2 pontos / detectar a quadra automaticamente).
 - [ ] Estimativa de pose para biomecânica do gesto (ângulos, cadeia cinética).
 - [ ] Correção de perspectiva via homografia da quadra.
@@ -109,12 +147,16 @@ Para a velocidade ser confiável, padronize a filmagem:
 tennis-serve-analyzer/
 ├── src/
 │   ├── analyze.py          # CLI principal
-│   ├── ball_tracker.py     # detecção + rastreio da bola
+│   ├── tracking.py         # associação temporal + interface de detector
+│   ├── ball_tracker.py     # detector clássico (cor + movimento)
+│   ├── detector_dl.py      # detector deep learning (YOLOv8)
 │   ├── calibration.py      # conversão pixel → metro
 │   ├── speed_estimator.py  # cálculo de velocidade
 │   └── report.py           # CSV, gráfico, vídeo anotado, JSON
 ├── tools/
-│   └── generate_test_video.py  # saque sintético p/ validação
-├── output/                 # exemplos gerados
-└── requirements.txt
+│   ├── generate_test_video.py    # saque sintético p/ validação
+│   └── render_realistic_ball.py  # bola sombreada p/ testar o detector DL
+├── output/                 # exemplos gerados (classic) e output/dl (DL)
+├── requirements.txt        # núcleo
+└── requirements-dl.txt     # detector DL (opcional)
 ```

@@ -1,0 +1,18 @@
+{
+  "atleta": "Atleta",
+  "gerado_em": "2026-06-23T10:37:26.278892+00:00",
+  "captura": {
+    "fps": 240.0,
+    "resolucao": "1280x720",
+    "quadros": 61,
+    "deteccoes_bola": 18,
+    "metros_por_pixel": 0.005
+  },
+  "resultado": {
+    "velocidade_pico_kmh": 180.6,
+    "velocidade_pico_ms": 50.16,
+    "velocidade_media_kmh": 106.1,
+    "quadro_impacto": 43
+  },
+  "observacoes": []
+}

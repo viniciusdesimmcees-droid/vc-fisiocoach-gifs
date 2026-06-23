@@ -1,0 +1,4 @@
+# Detector por deep learning (opcional). torch via PyPI (o índice
+# download.pytorch.org pode estar bloqueado em alguns ambientes).
+torch>=2.2
+ultralytics>=8.3

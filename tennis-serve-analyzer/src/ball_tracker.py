@@ -1,31 +1,21 @@
-"""Detecção e rastreamento da bola de tênis em um vídeo.
+"""Detector clássico de bola (cor + movimento), sem rede neural.
 
-Estratégia do protótipo (sem rede neural treinada, roda em qualquer máquina):
+Estratégia (roda em qualquer máquina, sem GPU):
   1. Subtração de fundo (MOG2) para isolar o que se move.
   2. Filtro de cor HSV para o amarelo-esverdeado típico da bola.
   3. Detecção de blobs circulares por contorno (área + circularidade).
-  4. Associação quadro-a-quadro pela proximidade (vizinho mais próximo),
-     com tolerância a alguns quadros sem detecção (oclusão / blur).
 
-Para produção, este módulo seria substituído por um detector treinado
-(ex.: YOLO/TrackNet para bola de tênis), mantendo a mesma interface de saída.
+A associação quadro-a-quadro fica em `tracking.associate`. Este módulo só
+fornece os CANDIDATOS de cada quadro, expondo `candidates(frame)`. O detector
+por deep learning (`detector_dl.py`) cumpre a mesma interface e é intercambiável.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import cv2
 import numpy as np
 
-
-@dataclass
-class Detection:
-    frame: int
-    x: float  # centro em pixels
-    y: float
-    radius: float
-
+from tracking import Detection, associate
 
 # Faixa HSV para a bola amarelo-esverdeada. Ajustável conforme iluminação.
 DEFAULT_HSV_LOW = (25, 60, 60)
@@ -52,7 +42,7 @@ class BallTracker:
             history=200, varThreshold=25, detectShadows=False
         )
 
-    def _candidates(self, frame: np.ndarray) -> list[Detection]:
+    def candidates(self, frame: np.ndarray) -> list[Detection]:
         motion = self._bg.apply(frame)
         motion = cv2.medianBlur(motion, 3)
 
@@ -82,75 +72,12 @@ class BallTracker:
             circularity = area / (np.pi * r * r + 1e-6)
             if circularity < self.min_circularity:
                 continue
-            out.append(Detection(frame=-1, x=float(cx), y=float(cy), radius=float(r)))
+            out.append(
+                Detection(frame=-1, x=float(cx), y=float(cy), radius=float(r))
+            )
         return out
 
     def track(
         self, video_path: str, max_jump_px: float = 180.0, max_gap: int = 6
     ) -> tuple[list[Detection], dict]:
-        """Rastreia a bola ao longo do vídeo.
-
-        Retorna a trajetória (lista de Detection ordenada por quadro) e um dict
-        de metadados (fps, dimensões, total de quadros).
-        """
-        cap = cv2.VideoCapture(video_path)
-        if not cap.isOpened():
-            raise FileNotFoundError(f"Não foi possível abrir o vídeo: {video_path}")
-
-        fps = cap.get(cv2.CAP_PROP_FPS) or 0.0
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-        trajectory: list[Detection] = []
-        last: Detection | None = None
-        gap = 0
-        frame_idx = -1
-
-        while True:
-            ok, frame = cap.read()
-            if not ok:
-                break
-            frame_idx += 1
-
-            cands = self._candidates(frame)
-            for d in cands:
-                d.frame = frame_idx
-
-            if not cands:
-                gap += 1
-                if gap > max_gap:
-                    last = None
-                continue
-
-            if last is None:
-                # Pega o maior candidato (bola tende a ser blob consistente).
-                chosen = max(cands, key=lambda d: d.radius)
-            else:
-                # Vizinho mais próximo, penalizando mudança brusca de raio
-                # (rejeita blobs-fantasma de ruído com tamanho inconsistente).
-                def dist(d: Detection) -> float:
-                    return ((d.x - last.x) ** 2 + (d.y - last.y) ** 2) ** 0.5
-
-                def cost(d: Detection) -> float:
-                    return dist(d) + 8.0 * abs(d.radius - last.radius)
-
-                chosen = min(cands, key=cost)
-                if dist(chosen) > max_jump_px * (1 + gap):
-                    gap += 1
-                    if gap > max_gap:
-                        last = None
-                    continue
-
-            trajectory.append(chosen)
-            last = chosen
-            gap = 0
-
-        cap.release()
-        meta = {
-            "fps": fps,
-            "width": width,
-            "height": height,
-            "frames": frame_idx + 1,
-            "detections": len(trajectory),
-        }
-        return trajectory, meta
+        return associate(video_path, self, max_jump_px=max_jump_px, max_gap=max_gap)
