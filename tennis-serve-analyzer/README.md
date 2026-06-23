@@ -45,6 +45,12 @@ python webapp/app.py --https            # gera o certificado via openssl
 O app é instalável: no navegador, use “Adicionar à tela inicial”. Ele passa a
 abrir com a **logomarca** em tela cheia, no celular e no computador.
 
+### Publicar online (HTTPS automático, sem terminal)
+
+Para acessar de qualquer lugar, conecte o repositório a uma plataforma de
+hospedagem — o app já vem pronto para produção (gunicorn) com `render.yaml`,
+`Dockerfile` e `Procfile`. Passo a passo em **[DEPLOY.md](DEPLOY.md)**.
+
 > O app roda na sua máquina; seus vídeos não saem do aparelho. O detector
 > clássico é o padrão (rápido); deep learning e biomecânica exigem
 > `requirements-dl.txt`. A logo é gerada por `python tools/make_logo.py`.

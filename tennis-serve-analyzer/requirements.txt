@@ -3,3 +3,4 @@ opencv-python-headless>=4.8
 matplotlib>=3.7
 pillow>=10.0
 flask>=3.0
+gunicorn>=21.0

@@ -1,0 +1,18 @@
+# Blueprint do Render (https://render.com) — deploy do Analisador de Saque.
+# Conecte este repositório no Render; ele lê este arquivo e cria o serviço.
+# HTTPS é automático (o Render fornece o certificado e a URL https://...).
+#
+# Observação: este blueprint instala o detector clássico (leve), que roda no
+# plano gratuito. O detector por deep learning e a biomecânica (torch ~1 GB)
+# exigem um plano com mais memória/disco — veja DEPLOY.md.
+services:
+  - type: web
+    name: fisiocoach-saque
+    runtime: python
+    rootDir: tennis-serve-analyzer
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --chdir webapp --timeout 120 --workers 1 --bind 0.0.0.0:$PORT app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"

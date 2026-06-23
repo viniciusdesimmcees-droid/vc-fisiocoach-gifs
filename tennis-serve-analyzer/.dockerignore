@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pt
+dataset/
+runs/
+output/
+webapp/uploads/
+webapp/static/results/
+webapp/certs/
+.git/
