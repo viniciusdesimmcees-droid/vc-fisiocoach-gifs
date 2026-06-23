@@ -1,7 +1,7 @@
 {
-  "name": "VC Fisiocoach — Analisador de Saque",
-  "short_name": "Fisiocoach",
-  "description": "Análise de velocidade e biomecânica do saque de tênis.",
+  "name": "VF Tênis Scanner — Analisador de Saque",
+  "short_name": "Tênis Scanner",
+  "description": "Scanner de saque de tênis: velocidade e biomecânica do atleta.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
