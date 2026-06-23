@@ -13,6 +13,16 @@ a câmera do celular funciona (porque a plataforma serve em HTTPS).
 
 ## Opção A — Render (recomendada, tem plano grátis)
 
+**Jeito mais rápido (1 clique):**
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/viniciusdesimmcees-droid/vc-fisiocoach-gifs)
+
+Clique no botão acima, entre com o GitHub, autorize e clique em **Apply**. O
+Render lê o `render.yaml` e publica sozinho. Em ~3 min você recebe a URL
+`https://...onrender.com`.
+
+**Ou pelo painel, manualmente:**
+
 1. Crie uma conta em https://render.com (pode entrar com o GitHub).
 2. No painel: **New → Blueprint**.
 3. Conecte o repositório `vc-fisiocoach-gifs`.
