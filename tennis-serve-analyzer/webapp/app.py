@@ -42,9 +42,11 @@ app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024  # 200 MB
 
 # Largura máxima de processamento no servidor: reduz vídeos grandes (1080p+)
 # para caber na memória/tempo de planos pequenos (ex.: Render free, 512 MB).
-PROC_MAX_WIDTH = int(os.environ.get("PROC_MAX_WIDTH", "720"))
+PROC_MAX_WIDTH = int(os.environ.get("PROC_MAX_WIDTH", "540"))
 # Limite de quadros processados (evita estourar o tempo em vídeos longos).
-PROC_MAX_FRAMES = int(os.environ.get("PROC_MAX_FRAMES", "1800"))
+PROC_MAX_FRAMES = int(os.environ.get("PROC_MAX_FRAMES", "900"))
+# Gerar o MP4 anotado (passada extra, cara em CPU fraca). Por padrão só o GIF.
+MAKE_MP4 = os.environ.get("MAKE_MP4", "0") == "1"
 
 # Deep learning (detector YOLOv8 + biomecânica) só está disponível se torch e
 # ultralytics estiverem instalados — não estão no plano grátis. Detectamos uma
@@ -163,18 +165,22 @@ def analyze():
             base + "_resumo.json", athlete, result, meta, calib.meters_per_pixel
         )
         report.write_annotated_gif(
-            in_path, base + "_anotado.gif", trajectory, result, proc_scale=scale
+            in_path, base + "_anotado.gif", trajectory, result, proc_scale=scale,
+            max_width=420, max_frames=50, fps_out=15.0,
         )
-        report.write_annotated_video(
-            in_path, base + "_anotado.mp4", trajectory, result, proc_scale=scale
-        )
+        mp4_url = None
+        if MAKE_MP4:
+            report.write_annotated_video(
+                in_path, base + "_anotado.mp4", trajectory, result, proc_scale=scale
+            )
+            mp4_url = url_for("static", filename=f"results/{job}/saque_anotado.mp4")
 
         ctx = {
             "athlete": athlete,
             "summary": summary,
             "detector": detector,
             "gif": url_for("static", filename=f"results/{job}/saque_anotado.gif"),
-            "mp4": url_for("static", filename=f"results/{job}/saque_anotado.mp4"),
+            "mp4": mp4_url,
             "plot": url_for("static", filename=f"results/{job}/saque_velocidade.png"),
             "csv": url_for("static", filename=f"results/{job}/saque_trajetoria.csv"),
             "json": url_for("static", filename=f"results/{job}/saque_resumo.json"),

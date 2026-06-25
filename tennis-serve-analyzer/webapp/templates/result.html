@@ -42,7 +42,7 @@
       <h2>Vídeo anotado</h2>
       <img class="result" src="{{ gif }}" alt="Saque anotado">
       <div class="downloads">
-        <a href="{{ mp4 }}" download>Baixar MP4</a>
+        {% if mp4 %}<a href="{{ mp4 }}" download>Baixar MP4</a>{% endif %}
         <a href="{{ csv }}" download>Baixar CSV (trajetória)</a>
         <a href="{{ json }}" download>Baixar JSON (resumo)</a>
       </div>
