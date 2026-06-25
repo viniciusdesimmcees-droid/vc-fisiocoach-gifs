@@ -38,7 +38,11 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 300 * 1024 * 1024  # 300 MB
+app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024  # 200 MB
+
+# Largura máxima de processamento no servidor: reduz vídeos grandes (1080p+)
+# para caber na memória/tempo de planos pequenos (ex.: Render free, 512 MB).
+PROC_MAX_WIDTH = int(os.environ.get("PROC_MAX_WIDTH", "720"))
 
 
 def _f(name: str, default: float) -> float:
@@ -49,6 +53,23 @@ def _f(name: str, default: float) -> float:
 
 
 STATIC = os.path.join(HERE, "static")
+
+
+@app.errorhandler(413)
+def too_large(_e):
+    return render_template(
+        "index.html",
+        error="Vídeo muito grande (máx. 200 MB). Envie um clipe curto do saque.",
+    ), 413
+
+
+@app.errorhandler(500)
+def server_error(_e):
+    return render_template(
+        "index.html",
+        error="Algo deu errado ao processar o vídeo. Tente um clipe mais curto "
+        "ou confira a calibração. Se persistir, me avise.",
+    ), 500
 
 
 @app.route("/")
@@ -103,7 +124,9 @@ def analyze():
             )
         else:
             tracker = BallTracker()
-        trajectory, meta = tracker.track(in_path)
+        # Reduz vídeos grandes no servidor (memória/tempo em planos pequenos).
+        trajectory, meta = tracker.track(in_path, max_width=PROC_MAX_WIDTH)
+        scale = meta.get("scale", 1.0)
 
         fps = fps_override if fps_override > 0 else meta["fps"]
         if not fps or fps <= 0:
@@ -111,7 +134,9 @@ def analyze():
                 "fps inválido. Informe o fps real da captura no formulário."
             )
 
-        calib = Calibration.from_reference(ref_m, ref_px, fps)
+        # A referência foi medida na resolução original; ajusta para a escala
+        # reduzida em que o rastreio rodou (mantém a velocidade correta).
+        calib = Calibration.from_reference(ref_m, ref_px * scale, fps)
         result = estimate(trajectory, calib)
 
         base = os.path.join(job_dir, "saque")
@@ -120,8 +145,12 @@ def analyze():
         summary = report.write_summary_json(
             base + "_resumo.json", athlete, result, meta, calib.meters_per_pixel
         )
-        report.write_annotated_gif(in_path, base + "_anotado.gif", trajectory, result)
-        report.write_annotated_video(in_path, base + "_anotado.mp4", trajectory, result)
+        report.write_annotated_gif(
+            in_path, base + "_anotado.gif", trajectory, result, proc_scale=scale
+        )
+        report.write_annotated_video(
+            in_path, base + "_anotado.mp4", trajectory, result, proc_scale=scale
+        )
 
         ctx = {
             "athlete": athlete,
@@ -137,13 +166,23 @@ def analyze():
 
         # ---- biomecânica (opcional) ----
         if run_biomech:
-            ctx["biomech"] = _run_biomech(in_path, job_dir, job, athlete, fps)
+            try:
+                ctx["biomech"] = _run_biomech(in_path, job_dir, job, athlete, fps)
+            except Exception:
+                traceback.print_exc()  # biomecânica é extra: não derruba o resultado
 
         return render_template("result.html", **ctx)
 
     except Exception as e:  # mostra o erro de forma amigável
         traceback.print_exc()
         return render_template("index.html", error=f"Falha na análise: {e}"), 500
+    finally:
+        # libera o vídeo enviado (poupa disco no servidor)
+        try:
+            if os.path.exists(in_path):
+                os.remove(in_path)
+        except OSError:
+            pass
 
 
 def _run_biomech(in_path, job_dir, job, athlete, fps):

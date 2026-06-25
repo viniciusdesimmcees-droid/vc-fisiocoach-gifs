@@ -85,9 +85,14 @@ def write_summary_json(
     return summary
 
 
-def _annotated_frames(in_path: str, trajectory: list[Detection], result: SpeedResult):
+def _annotated_frames(
+    in_path: str, trajectory: list[Detection], result: SpeedResult,
+    proc_scale: float = 1.0,
+):
     """Gera (yield) cada quadro do vídeo anotado com trajetória + velocidade.
 
+    `proc_scale`: se o rastreio rodou em resolução reduzida, redimensiona cada
+    quadro original pelo mesmo fator para as coordenadas baterem.
     Usado tanto pelo escritor de MP4 quanto pelo de GIF.
     """
     by_frame = {d.frame: d for d in trajectory}
@@ -97,6 +102,8 @@ def _annotated_frames(in_path: str, trajectory: list[Detection], result: SpeedRe
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    if proc_scale != 1.0:
+        width, height = round(width * proc_scale), round(height * proc_scale)
 
     trail: list[tuple[int, int]] = []
     frame_idx = -1
@@ -105,6 +112,8 @@ def _annotated_frames(in_path: str, trajectory: list[Detection], result: SpeedRe
         if not ok:
             break
         frame_idx += 1
+        if proc_scale != 1.0:
+            frame = cv2.resize(frame, (width, height))
 
         d = by_frame.get(frame_idx)
         if d is not None:
@@ -136,10 +145,11 @@ def write_annotated_video(
     out_path: str,
     trajectory: list[Detection],
     result: SpeedResult,
+    proc_scale: float = 1.0,
 ) -> None:
     """Reescreve o vídeo (MP4) com o esqueleto da trajetória e a velocidade."""
     out = None
-    for frame, fps in _annotated_frames(in_path, trajectory, result):
+    for frame, fps in _annotated_frames(in_path, trajectory, result, proc_scale):
         if out is None:
             h, w = frame.shape[:2]
             fourcc = cv2.VideoWriter_fourcc(*"mp4v")
@@ -154,23 +164,39 @@ def write_annotated_gif(
     out_path: str,
     trajectory: list[Detection],
     result: SpeedResult,
-    max_width: int = 640,
-    fps_out: float = 20.0,
+    max_width: int = 480,
+    fps_out: float = 18.0,
+    max_frames: int = 90,
+    proc_scale: float = 1.0,
 ) -> None:
     """Gera um GIF anotado (toca nativamente em qualquer navegador).
 
-    Reduz largura para `max_width` e limita o fps para um arquivo leve.
+    Limita largura (`max_width`) E número de quadros (`max_frames`, amostrados
+    uniformemente) para o arquivo ser leve e NÃO estourar a memória do servidor
+    com vídeos longos/alta resolução.
     """
     from PIL import Image
 
+    total = 0
+    cap = cv2.VideoCapture(in_path)
+    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    cap.release()
+    step = max(1, total // max_frames) if total else 1
+
     pil_frames = []
-    for frame, _ in _annotated_frames(in_path, trajectory, result):
+    for i, (frame, _) in enumerate(
+        _annotated_frames(in_path, trajectory, result, proc_scale)
+    ):
+        if i % step:
+            continue
         h, w = frame.shape[:2]
         if w > max_width:
-            scale = max_width / w
-            frame = cv2.resize(frame, (max_width, int(h * scale)))
+            sc = max_width / w
+            frame = cv2.resize(frame, (max_width, int(h * sc)))
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         pil_frames.append(Image.fromarray(rgb))
+        if len(pil_frames) >= max_frames:
+            break
 
     if not pil_frames:
         return

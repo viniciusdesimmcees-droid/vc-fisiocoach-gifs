@@ -78,6 +78,10 @@ class BallTracker:
         return out
 
     def track(
-        self, video_path: str, max_jump_px: float = 180.0, max_gap: int = 6
+        self, video_path: str, max_jump_px: float = 180.0, max_gap: int = 6,
+        max_width: int | None = None,
     ) -> tuple[list[Detection], dict]:
-        return associate(video_path, self, max_jump_px=max_jump_px, max_gap=max_gap)
+        return associate(
+            video_path, self, max_jump_px=max_jump_px, max_gap=max_gap,
+            max_width=max_width,
+        )

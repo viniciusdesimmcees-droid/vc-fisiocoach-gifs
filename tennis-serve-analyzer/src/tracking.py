@@ -35,9 +35,15 @@ def associate(
     detector: CandidateDetector,
     max_jump_px: float = 180.0,
     max_gap: int = 6,
+    max_width: int | None = None,
 ) -> tuple[list[Detection], dict]:
     """Rastreia a bola: lê o vídeo, pede candidatos por quadro ao `detector` e
     encadeia as detecções por proximidade + consistência de tamanho.
+
+    `max_width`: se informado e o vídeo for mais largo, reduz cada quadro antes
+    de processar (economiza memória/tempo — essencial em servidores pequenos).
+    As coordenadas saem nessa escala reduzida; `meta['scale']` informa o fator
+    para reconverter (calibração e anotação se ajustam por ele).
 
     Retorna (trajetória ordenada por quadro, metadados).
     """
@@ -49,6 +55,10 @@ def associate(
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
+    scale = 1.0
+    if max_width and width > max_width:
+        scale = max_width / width
+
     trajectory: list[Detection] = []
     last: Detection | None = None
     gap = 0
@@ -59,6 +69,11 @@ def associate(
         if not ok:
             break
         frame_idx += 1
+
+        if scale != 1.0:
+            frame = cv2.resize(
+                frame, (round(width * scale), round(height * scale))
+            )
 
         cands = detector.candidates(frame)
         for d in cands:
@@ -100,5 +115,6 @@ def associate(
         "height": height,
         "frames": frame_idx + 1,
         "detections": len(trajectory),
+        "scale": scale,
     }
     return trajectory, meta
