@@ -70,7 +70,7 @@
           <label>Detector da bola</label>
           <select name="detector">
             <option value="classic">Clássico (rápido, sem GPU)</option>
-            <option value="dl">Deep learning (YOLOv8)</option>
+            {% if dl_available %}<option value="dl">Deep learning (YOLOv8)</option>{% endif %}
           </select>
         </div>
       </div>
@@ -89,10 +89,12 @@
       <p class="hint">Use um objeto de tamanho conhecido no plano do saque (ex.: rede = 0,914 m
         no centro) e meça quantos pixels ele ocupa no quadro.</p>
 
+      {% if dl_available %}
       <div class="check">
         <input type="checkbox" name="biomech" id="biomech">
         <label for="biomech">Incluir análise biomecânica (pose, ângulos, fases) — requer deep learning</label>
       </div>
+      {% endif %}
 
       <button type="submit">Analisar saque</button>
       <p class="note">A análise roda no seu computador. Seus vídeos não saem do seu aparelho.</p>

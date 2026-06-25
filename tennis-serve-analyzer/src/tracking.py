@@ -36,6 +36,7 @@ def associate(
     max_jump_px: float = 180.0,
     max_gap: int = 6,
     max_width: int | None = None,
+    max_frames: int | None = None,
 ) -> tuple[list[Detection], dict]:
     """Rastreia a bola: lê o vídeo, pede candidatos por quadro ao `detector` e
     encadeia as detecções por proximidade + consistência de tamanho.
@@ -69,6 +70,8 @@ def associate(
         if not ok:
             break
         frame_idx += 1
+        if max_frames and frame_idx >= max_frames:
+            break
 
         if scale != 1.0:
             frame = cv2.resize(

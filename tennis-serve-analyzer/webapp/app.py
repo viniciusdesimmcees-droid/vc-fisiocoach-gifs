@@ -43,6 +43,17 @@ app.config["MAX_CONTENT_LENGTH"] = 200 * 1024 * 1024  # 200 MB
 # Largura máxima de processamento no servidor: reduz vídeos grandes (1080p+)
 # para caber na memória/tempo de planos pequenos (ex.: Render free, 512 MB).
 PROC_MAX_WIDTH = int(os.environ.get("PROC_MAX_WIDTH", "720"))
+# Limite de quadros processados (evita estourar o tempo em vídeos longos).
+PROC_MAX_FRAMES = int(os.environ.get("PROC_MAX_FRAMES", "1800"))
+
+# Deep learning (detector YOLOv8 + biomecânica) só está disponível se torch e
+# ultralytics estiverem instalados — não estão no plano grátis. Detectamos uma
+# vez para esconder as opções na tela e cair no clássico automaticamente.
+import importlib.util as _ilu
+
+DL_AVAILABLE = (
+    _ilu.find_spec("torch") is not None and _ilu.find_spec("ultralytics") is not None
+)
 
 
 def _f(name: str, default: float) -> float:
@@ -74,7 +85,7 @@ def server_error(_e):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", dl_available=DL_AVAILABLE)
 
 
 @app.route("/manifest.webmanifest")
@@ -111,6 +122,10 @@ def analyze():
     detector = request.form.get("detector", "classic")
     run_biomech = request.form.get("biomech") == "on"
 
+    # Deep learning indisponível (plano grátis): cai no clássico em vez de falhar.
+    if detector == "dl" and not DL_AVAILABLE:
+        detector = "classic"
+
     try:
         # ---- rastreio da bola ----
         if detector == "dl":
@@ -125,7 +140,9 @@ def analyze():
         else:
             tracker = BallTracker()
         # Reduz vídeos grandes no servidor (memória/tempo em planos pequenos).
-        trajectory, meta = tracker.track(in_path, max_width=PROC_MAX_WIDTH)
+        trajectory, meta = tracker.track(
+            in_path, max_width=PROC_MAX_WIDTH, max_frames=PROC_MAX_FRAMES
+        )
         scale = meta.get("scale", 1.0)
 
         fps = fps_override if fps_override > 0 else meta["fps"]
@@ -165,7 +182,7 @@ def analyze():
         }
 
         # ---- biomecânica (opcional) ----
-        if run_biomech:
+        if run_biomech and DL_AVAILABLE:
             try:
                 ctx["biomech"] = _run_biomech(in_path, job_dir, job, athlete, fps)
             except Exception:
