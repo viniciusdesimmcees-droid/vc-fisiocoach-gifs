@@ -8,3 +8,4 @@ runs/
 webapp/uploads/
 webapp/static/results/
 webapp/certs/
+webapp/data/

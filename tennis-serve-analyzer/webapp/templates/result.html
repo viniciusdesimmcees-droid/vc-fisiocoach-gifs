@@ -20,7 +20,10 @@
   </header>
 
   <div class="wrap">
-    <a class="back" href="{{ url_for('index') }}">← Analisar outro saque</a>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
+      <a class="back" href="{{ url_for('index') }}">← Analisar outro saque</a>
+      {% if history_url %}<a class="back" href="{{ history_url }}">Ver histórico do atleta →</a>{% endif %}
+    </div>
 
     <div class="card">
       <h2>Velocidade do saque <span class="tag">detector: {{ detector }}</span></h2>

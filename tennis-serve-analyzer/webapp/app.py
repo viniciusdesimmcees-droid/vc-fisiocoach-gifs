@@ -21,16 +21,22 @@ import sys
 import uuid
 import traceback
 
-from flask import Flask, request, render_template, url_for, send_from_directory
+from flask import (
+    Flask, request, render_template, url_for, send_from_directory, Response, abort
+)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "..", "src")
 sys.path.insert(0, SRC)
+sys.path.insert(0, HERE)
 
 from calibration import Calibration  # noqa: E402
 from ball_tracker import BallTracker  # noqa: E402
 from speed_estimator import estimate  # noqa: E402
 import report  # noqa: E402
+import history  # noqa: E402
+
+history.init_db()
 
 RESULTS_DIR = os.path.join(HERE, "static", "results")
 UPLOADS_DIR = os.path.join(HERE, "uploads")
@@ -66,6 +72,35 @@ def _f(name: str, default: float) -> float:
 
 
 STATIC = os.path.join(HERE, "static")
+
+
+# ---------- histórico do atleta ----------
+@app.route("/historico")
+def historico():
+    return render_template("historico.html", athletes=history.list_athletes())
+
+
+@app.route("/historico/<athlete>")
+def historico_atleta(athlete):
+    h = history.get_history(athlete)
+    if not h:
+        abort(404)
+    return render_template(
+        "atleta.html",
+        athlete=athlete,
+        stats=history.athlete_stats(athlete),
+        rows=list(reversed(h)),  # mais recentes primeiro na tabela
+    )
+
+
+@app.route("/chart/evolucao/<athlete>.png")
+def chart_evolucao(athlete):
+    return Response(history.evolution_png(athlete), mimetype="image/png")
+
+
+@app.route("/chart/comparacao.png")
+def chart_comparacao():
+    return Response(history.comparison_png(), mimetype="image/png")
 
 
 @app.errorhandler(413)
@@ -164,6 +199,14 @@ def analyze():
         summary = report.write_summary_json(
             base + "_resumo.json", athlete, result, meta, calib.meters_per_pixel
         )
+        # registra no histórico do atleta (só análises com leitura válida)
+        if result.peak_kmh > 0:
+            try:
+                history.record_analysis(
+                    athlete, result.peak_kmh, result.mean_kmh, fps, detector
+                )
+            except Exception:
+                traceback.print_exc()  # histórico não pode derrubar o resultado
         report.write_annotated_gif(
             in_path, base + "_anotado.gif", trajectory, result, proc_scale=scale,
             max_width=420, max_frames=50, fps_out=15.0,
@@ -179,6 +222,7 @@ def analyze():
             "athlete": athlete,
             "summary": summary,
             "detector": detector,
+            "history_url": url_for("historico_atleta", athlete=athlete),
             "gif": url_for("static", filename=f"results/{job}/saque_anotado.gif"),
             "mp4": mp4_url,
             "plot": url_for("static", filename=f"results/{job}/saque_velocidade.png"),

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ athlete }} — Evolução</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>{{ athlete }}</h1>
+      <span>VF Tênis Scanner — evolução do saque</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('historico') }}">← Todos os atletas</a>
+
+    <div class="card">
+      <h2>Resumo</h2>
+      <div class="stats">
+        <div class="stat"><div class="v">{{ "%.0f"|format(stats.best) }}</div><div class="k">recorde km/h</div></div>
+        <div class="stat"><div class="v">{{ "%.0f"|format(stats.avg) }}</div><div class="k">média km/h</div></div>
+        <div class="stat"><div class="v">{{ stats.n }}</div><div class="k">análises</div></div>
+      </div>
+      <div class="stats" style="grid-template-columns: repeat(2, 1fr); margin-top:10px">
+        <div class="stat"><div class="v">{{ "%.0f"|format(stats.last) }}</div><div class="k">último km/h</div></div>
+        <div class="stat">
+          <div class="v" style="color: {{ '#15803d' if stats.delta >= 0 else '#c0392b' }}">
+            {{ '+' if stats.delta >= 0 else '' }}{{ "%.0f"|format(stats.delta) }}
+          </div>
+          <div class="k">evolução km/h ({{ '+' if stats.delta_pct >= 0 else '' }}{{ stats.delta_pct }}%)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Evolução da velocidade</h2>
+      <img class="result" src="{{ url_for('chart_evolucao', athlete=athlete) }}" alt="Evolução">
+    </div>
+
+    <div class="card">
+      <h2>Análises ({{ rows|length }})</h2>
+      <table class="angles">
+        <tr>
+          <td><strong>Data</strong></td>
+          <td style="text-align:center"><strong>Média</strong></td>
+          <td style="text-align:right"><strong>Pico</strong></td>
+        </tr>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r.created_at[8:10] }}/{{ r.created_at[5:7] }}/{{ r.created_at[0:4] }}</td>
+          <td style="text-align:center">{{ "%.0f"|format(r.mean_kmh) }} km/h</td>
+          <td>{{ "%.0f"|format(r.peak_kmh) }} km/h</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>

@@ -25,6 +25,8 @@
   <div class="wrap">
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
+    <a class="back" href="{{ url_for('historico') }}">📊 Ver histórico dos atletas →</a>
+
     <form class="card" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
       <div class="tabs">
         <button type="button" id="tab-record" class="tab active">📹 Gravar agora</button>

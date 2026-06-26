@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Histórico — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Histórico dos atletas</h1>
+      <span>VF Tênis Scanner — evolução e comparação</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('index') }}">← Nova análise</a>
+
+    {% if athletes %}
+    <div class="card">
+      <h2>Comparação entre atletas</h2>
+      <img class="result" src="{{ url_for('chart_comparacao') }}" alt="Comparação entre atletas">
+    </div>
+
+    <div class="card">
+      <h2>Atletas ({{ athletes|length }})</h2>
+      <table class="angles">
+        <tr>
+          <td><strong>Atleta</strong></td>
+          <td style="text-align:center"><strong>Análises</strong></td>
+          <td style="text-align:right"><strong>Recorde</strong></td>
+        </tr>
+        {% for a in athletes %}
+        <tr>
+          <td><a class="back" href="{{ url_for('historico_atleta', athlete=a.athlete) }}">{{ a.athlete }}</a></td>
+          <td style="text-align:center">{{ a.n }}</td>
+          <td>{{ "%.0f"|format(a.best) }} km/h</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% else %}
+    <div class="card">
+      <h2>Ainda não há histórico</h2>
+      <p class="note">Faça uma análise de saque para começar a registrar a evolução do atleta.</p>
+    </div>
+    {% endif %}
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>

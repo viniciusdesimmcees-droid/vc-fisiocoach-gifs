@@ -195,6 +195,19 @@ A pose foi validada em foto real (17/17 keypoints; cotovelo 98°, joelho 174°).
 Como a pose só funciona em pessoas reais filmadas, a `demo_biomech` usa
 keypoints sintéticos apenas para mostrar o FORMATO do relatório.
 
+## Histórico do atleta (evolução e comparação)
+
+Cada análise é gravada em um banco SQLite (`webapp/history.py`). O app tem:
+
+- **Página por atleta** (`/historico/<nome>`): resumo (recorde, média, evolução),
+  gráfico de evolução da velocidade ao longo do tempo e tabela das análises.
+- **Comparação** (`/historico`): ranking e gráfico comparando os atletas.
+
+Persistência: o caminho do banco vem de `DB_PATH` (padrão
+`webapp/data/history.db`). Em hospedagem com disco efêmero (ex.: Hugging Face
+grátis), os dados **resetam quando o servidor reinicia**. Para histórico
+permanente, aponte `DB_PATH` para um disco persistente — o código não muda.
+
 ## Fine-tuning do detector de bola
 
 O YOLOv8 pré-treinado já detecta a bola, mas o ganho de robustez vem do
