@@ -1,11 +1,11 @@
 # Dockerfile para o Hugging Face Spaces (SDK: Docker).
 # Baixa o código direto do repositório público no GitHub e roda o app.
-# O Hugging Face grátis tem 2 vCPU + 16 GB de RAM — bem mais forte que o Render
-# grátis, então a análise de vídeo roda tranquila.
+# O Hugging Face grátis tem 2 vCPU + 16 GB de RAM — aguenta a análise de vídeo
+# E a biomecânica (pose por deep learning).
 FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git libglib2.0-0 \
+    git libglib2.0-0 libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -17,14 +17,22 @@ RUN git clone --depth 1 --filter=blob:none --sparse \
 
 WORKDIR /app/tennis-serve-analyzer
 RUN pip install --no-cache-dir -r requirements.txt
+# Biomecânica: torch (CPU) + ultralytics. Wheel CPU é bem menor que a versão GPU.
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir ultralytics
 
-# O runtime do HF roda como usuário sem privilégios: garante pastas graváveis.
+# Pré-baixa os modelos (bola e pose) para não baixar a cada requisição.
+RUN cd webapp && python -c "from ultralytics import YOLO; YOLO('yolov8n.pt'); YOLO('yolov8n-pose.pt')"
+
+# O runtime do HF roda como usuário sem privilégios: garante pastas/arquivos graváveis.
 RUN mkdir -p webapp/static/results webapp/uploads && chmod -R 777 webapp
 
 ENV PORT=7860 \
     MPLCONFIGDIR=/tmp/mpl \
     PROC_MAX_WIDTH=720 \
-    PROC_MAX_FRAMES=1500
+    PROC_MAX_FRAMES=1500 \
+    POSE_MAX_WIDTH=640 \
+    POSE_MAX_FRAMES=150
 
 EXPOSE 7860
 CMD ["sh", "-c", "gunicorn --chdir webapp --timeout 300 --workers 2 --bind 0.0.0.0:$PORT app:app"]

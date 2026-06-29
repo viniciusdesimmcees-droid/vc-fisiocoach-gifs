@@ -54,6 +54,9 @@ PROC_MAX_WIDTH = int(os.environ.get("PROC_MAX_WIDTH", "540"))
 PROC_MAX_FRAMES = int(os.environ.get("PROC_MAX_FRAMES", "900"))
 # Gerar o MP4 anotado (passada extra, cara em CPU fraca). Por padrão só o GIF.
 MAKE_MP4 = os.environ.get("MAKE_MP4", "0") == "1"
+# Pose (biomecânica) em CPU é pesada: reduz resolução e limita quadros.
+POSE_MAX_WIDTH = int(os.environ.get("POSE_MAX_WIDTH", "640"))
+POSE_MAX_FRAMES = int(os.environ.get("POSE_MAX_FRAMES", "150"))
 
 # Deep learning (detector YOLOv8 + biomecânica) só está disponível se torch e
 # ultralytics estiverem instalados — não estão no plano grátis. Detectamos uma
@@ -208,6 +211,14 @@ def analyze():
                 )
             except Exception:
                 traceback.print_exc()  # histórico não pode derrubar o resultado
+        # ---- biomecânica (opcional) — roda ANTES do PDF para entrar nele ----
+        biomech = None
+        if run_biomech and DL_AVAILABLE:
+            try:
+                biomech = _run_biomech(in_path, job_dir, job, athlete, fps)
+            except Exception:
+                traceback.print_exc()  # biomecânica é extra: não derruba o resultado
+
         # relatório profissional: classificação + velocímetro + PDF
         cls = reportpro.classify(result.peak_kmh)
         reportpro.write_gauge_png(base + "_gauge.png", result.peak_kmh, cls)
@@ -215,6 +226,8 @@ def analyze():
             reportpro.write_report_pdf(
                 base + "_relatorio.pdf", athlete, summary, cls,
                 base + "_velocidade.png",
+                biomech=biomech.get("summary") if biomech else None,
+                biomech_png=biomech.get("plot_path") if biomech else None,
             )
             pdf_ok = True
         except Exception:
@@ -246,15 +259,8 @@ def analyze():
             "plot": url_for("static", filename=f"results/{job}/saque_velocidade.png"),
             "csv": url_for("static", filename=f"results/{job}/saque_trajetoria.csv"),
             "json": url_for("static", filename=f"results/{job}/saque_resumo.json"),
-            "biomech": None,
+            "biomech": biomech,
         }
-
-        # ---- biomecânica (opcional) ----
-        if run_biomech and DL_AVAILABLE:
-            try:
-                ctx["biomech"] = _run_biomech(in_path, job_dir, job, athlete, fps)
-            except Exception:
-                traceback.print_exc()  # biomecânica é extra: não derruba o resultado
 
         return render_template("result.html", **ctx)
 
@@ -278,7 +284,10 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
     import biomech_report as br
 
     pose = PoseEstimator(model_path="yolov8n-pose.pt")
-    frames, pmeta = pose.estimate_video(in_path)
+    # pose em CPU é pesada: reduz resolução (ângulos não mudam) e limita quadros
+    frames, pmeta = pose.estimate_video(
+        in_path, max_width=POSE_MAX_WIDTH, max_frames=POSE_MAX_FRAMES
+    )
     side = choose_serve_side(frames)
     angles = compute_angles(frames, side)
     phases = segment_phases(angles)
@@ -292,6 +301,7 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
     )
     return {
         "summary": bsummary,
+        "plot_path": b + "_angulos.png",
         "plot": url_for("static", filename=f"results/{job}/biomech_angulos.png"),
         "json": url_for("static", filename=f"results/{job}/biomech_resumo.json"),
     }

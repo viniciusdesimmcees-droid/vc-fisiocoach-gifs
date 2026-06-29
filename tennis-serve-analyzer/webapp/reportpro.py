@@ -93,8 +93,9 @@ def write_gauge_png(path: str, peak_kmh: float, cls: dict) -> None:
 
 def write_report_pdf(
     path: str, athlete: str, summary: dict, cls: dict, speed_png: str,
+    biomech: dict | None = None, biomech_png: str | None = None,
 ) -> None:
-    """Monta um relatório PDF A4 profissional de uma página."""
+    """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
     cap = summary.get("captura", {})
     peak = r.get("velocidade_pico_kmh", 0)
@@ -170,4 +171,82 @@ def write_report_pdf(
 
     with PdfPages(path) as pdf:
         pdf.savefig(fig)
-    plt.close(fig)
+        plt.close(fig)
+        if biomech:
+            fig2 = _biomech_page(athlete, biomech, biomech_png)
+            pdf.savefig(fig2)
+            plt.close(fig2)
+
+
+def _biomech_page(athlete: str, b: dict, biomech_png: str | None):
+    """Segunda página do PDF: biomecânica do gesto."""
+    import matplotlib.image as mpimg
+
+    fig = plt.figure(figsize=(8.27, 11.69))
+    fig.patch.set_facecolor("white")
+    fig.text(0.06, 0.955, "VF Tênis Scanner", fontsize=22, fontweight="bold",
+             color="#15803d")
+    fig.text(0.06, 0.935, "Relatório de Biomecânica do Saque", fontsize=12,
+             color="#334155")
+    fig.text(0.94, 0.955, athlete, fontsize=13, fontweight="bold",
+             color="#0f1714", ha="right")
+    fig.add_artist(plt.Line2D([0.06, 0.94], [0.922, 0.922], color="#e6ece8", lw=1))
+
+    fases = b.get("fases", {})
+    chain = b.get("cadeia_cinetica", {})
+    ang = b.get("angulos_no_contato") or {}
+
+    # blocos de informação
+    info = [
+        ("Lado dominante", str(b.get("lado_dominante", "—")).capitalize()),
+        ("Quadro do contato", str(fases.get("contato", "—"))),
+        ("Cadeia proximal→distal",
+         "Eficiente" if chain.get("proximal_para_distal") else "Revisar"),
+        ("Quadros com pose", str(b.get("captura", {}).get("quadros_com_pose", "—"))),
+    ]
+    for i, (k, v) in enumerate(info):
+        x = 0.06 + (i % 2) * 0.46
+        y = 0.85 - (i // 2) * 0.07
+        ax = fig.add_axes([x, y, 0.42, 0.06]); ax.axis("off")
+        ax.add_patch(plt.Rectangle((0, 0), 1, 1, transform=ax.transAxes,
+                                   facecolor="#f1f6f3", edgecolor="#e6ece8"))
+        ax.text(0.04, 0.62, k, fontsize=9, color="#64748b", transform=ax.transAxes)
+        ax.text(0.04, 0.22, v, fontsize=13, fontweight="bold", color="#0f1714",
+                transform=ax.transAxes)
+
+    # ângulos no contato
+    fig.text(0.06, 0.76, "Ângulos no momento do impacto", fontsize=12,
+             fontweight="bold", color="#15803d")
+    if ang:
+        items = [(k.replace("_", " ").capitalize(), v) for k, v in ang.items()
+                 if v is not None]
+        txt = "\n".join(f"• {k}: {v}°" for k, v in items)
+    else:
+        txt = "Pose não detectada neste vídeo (filme o atleta de corpo inteiro, " \
+              "câmera lateral, boa iluminação)."
+    ax_a = fig.add_axes([0.06, 0.60, 0.88, 0.14]); ax_a.axis("off")
+    ax_a.text(0, 1, txt, fontsize=11, color="#334155", va="top",
+              transform=ax_a.transAxes, linespacing=1.7)
+
+    # gráfico de ângulos
+    if biomech_png and os.path.exists(biomech_png):
+        ax_p = fig.add_axes([0.06, 0.30, 0.88, 0.26]); ax_p.axis("off")
+        ax_p.imshow(mpimg.imread(biomech_png))
+
+    # explicação da cadeia cinética
+    fig.text(0.06, 0.25, "Cadeia cinética (sequência proximal→distal)",
+             fontsize=12, fontweight="bold", color="#15803d")
+    expl = (
+        "Num saque eficiente, a energia sobe do solo em sequência: pernas/quadril "
+        "giram primeiro, depois o tronco, o ombro e por fim o cotovelo/punho. "
+        "Quando os picos de velocidade angular respeitam essa ordem (proximal → "
+        "distal), o gesto transfere força de forma ótima e protege as articulações."
+    )
+    for note in chain.get("observacoes", []):
+        expl += f"\n\n• {note}"
+    ax_e = fig.add_axes([0.06, 0.08, 0.88, 0.15]); ax_e.axis("off")
+    ax_e.text(0, 1, expl, fontsize=10, color="#334155", va="top",
+              transform=ax_e.transAxes, linespacing=1.6, wrap=True)
+
+    fig.text(0.5, 0.025, CREDIT, ha="center", fontsize=8, color="#94a3b8")
+    return fig

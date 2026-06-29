@@ -62,7 +62,16 @@ class PoseEstimator:
         res = self.model.predict(frame, verbose=False)[0]
         return self._largest_person(res)
 
-    def estimate_video(self, video_path: str) -> tuple[list, dict]:
+    def estimate_video(
+        self, video_path: str, max_width: int | None = None,
+        max_frames: int | None = None,
+    ) -> tuple[list, dict]:
+        """Estima a pose quadro a quadro.
+
+        `max_width` reduz a resolução (ângulos não mudam com a escala, então
+        acelera sem perder precisão). `max_frames` limita o total processado
+        (pose em CPU é pesada). Retorna a lista de keypoints por quadro + meta.
+        """
         import cv2
 
         cap = cv2.VideoCapture(video_path)
@@ -72,17 +81,27 @@ class PoseEstimator:
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
+        scale = 1.0
+        if max_width and width > max_width:
+            scale = max_width / width
+
         frames: list = []
+        idx = -1
         while True:
             ok, frame = cap.read()
             if not ok:
                 break
+            idx += 1
+            if max_frames and idx >= max_frames:
+                break
+            if scale != 1.0:
+                frame = cv2.resize(frame, (round(width * scale), round(height * scale)))
             frames.append(self.estimate_frame(frame))
         cap.release()
 
         detected = sum(1 for f in frames if f is not None)
         meta = {
             "fps": fps, "width": width, "height": height,
-            "frames": len(frames), "pose_detected": detected,
+            "frames": len(frames), "pose_detected": detected, "scale": scale,
         }
         return frames, meta
