@@ -214,39 +214,72 @@ def _biomech_page(athlete: str, b: dict, biomech_png: str | None):
         ax.text(0.04, 0.22, v, fontsize=13, fontweight="bold", color="#0f1714",
                 transform=ax.transAxes)
 
-    # ângulos no contato
-    fig.text(0.06, 0.76, "Ângulos no momento do impacto", fontsize=12,
+    adv = b.get("metricas_avancadas", {}) or {}
+
+    # ângulos no contato (coluna esquerda)
+    fig.text(0.06, 0.76, "Ângulos no impacto", fontsize=12,
              fontweight="bold", color="#15803d")
     if ang:
         items = [(k.replace("_", " ").capitalize(), v) for k, v in ang.items()
                  if v is not None]
         txt = "\n".join(f"• {k}: {v}°" for k, v in items)
     else:
-        txt = "Pose não detectada neste vídeo (filme o atleta de corpo inteiro, " \
-              "câmera lateral, boa iluminação)."
-    ax_a = fig.add_axes([0.06, 0.60, 0.88, 0.14]); ax_a.axis("off")
-    ax_a.text(0, 1, txt, fontsize=11, color="#334155", va="top",
+        txt = "Pose não detectada (filme o atleta de corpo inteiro, câmera " \
+              "lateral, boa iluminação)."
+    ax_a = fig.add_axes([0.06, 0.585, 0.42, 0.155]); ax_a.axis("off")
+    ax_a.text(0, 1, txt, fontsize=10, color="#334155", va="top",
               transform=ax_a.transAxes, linespacing=1.7)
+
+    # métricas avançadas (coluna direita)
+    fig.text(0.52, 0.76, "Métricas avançadas", fontsize=12,
+             fontweight="bold", color="#15803d")
+    lines = []
+    dur = adv.get("duracao_fases_ms", {}) or {}
+    if dur.get("aceleracao_total"):
+        lines.append(f"• Aceleração total: {dur['aceleracao_total']:.0f} ms")
+    if dur.get("armada"):
+        lines.append(f"• Armada → impacto: {dur['armada']:.0f} ms")
+    av = adv.get("velocidades_angulares_max", {}) or {}
+    if av.get("cotovelo"):
+        lines.append(f"• Vel. angular cotovelo: {av['cotovelo']:.0f} °/s")
+    if av.get("ombro"):
+        lines.append(f"• Vel. angular ombro: {av['ombro']:.0f} °/s")
+    xf = adv.get("x_factor", {}) or {}
+    if xf.get("disponivel"):
+        lines.append(f"• X-Factor (tronco): {xf['separacao_max_graus']:.0f}°")
+    txt2 = "\n".join(lines) if lines else "Disponível com pose detectada."
+    ax_b = fig.add_axes([0.52, 0.585, 0.42, 0.155]); ax_b.axis("off")
+    ax_b.text(0, 1, txt2, fontsize=10, color="#334155", va="top",
+              transform=ax_b.transAxes, linespacing=1.7)
 
     # gráfico de ângulos
     if biomech_png and os.path.exists(biomech_png):
-        ax_p = fig.add_axes([0.06, 0.30, 0.88, 0.26]); ax_p.axis("off")
+        ax_p = fig.add_axes([0.06, 0.37, 0.88, 0.20]); ax_p.axis("off")
         ax_p.imshow(mpimg.imread(biomech_png))
 
+    # indicadores de risco
+    fig.text(0.06, 0.33, "Indicadores de risco (não é diagnóstico médico)",
+             fontsize=12, fontweight="bold", color="#15803d")
+    flags = adv.get("indicadores_risco", []) or []
+    ftxt = "\n".join(f"• [{f.get('area')}] {f.get('texto')}" for f in flags) \
+        or "Sem indicadores."
+    ax_f = fig.add_axes([0.06, 0.21, 0.88, 0.11]); ax_f.axis("off")
+    ax_f.text(0, 1, ftxt, fontsize=9.5, color="#334155", va="top",
+              transform=ax_f.transAxes, linespacing=1.6, wrap=True)
+
     # explicação da cadeia cinética
-    fig.text(0.06, 0.25, "Cadeia cinética (sequência proximal→distal)",
+    fig.text(0.06, 0.17, "Cadeia cinética (sequência proximal→distal)",
              fontsize=12, fontweight="bold", color="#15803d")
     expl = (
         "Num saque eficiente, a energia sobe do solo em sequência: pernas/quadril "
-        "giram primeiro, depois o tronco, o ombro e por fim o cotovelo/punho. "
-        "Quando os picos de velocidade angular respeitam essa ordem (proximal → "
-        "distal), o gesto transfere força de forma ótima e protege as articulações."
+        "→ tronco → ombro → cotovelo/punho. Respeitar essa ordem (proximal → "
+        "distal) transfere força de forma ótima e protege as articulações."
     )
     for note in chain.get("observacoes", []):
-        expl += f"\n\n• {note}"
-    ax_e = fig.add_axes([0.06, 0.08, 0.88, 0.15]); ax_e.axis("off")
-    ax_e.text(0, 1, expl, fontsize=10, color="#334155", va="top",
-              transform=ax_e.transAxes, linespacing=1.6, wrap=True)
+        expl += f"\n• {note}"
+    ax_e = fig.add_axes([0.06, 0.07, 0.88, 0.09]); ax_e.axis("off")
+    ax_e.text(0, 1, expl, fontsize=9.5, color="#334155", va="top",
+              transform=ax_e.transAxes, linespacing=1.5, wrap=True)
 
     fig.text(0.5, 0.025, CREDIT, ha="center", fontsize=8, color="#94a3b8")
     return fig

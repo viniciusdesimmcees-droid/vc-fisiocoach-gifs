@@ -91,6 +91,10 @@ def evaluate(summary: dict, biomech: dict | None) -> dict:
                             "ponto mais alto possível.")
         else:
             breakdown.append(("Extensão do braço no impacto", 7.5, 15.0))
+        # indicadores de risco (das métricas avançadas)
+        for f in (biomech.get("metricas_avancadas", {}) or {}).get("indicadores_risco", []):
+            if f.get("nivel") == "atenção":
+                atencao.append("Risco — " + f.get("texto", ""))
     else:
         recs.append("Ative a análise biomecânica (marque a opção e filme o atleta "
                     "de corpo inteiro, câmera lateral) para uma avaliação completa.")

@@ -145,12 +145,50 @@
       {% endif %}
       <h2 style="margin-top:18px">Ângulos articulares ao longo do saque</h2>
       <img class="result" src="{{ biomech.plot }}" alt="Ângulos articulares">
-      <div class="downloads">
-        <a href="{{ biomech.json }}" download>Baixar JSON (biomecânica)</a>
-      </div>
       {% for obs in biomech.summary.cadeia_cinetica.observacoes %}
         <p class="note">• {{ obs }}</p>
       {% endfor %}
+
+      {% set adv = biomech.summary.metricas_avancadas %}
+      {% if adv %}
+      {% if adv.duracao_fases_ms %}
+      <h2 style="margin-top:18px">Tempo das fases <span class="hint">(milissegundos)</span></h2>
+      <table class="angles">
+        {% if adv.duracao_fases_ms.carregamento %}<tr><td>Carregamento</td><td>{{ adv.duracao_fases_ms.carregamento|int }} ms</td></tr>{% endif %}
+        {% if adv.duracao_fases_ms.armada %}<tr><td>Armada → impacto</td><td>{{ adv.duracao_fases_ms.armada|int }} ms</td></tr>{% endif %}
+        {% if adv.duracao_fases_ms.aceleracao_total %}<tr><td>Aceleração total</td><td>{{ adv.duracao_fases_ms.aceleracao_total|int }} ms</td></tr>{% endif %}
+        {% if adv.duracao_fases_ms.finalizacao %}<tr><td>Finalização</td><td>{{ adv.duracao_fases_ms.finalizacao|int }} ms</td></tr>{% endif %}
+      </table>
+      {% endif %}
+
+      {% if adv.velocidades_angulares_max %}
+      <h2 style="margin-top:18px">Velocidade angular de pico <span class="hint">(°/s)</span></h2>
+      <table class="angles">
+        {% for k, v in adv.velocidades_angulares_max.items() %}
+        <tr><td>{{ k|capitalize }}</td><td>{{ v|int }} °/s</td></tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+
+      {% if adv.x_factor and adv.x_factor.disponivel %}
+      <h2 style="margin-top:18px">X-Factor (separação ombro–quadril)</h2>
+      <div class="stats"><div class="stat"><div class="v">{{ adv.x_factor.separacao_max_graus|int }}°</div><div class="k">rotação máx. do tronco</div></div></div>
+      <p class="note">Maior separação = mais potência via rotação. (Estimativa 2D.)</p>
+      {% endif %}
+
+      {% if adv.indicadores_risco %}
+      <h2 style="margin-top:18px">🩺 Indicadores de risco <span class="hint">(não é diagnóstico médico)</span></h2>
+      <div class="explain">
+        {% for f in adv.indicadores_risco %}
+        <div class="ex"><span class="ex-i" style="background: {{ 'rgba(34,197,94,.14)' if f.nivel == 'ok' else 'rgba(239,68,68,.14)' }}">{{ '✅' if f.nivel == 'ok' else '🩺' }}</span><div><b>{{ f.area }}:</b> {{ f.texto }}</div></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <div class="downloads" style="margin-top:14px">
+        <a href="{{ biomech.json }}" download>Baixar JSON (biomecânica)</a>
+      </div>
     </div>
     {% endif %}
 

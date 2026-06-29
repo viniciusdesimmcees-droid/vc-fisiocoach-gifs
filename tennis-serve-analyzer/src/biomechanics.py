@@ -173,3 +173,128 @@ def kinematic_sequence(angles: list[FrameAngles], fps: float) -> KinematicChain:
                 "Sequência proximal->distal quebrada: revisar timing da cadeia."
             )
     return chain
+
+
+# ============================ Biomecânica profunda ============================
+
+def _smooth(series: list[tuple[int, float]], k: int = 3) -> list[tuple[int, float]]:
+    """Média móvel simples sobre (frame, valor) para reduzir ruído da pose
+    antes de derivar — evita picos irreais de velocidade angular."""
+    if len(series) < k:
+        return series
+    frames = [f for f, _ in series]
+    vals = [v for _, v in series]
+    out = []
+    half = k // 2
+    for i in range(len(vals)):
+        lo, hi = max(0, i - half), min(len(vals), i + half + 1)
+        out.append((frames[i], sum(vals[lo:hi]) / (hi - lo)))
+    return out
+
+
+def peak_angular_velocities(angles: list[FrameAngles], fps: float,
+                            ceiling: float = 4000.0) -> dict:
+    """Pico de velocidade angular (°/s) por junta — quão rápido cada segmento
+    gira. Indicador de explosão/potência do gesto. A série é suavizada e o
+    valor é limitado a um teto fisiológico para descartar ruído da pose."""
+    series = {
+        "quadril": [(a.frame, a.hip) for a in angles if not np.isnan(a.hip)],
+        "tronco": [(a.frame, a.trunk_lean) for a in angles if not np.isnan(a.trunk_lean)],
+        "ombro": [(a.frame, a.shoulder) for a in angles if not np.isnan(a.shoulder)],
+        "cotovelo": [(a.frame, a.elbow) for a in angles if not np.isnan(a.elbow)],
+        "joelho": [(a.frame, a.knee) for a in angles if not np.isnan(a.knee)],
+    }
+    out = {}
+    for name, s in series.items():
+        av = _angular_velocity(_smooth(s), fps)
+        if av:
+            out[name] = round(min(max(v for _, v in av), ceiling), 0)
+    return out
+
+
+def phase_durations_ms(phases: Phases, fps: float) -> dict:
+    """Duração de cada fase do saque em milissegundos."""
+    if not fps or fps <= 0:
+        return {}
+
+    def ms(a, b):
+        if a is None or b is None:
+            return None
+        return round((b - a) / fps * 1000.0, 0)
+
+    return {
+        "carregamento": ms(phases.loading, phases.cocking),
+        "armada": ms(phases.cocking, phases.contact),
+        "aceleracao_total": ms(phases.loading, phases.contact),
+        "finalizacao": ms(phases.contact, phases.follow_through),
+    }
+
+
+def x_factor(frames: list, side: str) -> dict:
+    """X-Factor: separação ombro–quadril (rotação do tronco) — métrica de ouro
+    da potência. ESTIMATIVA 2D no plano da imagem; requer ver os dois ombros e
+    os dois quadris (melhor em câmera frontal/traseira)."""
+    best = 0.0
+    n = 0
+    for kp in frames:
+        if kp is None:
+            continue
+        ls, rs = _pt(kp, "left_shoulder"), _pt(kp, "right_shoulder")
+        lh, rh = _pt(kp, "left_hip"), _pt(kp, "right_hip")
+        if any(p is None for p in (ls, rs, lh, rh)):
+            continue
+        sh_vec = np.asarray(rs) - np.asarray(ls)
+        hp_vec = np.asarray(rh) - np.asarray(lh)
+        ns, nh = np.linalg.norm(sh_vec), np.linalg.norm(hp_vec)
+        if ns < 1e-3 or nh < 1e-3:
+            continue
+        cos = np.clip(np.dot(sh_vec, hp_vec) / (ns * nh), -1.0, 1.0)
+        sep = float(np.degrees(np.arccos(cos)))
+        best = max(best, sep)
+        n += 1
+    if n < 3:
+        return {"disponivel": False}
+    return {"disponivel": True, "separacao_max_graus": round(best, 0)}
+
+
+def injury_flags(angles: list[FrameAngles], phases: Phases) -> list[dict]:
+    """Indicadores de risco (NÃO é diagnóstico médico) a partir de ângulos-chave.
+    Heurísticas de coaching/fisio para sinalizar pontos a investigar."""
+    flags: list[dict] = []
+
+    def at(frame):
+        for a in angles:
+            if a.frame == frame:
+                return a
+        return None
+
+    contato = at(phases.contact)
+    loading = at(phases.loading)
+
+    if contato is not None and not np.isnan(contato.trunk_lean) and contato.trunk_lean > 35:
+        flags.append({"area": "Lombar", "nivel": "atenção",
+                      "texto": f"Inclinação de tronco acentuada no impacto "
+                               f"({contato.trunk_lean:.0f}°) — atenção à sobrecarga lombar."})
+    if contato is not None and not np.isnan(contato.elbow) and contato.elbow < 100:
+        flags.append({"area": "Cotovelo/Ombro", "nivel": "atenção",
+                      "texto": f"Cotovelo muito flexionado no impacto "
+                               f"({contato.elbow:.0f}°) — risco de sobrecarga no ombro/cotovelo."})
+    if loading is not None and not np.isnan(loading.knee) and loading.knee > 168:
+        flags.append({"area": "Pernas/Ombro", "nivel": "atenção",
+                      "texto": "Pouca flexão de joelhos no carregamento — menos "
+                               "absorção das pernas, mais carga em ombro/tronco."})
+    if not flags:
+        flags.append({"area": "Geral", "nivel": "ok",
+                      "texto": "Nenhum indicador de risco evidente nos ângulos analisados."})
+    return flags
+
+
+def deep_metrics(frames: list, angles: list[FrameAngles], phases: Phases,
+                 fps: float, side: str) -> dict:
+    """Reúne as métricas biomecânicas avançadas em um dicionário."""
+    return {
+        "velocidades_angulares_max": peak_angular_velocities(angles, fps),
+        "duracao_fases_ms": phase_durations_ms(phases, fps),
+        "x_factor": x_factor(frames, side),
+        "indicadores_risco": injury_flags(angles, phases),
+    }

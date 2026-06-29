@@ -288,6 +288,7 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
     from pose_estimator import PoseEstimator
     from biomechanics import (
         choose_serve_side, compute_angles, segment_phases, kinematic_sequence,
+        deep_metrics,
     )
     import biomech_report as br
 
@@ -300,6 +301,7 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
     angles = compute_angles(frames, side)
     phases = segment_phases(angles)
     chain = kinematic_sequence(angles, fps)
+    deep = deep_metrics(frames, angles, phases, fps, side)
 
     b = os.path.join(job_dir, "biomech")
     br.write_angles_plot(b + "_angulos.png", angles, phases, fps, athlete)
@@ -307,6 +309,7 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
         b + "_resumo.json", athlete, side, angles, phases, chain,
         {**pmeta, "fps": fps},
     )
+    bsummary["metricas_avancadas"] = deep
     return {
         "summary": bsummary,
         "plot_path": b + "_angulos.png",

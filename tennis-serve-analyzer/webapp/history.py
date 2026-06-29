@@ -24,10 +24,23 @@ import matplotlib.pyplot as plt
 
 CREDIT = "Sistema criado e desenvolvido por Vinícius Camargos da Fonseca."
 
-DB_PATH = os.environ.get(
-    "DB_PATH",
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "history.db"),
-)
+def _default_db_path() -> str:
+    """Escolhe onde guardar o histórico.
+
+    Prioridade: DB_PATH explícito > disco persistente /data (ex.: armazenamento
+    persistente do Hugging Face) > pasta local efêmera. Assim, basta ativar o
+    armazenamento persistente no Space que o histórico passa a ser PERMANENTE,
+    sem mudar código.
+    """
+    env = os.environ.get("DB_PATH")
+    if env:
+        return env
+    if os.path.isdir("/data") and os.access("/data", os.W_OK):
+        return "/data/history.db"
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "history.db")
+
+
+DB_PATH = _default_db_path()
 
 
 def _conn() -> sqlite3.Connection:
