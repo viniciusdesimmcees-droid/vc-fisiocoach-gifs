@@ -25,12 +25,32 @@
       {% if history_url %}<a class="back" href="{{ history_url }}">Ver histórico do atleta →</a>{% endif %}
     </div>
 
+    {% if pdf %}
+    <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar relatório completo (PDF)</a>
+    {% endif %}
+
     <div class="card">
       <h2>Velocidade do saque <span class="tag">detector: {{ detector }}</span></h2>
-      <div class="metric">
-        <div class="big">{{ summary.resultado.velocidade_pico_kmh }}</div>
-        <div class="unit">km/h (pico no impacto)</div>
+
+      <img class="gauge" src="{{ gauge }}" alt="Velocímetro do saque">
+
+      {% if cls %}
+      <div class="level" style="border-color: {{ cls.cor }}">
+        <span class="level-badge" style="background: {{ cls.cor }}">{{ cls.nivel }}</span>
+        <span class="level-desc">{{ cls.descricao }}</span>
       </div>
+
+      <!-- régua de níveis -->
+      <div class="bands">
+        {% for lo, hi, nome, cor, desc in bands %}
+        <div class="band {{ 'on' if nome == cls.nivel else '' }}" style="--c: {{ cor }}">
+          <span class="band-name">{{ nome }}</span>
+          <span class="band-range">{{ lo }}{{ '+' if hi >= 9999 else '–' ~ hi }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
       <div class="stats">
         <div class="stat"><div class="v">{{ summary.resultado.velocidade_media_kmh }}</div><div class="k">média km/h</div></div>
         <div class="stat"><div class="v">{{ summary.captura.fps }}</div><div class="k">fps</div></div>
@@ -42,9 +62,20 @@
     </div>
 
     <div class="card">
-      <h2>Vídeo anotado</h2>
+      <h2>O que cada número significa</h2>
+      <div class="explain">
+        <div class="ex"><span class="ex-i">⚡</span><div><b>Velocidade de pico</b> — a maior velocidade da bola logo após o impacto. É o principal indicador de potência do saque.</div></div>
+        <div class="ex"><span class="ex-i">📊</span><div><b>Velocidade média</b> — média ao longo do trajeto rastreado da bola.</div></div>
+        <div class="ex"><span class="ex-i">🎯</span><div><b>Quadro do impacto</b> — o momento exato em que a raquete acerta a bola.</div></div>
+        <div class="ex"><span class="ex-i">🎥</span><div><b>fps / detecções</b> — quadros por segundo da captura e quantas vezes a bola foi localizada. Mais fps = medição mais precisa.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Vídeo anotado <span class="hint">(bola rastreada + velocidade)</span></h2>
       <img class="result" src="{{ gif }}" alt="Saque anotado">
       <div class="downloads">
+        {% if pdf %}<a href="{{ pdf }}" download>Relatório PDF</a>{% endif %}
         {% if mp4 %}<a href="{{ mp4 }}" download>Baixar MP4</a>{% endif %}
         <a href="{{ csv }}" download>Baixar CSV (trajetória)</a>
         <a href="{{ json }}" download>Baixar JSON (resumo)</a>
@@ -52,8 +83,9 @@
     </div>
 
     <div class="card">
-      <h2>Perfil de velocidade</h2>
+      <h2>Perfil de velocidade <span class="hint">(toss → impacto → finalização)</span></h2>
       <img class="result" src="{{ plot }}" alt="Gráfico de velocidade">
+      <p class="note">O pico do gráfico marca o impacto. A subida acentuada mostra a aceleração da bola no momento do saque.</p>
     </div>
 
     {% if biomech %}

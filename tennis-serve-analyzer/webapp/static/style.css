@@ -209,3 +209,42 @@ footer.credit {
   margin: 28px 0 40px; padding-top: 16px; border-top: 1px solid var(--line);
 }
 footer.credit strong { color: var(--ink); }
+
+/* ---------- relatório rico ---------- */
+.pdf-btn {
+  display: block; text-align: center; text-decoration: none;
+  background: linear-gradient(135deg, #0b3b22, #15803d); color: #fff;
+  font-weight: 700; padding: 15px; border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(21,128,61,.35);
+}
+.pdf-btn:hover { filter: brightness(1.08); }
+
+img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; }
+
+.level {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  border: 1.5px solid; border-radius: 12px; padding: 12px 14px; margin: 6px 0 4px;
+  background: #fbfdfc;
+}
+.level-badge { color: #fff; font-weight: 800; font-size: 13px;
+  padding: 4px 12px; border-radius: 20px; }
+.level-desc { font-size: 13px; color: #334155; flex: 1; min-width: 180px; }
+
+.bands { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin: 12px 0 4px; }
+.band {
+  text-align: center; padding: 8px 3px; border-radius: 9px;
+  background: var(--bg); border: 2px solid transparent; opacity: .55;
+}
+.band.on { opacity: 1; border-color: var(--c); background: #fff; box-shadow: var(--shadow); }
+.band-name { display: block; font-size: 10.5px; font-weight: 700; color: var(--c); }
+.band-range { display: block; font-size: 9.5px; color: var(--muted); margin-top: 2px; }
+@media (max-width: 480px) { .band-name { font-size: 9px; } .band-range { font-size: 8.5px; } }
+
+.explain { display: flex; flex-direction: column; gap: 12px; }
+.ex { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: #334155; }
+.ex-i {
+  flex: none; width: 38px; height: 38px; border-radius: 11px;
+  background: rgba(34,197,94,.12); display: flex; align-items: center;
+  justify-content: center; font-size: 19px;
+}
+.ex b { color: var(--ink); }

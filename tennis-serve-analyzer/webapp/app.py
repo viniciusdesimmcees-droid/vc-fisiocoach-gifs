@@ -35,6 +35,7 @@ from ball_tracker import BallTracker  # noqa: E402
 from speed_estimator import estimate  # noqa: E402
 import report  # noqa: E402
 import history  # noqa: E402
+import reportpro  # noqa: E402
 
 history.init_db()
 
@@ -207,6 +208,19 @@ def analyze():
                 )
             except Exception:
                 traceback.print_exc()  # histórico não pode derrubar o resultado
+        # relatório profissional: classificação + velocímetro + PDF
+        cls = reportpro.classify(result.peak_kmh)
+        reportpro.write_gauge_png(base + "_gauge.png", result.peak_kmh, cls)
+        try:
+            reportpro.write_report_pdf(
+                base + "_relatorio.pdf", athlete, summary, cls,
+                base + "_velocidade.png",
+            )
+            pdf_ok = True
+        except Exception:
+            traceback.print_exc()
+            pdf_ok = False
+
         report.write_annotated_gif(
             in_path, base + "_anotado.gif", trajectory, result, proc_scale=scale,
             max_width=420, max_frames=50, fps_out=15.0,
@@ -222,7 +236,11 @@ def analyze():
             "athlete": athlete,
             "summary": summary,
             "detector": detector,
+            "cls": cls,
+            "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
+            "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),
+            "pdf": url_for("static", filename=f"results/{job}/saque_relatorio.pdf") if pdf_ok else None,
             "gif": url_for("static", filename=f"results/{job}/saque_anotado.gif"),
             "mp4": mp4_url,
             "plot": url_for("static", filename=f"results/{job}/saque_velocidade.png"),
