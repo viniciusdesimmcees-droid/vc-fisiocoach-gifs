@@ -161,6 +161,17 @@ def analyze():
     athlete = request.form.get("athlete", "Atleta").strip() or "Atleta"
     ref_m = _f("ref_length_m", 1.0)
     ref_px = _f("ref_length_px", 200.0)
+
+    # Calibração pela quadra: 2 pontos clicados (resolução nativa do vídeo) +
+    # distância real. O app calcula os pixels — sem medição manual.
+    cal_dist = _f("calib_dist_m", 0.0)
+    p1x, p1y = _f("calib_p1x", -1), _f("calib_p1y", -1)
+    p2x, p2y = _f("calib_p2x", -1), _f("calib_p2y", -1)
+    if cal_dist > 0 and min(p1x, p1y, p2x, p2y) >= 0:
+        px = ((p2x - p1x) ** 2 + (p2y - p1y) ** 2) ** 0.5
+        if px > 1:
+            ref_px, ref_m = px, cal_dist
+
     fps_override = _f("fps", 0.0)
     detector = request.form.get("detector", "classic")
     run_biomech = request.form.get("biomech") == "on"

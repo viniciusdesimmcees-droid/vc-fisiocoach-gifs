@@ -249,6 +249,15 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
 }
 .ex b { color: var(--ink); }
 
+/* calibração pela quadra */
+.calib-canvas {
+  display: block; margin: 10px auto; border-radius: 12px;
+  border: 1px solid var(--line); background: #06150c; cursor: crosshair;
+  touch-action: manipulation;
+}
+.calib-presets label { margin-top: 4px; }
+details summary { cursor: pointer; padding: 6px 0; }
+
 /* nota técnica */
 .scorebox { display: flex; align-items: center; gap: 16px; justify-content: center; margin: 4px 0 12px; }
 .score-num { font-size: 60px; font-weight: 800; line-height: 1; letter-spacing: -2px; }

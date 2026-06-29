@@ -77,19 +77,51 @@
         </div>
       </div>
 
-      <h2 style="margin-top:20px">Calibração <span class="hint">(converte pixels em metros)</span></h2>
-      <div class="grid">
-        <div>
-          <label>Comprimento real da referência (m)</label>
-          <input type="number" name="ref_length_m" step="0.001" value="0.914">
+      <h2 style="margin-top:20px">Calibração pela quadra <span class="hint">(precisão pericial)</span></h2>
+      <p class="hint">Para medir a velocidade real, o app precisa saber o tamanho real de
+        algo no vídeo. Toque em <b>2 pontos de uma medida conhecida</b> (ex.: altura da rede)
+        e informe a distância — o app calcula o resto.</p>
+
+      <button type="button" id="btn-calib" class="ghost" style="width:100%">📐 Calibrar pela quadra</button>
+
+      <div id="calib-panel" style="display:none; margin-top:12px">
+        <div class="calib-presets">
+          <label>Medida de referência</label>
+          <select id="calib-preset">
+            <option value="0.914">Altura da rede no centro — 0,914 m</option>
+            <option value="1.07">Altura da rede no poste — 1,07 m</option>
+            <option value="6.40">Comprimento da linha de saque — 6,40 m</option>
+            <option value="1.37">Largura do corredor de duplas — 1,37 m</option>
+            <option value="custom">Personalizado…</option>
+          </select>
+          <input type="number" id="calib-dist" step="0.001" value="0.914"
+                 style="margin-top:8px; display:none" placeholder="Distância real (m)">
         </div>
-        <div>
-          <label>Referência no vídeo (pixels)</label>
-          <input type="number" name="ref_length_px" step="1" value="220">
-        </div>
+        <canvas id="calib-canvas" class="calib-canvas"></canvas>
+        <p id="calib-status" class="note">Carregando quadro do vídeo…</p>
+        <button type="button" id="calib-reset" class="ghost" style="width:100%">↺ Refazer pontos</button>
       </div>
-      <p class="hint">Use um objeto de tamanho conhecido no plano do saque (ex.: rede = 0,914 m
-        no centro) e meça quantos pixels ele ocupa no quadro.</p>
+
+      <!-- campos preenchidos pela calibração -->
+      <input type="hidden" name="calib_p1x" id="calib_p1x">
+      <input type="hidden" name="calib_p1y" id="calib_p1y">
+      <input type="hidden" name="calib_p2x" id="calib_p2x">
+      <input type="hidden" name="calib_p2y" id="calib_p2y">
+      <input type="hidden" name="calib_dist_m" id="calib_dist_m">
+
+      <details style="margin-top:12px">
+        <summary class="hint">Calibração manual (avançado)</summary>
+        <div class="grid" style="margin-top:8px">
+          <div>
+            <label>Comprimento real (m)</label>
+            <input type="number" name="ref_length_m" step="0.001" value="0.914">
+          </div>
+          <div>
+            <label>Referência no vídeo (pixels)</label>
+            <input type="number" name="ref_length_px" step="1" value="220">
+          </div>
+        </div>
+      </details>
 
       {% if dl_available %}
       <div class="check">
@@ -106,6 +138,7 @@
   </div>
 
   <script src="{{ url_for('static', filename='camera.js') }}"></script>
+  <script src="{{ url_for('static', filename='calib.js') }}"></script>
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("{{ url_for('service_worker') }}").catch(function(){});
