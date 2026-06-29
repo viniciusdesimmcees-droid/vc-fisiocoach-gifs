@@ -14,6 +14,27 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Wedge
 from matplotlib.backends.backend_pdf import PdfPages
 
+LOGO_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "logo.png")
+ASSINATURA = "Vinícius Camargos da Fonseca"
+RESPONSAVEL = "Responsável técnico · VF Tênis Scanner™"
+
+
+def _signature(fig) -> None:
+    """Selo de assinatura/marca registrada no rodapé de cada página do laudo."""
+    # selo (logo) à direita
+    try:
+        import matplotlib.image as mpimg
+        ax_logo = fig.add_axes([0.82, 0.016, 0.12, 0.058]); ax_logo.axis("off")
+        ax_logo.imshow(mpimg.imread(LOGO_PATH))
+    except Exception:
+        pass
+    # linha + assinatura à esquerda
+    fig.add_artist(plt.Line2D([0.06, 0.40], [0.064, 0.064], color="#94a3b8", lw=1))
+    fig.text(0.06, 0.044, ASSINATURA, fontsize=14, fontfamily="serif",
+             fontstyle="italic", color="#15803d")
+    fig.text(0.06, 0.027, RESPONSAVEL, fontsize=8.5, color="#64748b")
+    fig.text(0.5, 0.009, CREDIT, ha="center", fontsize=7.5, color="#aab4ad")
+
 CREDIT = "Sistema criado e desenvolvido por Vinícius Camargos da Fonseca."
 GAUGE_MAX = 240.0  # fim de escala do velocímetro (km/h)
 
@@ -163,11 +184,11 @@ def write_report_pdf(
     recs = (evalu or {}).get("recomendacoes", [])[:4]
     rec_txt = "\n".join(f"• {t}" for t in recs) if recs else \
         "Mantenha a consistência e a regularidade do saque."
-    ax_e = fig.add_axes([0.06, 0.055, 0.88, 0.10]); ax_e.axis("off")
-    ax_e.text(0, 1, rec_txt, fontsize=10, color="#334155", va="top",
-              transform=ax_e.transAxes, linespacing=1.7, wrap=True)
+    ax_e = fig.add_axes([0.06, 0.09, 0.88, 0.065]); ax_e.axis("off")
+    ax_e.text(0, 1, rec_txt, fontsize=9.5, color="#334155", va="top",
+              transform=ax_e.transAxes, linespacing=1.6, wrap=True)
 
-    fig.text(0.5, 0.025, CREDIT, ha="center", fontsize=8, color="#94a3b8")
+    _signature(fig)
 
     with PdfPages(path) as pdf:
         pdf.savefig(fig)
@@ -277,9 +298,9 @@ def _biomech_page(athlete: str, b: dict, biomech_png: str | None):
     )
     for note in chain.get("observacoes", []):
         expl += f"\n• {note}"
-    ax_e = fig.add_axes([0.06, 0.07, 0.88, 0.09]); ax_e.axis("off")
-    ax_e.text(0, 1, expl, fontsize=9.5, color="#334155", va="top",
-              transform=ax_e.transAxes, linespacing=1.5, wrap=True)
+    ax_e = fig.add_axes([0.06, 0.10, 0.88, 0.07]); ax_e.axis("off")
+    ax_e.text(0, 1, expl, fontsize=9, color="#334155", va="top",
+              transform=ax_e.transAxes, linespacing=1.4, wrap=True)
 
-    fig.text(0.5, 0.025, CREDIT, ha="center", fontsize=8, color="#94a3b8")
+    _signature(fig)
     return fig
