@@ -40,7 +40,7 @@ class PoseEstimator:
             import os
             import torch
 
-            n = int(os.environ.get("TORCH_THREADS", "2"))
+            n = int(os.environ.get("TORCH_THREADS", "4"))
             torch.set_num_threads(n)
         except Exception:
             pass

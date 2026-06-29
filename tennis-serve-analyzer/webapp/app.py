@@ -36,6 +36,7 @@ from speed_estimator import estimate  # noqa: E402
 import report  # noqa: E402
 import history  # noqa: E402
 import reportpro  # noqa: E402
+import insights  # noqa: E402
 
 history.init_db()
 
@@ -54,11 +55,10 @@ PROC_MAX_WIDTH = int(os.environ.get("PROC_MAX_WIDTH", "540"))
 PROC_MAX_FRAMES = int(os.environ.get("PROC_MAX_FRAMES", "900"))
 # Gerar o MP4 anotado (passada extra, cara em CPU fraca). Por padrão só o GIF.
 MAKE_MP4 = os.environ.get("MAKE_MP4", "0") == "1"
-# Pose (biomecânica) em CPU é pesada: reduz resolução e limita quadros.
-# Teto rígido de 120 quadros para não estourar o tempo em CPU compartilhada,
-# mesmo que o ambiente peça mais.
+# Pose (biomecânica): reduz resolução e limita quadros. Com mais CPU (plano
+# pago) dá para processar mais quadros — o teto sobe para 240.
 POSE_MAX_WIDTH = int(os.environ.get("POSE_MAX_WIDTH", "640"))
-POSE_MAX_FRAMES = min(int(os.environ.get("POSE_MAX_FRAMES", "120")), 120)
+POSE_MAX_FRAMES = min(int(os.environ.get("POSE_MAX_FRAMES", "150")), 240)
 
 # Deep learning (detector YOLOv8 + biomecânica) só está disponível se torch e
 # ultralytics estiverem instalados — não estão no plano grátis. Detectamos uma
@@ -221,6 +221,10 @@ def analyze():
             except Exception:
                 traceback.print_exc()  # biomecânica é extra: não derruba o resultado
 
+        # avaliação técnica (nota + recomendações)
+        bio_summary = biomech.get("summary") if biomech else None
+        evalu = insights.evaluate(summary, bio_summary)
+
         # relatório profissional: classificação + velocímetro + PDF
         cls = reportpro.classify(result.peak_kmh)
         reportpro.write_gauge_png(base + "_gauge.png", result.peak_kmh, cls)
@@ -228,8 +232,9 @@ def analyze():
             reportpro.write_report_pdf(
                 base + "_relatorio.pdf", athlete, summary, cls,
                 base + "_velocidade.png",
-                biomech=biomech.get("summary") if biomech else None,
+                biomech=bio_summary,
                 biomech_png=biomech.get("plot_path") if biomech else None,
+                evalu=evalu,
             )
             pdf_ok = True
         except Exception:
@@ -252,6 +257,7 @@ def analyze():
             "summary": summary,
             "detector": detector,
             "cls": cls,
+            "evalu": evalu,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

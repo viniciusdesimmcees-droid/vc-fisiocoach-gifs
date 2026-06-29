@@ -94,6 +94,7 @@ def write_gauge_png(path: str, peak_kmh: float, cls: dict) -> None:
 def write_report_pdf(
     path: str, athlete: str, summary: dict, cls: dict, speed_png: str,
     biomech: dict | None = None, biomech_png: str | None = None,
+    evalu: dict | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -118,13 +119,18 @@ def write_report_pdf(
     ax_g = fig.add_axes([0.08, 0.62, 0.5, 0.27])
     draw_gauge(ax_g, peak, cls)
 
-    # classificação (texto ao lado)
-    fig.text(0.60, 0.85, "Classificação", fontsize=11, color="#64748b")
-    fig.text(0.60, 0.815, cls["nivel"], fontsize=20, fontweight="bold",
-             color=cls["cor"])
-    fig.text(0.60, 0.785, f"Faixa: {cls['faixa']}", fontsize=10, color="#334155")
-    ax_desc = fig.add_axes([0.60, 0.66, 0.34, 0.10]); ax_desc.axis("off")
-    ax_desc.text(0, 1, cls["descricao"], fontsize=10, color="#334155", va="top",
+    # coluna direita: NOTA TÉCNICA (destaque) + classificação
+    if evalu:
+        fig.text(0.60, 0.87, "Nota técnica", fontsize=11, color="#64748b")
+        fig.text(0.60, 0.80, f"{evalu['score']:.0f}", fontsize=40,
+                 fontweight="bold", color=evalu["cor"])
+        fig.text(0.745, 0.812, "/100", fontsize=14, color="#94a3b8")
+        fig.text(0.60, 0.785, evalu["nivel"], fontsize=12, fontweight="bold",
+                 color=evalu["cor"])
+    fig.text(0.60, 0.74, f"Classificação: {cls['nivel']} · {cls['faixa']}",
+             fontsize=10, color="#334155")
+    ax_desc = fig.add_axes([0.60, 0.63, 0.34, 0.09]); ax_desc.axis("off")
+    ax_desc.text(0, 1, cls["descricao"], fontsize=9.5, color="#64748b", va="top",
                  wrap=True, transform=ax_desc.transAxes)
 
     # métricas-chave
@@ -151,21 +157,15 @@ def write_report_pdf(
         ax_p = fig.add_axes([0.06, 0.20, 0.88, 0.21]); ax_p.axis("off")
         ax_p.imshow(mpimg.imread(speed_png))
 
-    # explicações
-    fig.text(0.06, 0.165, "Como ler este relatório", fontsize=12,
+    # recomendações personalizadas
+    fig.text(0.06, 0.165, "Recomendações para evoluir", fontsize=12,
              fontweight="bold", color="#15803d")
-    expl = (
-        "• Velocidade de pico: maior velocidade da bola logo após o impacto — o "
-        "indicador principal de potência do saque.\n"
-        "• Velocidade média: média ao longo do trajeto rastreado.\n"
-        "• Quadro do impacto: momento em que a raquete acerta a bola.\n"
-        "• Para precisão pericial, grave em câmera lenta (120–240 fps), câmera "
-        "lateral fixa e com um objeto de referência de tamanho conhecido no plano "
-        "do saque (calibração)."
-    )
-    ax_e = fig.add_axes([0.06, 0.06, 0.88, 0.09]); ax_e.axis("off")
-    ax_e.text(0, 1, expl, fontsize=9.5, color="#334155", va="top",
-              transform=ax_e.transAxes, linespacing=1.6)
+    recs = (evalu or {}).get("recomendacoes", [])[:4]
+    rec_txt = "\n".join(f"• {t}" for t in recs) if recs else \
+        "Mantenha a consistência e a regularidade do saque."
+    ax_e = fig.add_axes([0.06, 0.055, 0.88, 0.10]); ax_e.axis("off")
+    ax_e.text(0, 1, rec_txt, fontsize=10, color="#334155", va="top",
+              transform=ax_e.transAxes, linespacing=1.7, wrap=True)
 
     fig.text(0.5, 0.025, CREDIT, ha="center", fontsize=8, color="#94a3b8")
 

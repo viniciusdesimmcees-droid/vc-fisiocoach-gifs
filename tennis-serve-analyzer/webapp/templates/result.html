@@ -61,6 +61,45 @@
       {% endif %}
     </div>
 
+    {% if evalu %}
+    <div class="card">
+      <h2>Nota técnica do saque</h2>
+      <div class="scorebox">
+        <div class="score-num" style="color: {{ evalu.cor }}">{{ evalu.score|int }}<small>/100</small></div>
+        <div class="score-nivel" style="background: {{ evalu.cor }}">{{ evalu.nivel }}</div>
+      </div>
+
+      <div class="bars">
+        {% for nome, pts, max in evalu.breakdown %}
+        <div class="bar-row">
+          <span class="bar-label">{{ nome }}</span>
+          <span class="bar-track"><span class="bar-fill" style="width: {{ (pts/max*100)|round }}%; background: {{ evalu.cor }}"></span></span>
+          <span class="bar-val">{{ pts|round(0)|int }}/{{ max|int }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if evalu.fortes %}
+      <h2 style="margin-top:18px">✅ Pontos fortes</h2>
+      <div class="explain">
+        {% for t in evalu.fortes %}<div class="ex"><span class="ex-i" style="background: rgba(34,197,94,.14)">✅</span><div>{{ t }}</div></div>{% endfor %}
+      </div>
+      {% endif %}
+
+      {% if evalu.atencao %}
+      <h2 style="margin-top:18px">⚠️ Pontos de atenção</h2>
+      <div class="explain">
+        {% for t in evalu.atencao %}<div class="ex"><span class="ex-i" style="background: rgba(245,158,11,.16)">⚠️</span><div>{{ t }}</div></div>{% endfor %}
+      </div>
+      {% endif %}
+
+      <h2 style="margin-top:18px">🎯 Recomendações para evoluir</h2>
+      <div class="explain">
+        {% for t in evalu.recomendacoes %}<div class="ex"><span class="ex-i">🎯</span><div>{{ t }}</div></div>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
     <div class="card">
       <h2>O que cada número significa</h2>
       <div class="explain">
