@@ -34,6 +34,16 @@ class PoseEstimator:
                 "  pip install torch --index-url https://download.pytorch.org/whl/cpu\n"
                 "  pip install ultralytics"
             ) from e
+        # Em CPU compartilhada (ex.: hospedagem pequena), o torch cria threads
+        # demais e o processo trava/estoura o tempo. Limitar estabiliza.
+        try:
+            import os
+            import torch
+
+            n = int(os.environ.get("TORCH_THREADS", "2"))
+            torch.set_num_threads(n)
+        except Exception:
+            pass
         self.model = YOLO(model_path)
 
     def _largest_person(self, result) -> np.ndarray | None:
