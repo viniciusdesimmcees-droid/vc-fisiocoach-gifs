@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avaliação Postural — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Avaliação Postural</h1>
+      <span>Assimetrias de ombros, quadril e cabeça por foto/vídeo</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+    <a class="back" href="{{ url_for('index') }}">← Voltar ao analisador de saque</a>
+
+    {% if not dl_available %}
+    <div class="aviso-box">
+      <b>⚠️ Indisponível neste ambiente</b>
+      <p>A avaliação postural usa detecção de pose (deep learning). Ative o ambiente
+        com torch + ultralytics para usar este módulo.</p>
+    </div>
+    {% endif %}
+
+    <form class="card" action="{{ url_for('postura_analisar') }}" method="post" enctype="multipart/form-data">
+      <h2>Dados do atleta</h2>
+      <label>Nome do atleta</label>
+      <input type="text" name="athlete" placeholder="Ex.: João Silva" value="Atleta">
+
+      <div class="grid" style="margin-top:14px">
+        <div>
+          <label>Vista</label>
+          <select name="view">
+            <option value="frente">De frente</option>
+            <option value="costas">De costas</option>
+            <option value="lado">De lado (perfil)</option>
+          </select>
+        </div>
+        <div>
+          <label>Foto ou vídeo</label>
+          <input type="file" name="media" accept="image/*,video/*" capture="environment">
+        </div>
+      </div>
+
+      <div class="protocolo">
+        <b>📋 Como capturar (importante para a precisão)</b>
+        <ul>
+          <li>Atleta <b>ereto e relaxado</b>, pés afastados na largura do quadril.</li>
+          <li><b>Corpo inteiro</b> no quadro (cabeça aos pés), câmera na altura do tronco.</li>
+          <li>Roupa justa ajuda; fundo limpo e boa luz.</li>
+          <li>Frontal: de frente · Posterior: de costas · Lateral: de perfil completo.</li>
+        </ul>
+      </div>
+
+      <button type="submit">Avaliar postura</button>
+      <p class="note">Triagem por geometria 2D — apoio à avaliação do profissional,
+        não substitui avaliação presencial nem diagnóstico médico.</p>
+    </form>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>

@@ -286,6 +286,59 @@ def _glossary_page(athlete: str, glossario: list):
     return fig
 
 
+def write_posture_pdf(path: str, athlete: str, resultado: dict, annot_png: str) -> None:
+    """Laudo PDF da avaliação postural (1 página): imagem anotada + medidas."""
+    import matplotlib.image as mpimg
+
+    view_lbl = {"frente": "Vista frontal", "costas": "Vista posterior",
+                "lado": "Vista lateral", "lateral": "Vista lateral"}.get(
+        resultado.get("view"), "Avaliação")
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _page_header(fig, athlete, f"Avaliação Postural — {view_lbl}")
+
+    # imagem anotada à esquerda
+    if annot_png and os.path.exists(annot_png):
+        img = mpimg.imread(annot_png)
+        ih, iw = img.shape[:2]
+        aspect = ih / iw
+        box_w = 0.34
+        box_h = min(0.62, box_w * aspect * (8.27 / 11.69))
+        ax_i = fig.add_axes([0.06, 0.88 - box_h, box_w, box_h]); ax_i.axis("off")
+        ax_i.imshow(img)
+
+    # medidas à direita
+    x = 0.46
+    y = 0.86
+    for m in resultado.get("medidas", []):
+        fig.text(x, y, m["nome"], fontsize=10.5, fontweight="bold", color="#0f1714")
+        fig.text(x, y - 0.016, f"{m['valor']} · {m['situacao']}", fontsize=9.5,
+                 fontweight="bold", color=m["cor"])
+        fig.text(x, y - 0.030, m.get("detalhe", ""), fontsize=8.3, color="#334155")
+        fig.text(x, y - 0.043, m.get("para", ""), fontsize=7.6, color="#94a3b8")
+        fig.add_artist(plt.Line2D([x, 0.94], [y - 0.052, y - 0.052],
+                                  color="#eef2f0", lw=0.8))
+        y -= 0.072
+
+    # resumo
+    fig.text(0.06, 0.30, "Resumo", fontsize=12, fontweight="bold", color="#15803d")
+    ax_r = fig.add_axes([0.06, 0.22, 0.88, 0.07]); ax_r.axis("off")
+    ax_r.text(0, 1, resultado.get("resumo", ""), fontsize=10, color="#334155",
+              va="top", transform=ax_r.transAxes, wrap=True, linespacing=1.5)
+
+    ax_n = fig.add_axes([0.06, 0.12, 0.88, 0.06]); ax_n.axis("off")
+    ax_n.text(0, 1, "Triagem por geometria 2D a partir da pose: tem margem e "
+              "depende do enquadramento (atleta ereto, corpo inteiro, de frente/"
+              "costas/lado). Apoio a avaliacao do profissional, nao substitui "
+              "avaliacao postural presencial nem diagnostico medico.",
+              fontsize=8, color="#94a3b8", va="top", transform=ax_n.transAxes,
+              wrap=True, linespacing=1.4)
+    _signature(fig)
+
+    with PdfPages(path) as pdf:
+        pdf.savefig(fig)
+        plt.close(fig)
+
+
 def _engine_page(athlete: str, intel: dict):
     """Página: plano inteligente (risco de lesão + músculos + treino)."""
     fig = plt.figure(figsize=(8.27, 11.69))

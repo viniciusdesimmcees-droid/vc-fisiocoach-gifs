@@ -25,7 +25,10 @@
   <div class="wrap">
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
-    <a class="back" href="{{ url_for('historico') }}">📊 Ver histórico dos atletas →</a>
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('historico') }}">📊 Ver histórico dos atletas →</a>
+      <a class="back" href="{{ url_for('postura') }}">🧍 Avaliação postural →</a>
+    </div>
 
     <form class="card" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
       <div class="tabs">

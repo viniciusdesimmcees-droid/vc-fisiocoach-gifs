@@ -42,6 +42,7 @@ import didactic  # noqa: E402
 import references  # noqa: E402
 import engine  # noqa: E402
 import strokes  # noqa: E402
+import posture  # noqa: E402
 
 history.init_db()
 
@@ -170,6 +171,146 @@ def server_error(_e):
 @app.route("/")
 def index():
     return render_template("index.html", dl_available=DL_AVAILABLE)
+
+
+IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+
+
+def _downscale_bgr(img, max_width):
+    import cv2
+
+    h, w = img.shape[:2]
+    if max_width and w > max_width:
+        s = max_width / w
+        img = cv2.resize(img, (round(w * s), round(h * s)))
+    return img
+
+
+def _best_pose_frame(path):
+    """Extrai o quadro com a melhor pose (corpo inteiro) de uma foto ou vídeo.
+    Retorna (imagem_bgr, keypoints) ou (None, None)."""
+    import cv2
+    from pose_estimator import PoseEstimator
+
+    pose = PoseEstimator(model_path="yolov8n-pose.pt")
+    ext = os.path.splitext(path)[1].lower()
+
+    if ext in IMAGE_EXTS:
+        img = cv2.imread(path)
+        if img is None:
+            return None, None
+        img = _downscale_bgr(img, POSE_MAX_WIDTH)
+        return img, pose.estimate_frame(img)
+
+    # vídeo: amostra alguns quadros e escolhe o de pose mais completa
+    cap = cv2.VideoCapture(path)
+    if not cap.isOpened():
+        return None, None
+    n = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or 0
+    idxs = (list(range(0, n, max(1, n // 8)))[:8] if n > 0 else list(range(0, 8)))
+    trunk = [posture.L_SH, posture.R_SH, posture.L_HIP, posture.R_HIP,
+             posture.L_KNEE, posture.R_KNEE, posture.L_ANK, posture.R_ANK]
+    best_img, best_kp, best_score = None, None, -1.0
+    for i in idxs:
+        if n > 0:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+        ok, frame = cap.read()
+        if not ok:
+            continue
+        frame = _downscale_bgr(frame, POSE_MAX_WIDTH)
+        kp = pose.estimate_frame(frame)
+        if kp is None:
+            continue
+        score = float(sum(kp[j][2] for j in trunk))
+        if score > best_score:
+            best_img, best_kp, best_score = frame, kp, score
+    cap.release()
+    return best_img, best_kp
+
+
+@app.route("/postura")
+def postura():
+    return render_template("postura.html", dl_available=DL_AVAILABLE)
+
+
+@app.route("/postura/analisar", methods=["POST"])
+def postura_analisar():
+    if not DL_AVAILABLE:
+        return render_template(
+            "postura.html", dl_available=False,
+            error="A avaliação postural usa detecção de pose (deep learning), "
+            "indisponível neste ambiente.",
+        ), 400
+
+    media = request.files.get("media")
+    if not media or media.filename == "":
+        return render_template(
+            "postura.html", dl_available=True,
+            error="Envie uma foto ou vídeo do atleta (de frente, costas ou lado).",
+        ), 400
+
+    athlete = request.form.get("athlete", "Atleta").strip() or "Atleta"
+    view = request.form.get("view", "frente")
+
+    job = uuid.uuid4().hex[:10]
+    job_dir = os.path.join(RESULTS_DIR, job)
+    os.makedirs(job_dir, exist_ok=True)
+    in_path = os.path.join(UPLOADS_DIR, f"post_{job}_{media.filename}")
+    media.save(in_path)
+
+    try:
+        import cv2
+
+        img, kp = _best_pose_frame(in_path)
+        if kp is None or img is None:
+            return render_template(
+                "postura.html", dl_available=True,
+                error="Não consegui identificar a pessoa. Use boa luz, corpo "
+                "inteiro no quadro e fundo limpo (de frente, costas ou lado).",
+            ), 400
+
+        resultado = posture.analyze(kp, view)
+        if not resultado:
+            return render_template(
+                "postura.html", dl_available=True,
+                error="Pose insuficiente para medir. Garanta o corpo inteiro "
+                "visível e ereto no quadro.",
+            ), 400
+
+        annotated = posture.annotate(img, kp, view)
+        annot_path = os.path.join(job_dir, "postura_anotada.png")
+        cv2.imwrite(annot_path, annotated)
+
+        pdf_ok = True
+        try:
+            reportpro.write_posture_pdf(
+                os.path.join(job_dir, "postura_laudo.pdf"),
+                athlete, resultado, annot_path,
+            )
+        except Exception:
+            traceback.print_exc()
+            pdf_ok = False
+
+        return render_template(
+            "postura_result.html",
+            athlete=athlete,
+            resultado=resultado,
+            view_label={"frente": "de frente", "costas": "de costas",
+                        "lado": "de lado", "lateral": "de lado"}.get(view, view),
+            imagem=url_for("static", filename=f"results/{job}/postura_anotada.png"),
+            pdf=url_for("static", filename=f"results/{job}/postura_laudo.pdf") if pdf_ok else None,
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "postura.html", dl_available=True,
+            error=f"Falha na avaliação postural: {e}",
+        ), 500
+    finally:
+        try:
+            os.remove(in_path)
+        except OSError:
+            pass
 
 
 @app.route("/manifest.webmanifest")

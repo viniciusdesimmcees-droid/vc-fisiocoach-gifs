@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Postura — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Avaliação Postural — {{ athlete }}</h1>
+      <span>Vista {{ view_label }}</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
+      <a class="back" href="{{ url_for('postura') }}">← Avaliar outra postura</a>
+      <a class="back" href="{{ url_for('index') }}">Analisador de saque →</a>
+    </div>
+
+    {% if pdf %}
+    <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar laudo postural (PDF)</a>
+    {% endif %}
+
+    <div class="postura-grid">
+      <div class="card postura-img-card">
+        <img class="postura-img" src="{{ imagem }}" alt="Postura anotada">
+        <p class="note">Linhas em <span style="color:#1ea050;font-weight:700">verde</span> = niveladas ·
+          <span style="color:#e6a010;font-weight:700">âmbar</span> = inclinadas · linha vertical = prumo.</p>
+      </div>
+
+      <div class="card postura-resumo-card">
+        <h2>Resumo</h2>
+        <div class="resumo-flags">
+          {% set graves = resultado.graves %}
+          {% set alertas = resultado.alertas %}
+          <span class="flag" style="background:{{ '#dc2626' if graves else ('#d97706' if alertas else '#15803d') }}">
+            {{ '🔺' if graves else ('⚠️' if alertas else '✅') }}
+            {{ alertas }} ponto(s) de atenção
+          </span>
+        </div>
+        <p class="resumo-txt">{{ resultado.resumo }}</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Medidas</h2>
+      {% for m in resultado.medidas %}
+      <div class="post-row">
+        <div class="post-top">
+          <span class="post-nome">{{ m.nome }}</span>
+          <span class="post-sit" style="color: {{ m.cor }}">{{ m.icone }} {{ m.valor }} · {{ m.situacao }}</span>
+        </div>
+        <div class="post-detalhe">{{ m.detalhe }}</div>
+        <div class="post-expl">{{ m.explicacao }} <span class="post-para">— {{ m.para }}</span></div>
+      </div>
+      {% endfor %}
+      <p class="note">Triagem por geometria 2D (tem margem; depende do enquadramento).
+        Apoio à avaliação do profissional — não substitui avaliação presencial nem diagnóstico médico.</p>
+    </div>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>
