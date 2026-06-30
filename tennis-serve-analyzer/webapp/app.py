@@ -196,11 +196,10 @@ def analyze():
     video.save(in_path)
 
     athlete = request.form.get("athlete", "Atleta").strip() or "Atleta"
-    ref_m = _f("ref_length_m", 1.0)
-    ref_px = _f("ref_length_px", 200.0)
 
-    # Calibração pela quadra: 2 pontos clicados (resolução nativa do vídeo) +
-    # distância real. O app calcula os pixels — sem medição manual.
+    # CALIBRAÇÃO (obrigatória — sem ela a velocidade fica errada).
+    # Prioridade: 2 pontos clicados na quadra > calibração manual.
+    ref_m = ref_px = None
     cal_dist = _f("calib_dist_m", 0.0)
     p1x, p1y = _f("calib_p1x", -1), _f("calib_p1y", -1)
     p2x, p2y = _f("calib_p2x", -1), _f("calib_p2y", -1)
@@ -208,6 +207,22 @@ def analyze():
         px = ((p2x - p1x) ** 2 + (p2y - p1y) ** 2) ** 0.5
         if px > 1:
             ref_px, ref_m = px, cal_dist
+    if ref_px is None:
+        m_in, px_in = _f("ref_length_m", 0.0), _f("ref_length_px", 0.0)
+        if m_in > 0 and px_in > 0:
+            ref_m, ref_px = m_in, px_in
+    if ref_px is None or ref_m is None:
+        try:
+            os.remove(in_path)
+        except OSError:
+            pass
+        return render_template(
+            "index.html",
+            error="Calibre antes de analisar: em 'Calibração pela quadra', toque "
+            "em 2 pontos de uma medida conhecida (ex.: altura da rede = 0,914 m) e "
+            "informe a distância — ou use a calibração manual. Sem isso a "
+            "velocidade fica incorreta.",
+        ), 400
 
     fps_override = _f("fps", 0.0)
     detector = request.form.get("detector", "classic")
@@ -246,6 +261,25 @@ def analyze():
         # reduzida em que o rastreio rodou (mantém a velocidade correta).
         calib = Calibration.from_reference(ref_m, ref_px * scale, fps)
         result = estimate(trajectory, calib)
+
+        # ---- avisos automáticos de confiabilidade ----
+        avisos = []
+        file_fps = meta.get("fps") or 0
+        if fps < 100:
+            avisos.append(
+                f"fps baixo ({fps:.0f}). Saques rápidos (150+ km/h) exigem câmera "
+                "lenta de 120–240 fps. Com fps baixo, a velocidade fica imprecisa."
+            )
+        elif file_fps and abs(file_fps - fps) > 5:
+            avisos.append(
+                f"O arquivo informa {file_fps:.0f} fps, mas você usou {fps:.0f}. "
+                "Confirme o fps real da câmera lenta — isso afeta diretamente a velocidade."
+            )
+        if meta.get("detections", 0) < 8:
+            avisos.append(
+                "Poucas detecções da bola — confira iluminação, contraste da bola e "
+                "o enquadramento (câmera lateral, bola visível)."
+            )
 
         base = os.path.join(job_dir, "saque")
         report.write_trajectory_csv(base + "_trajetoria.csv", trajectory)
@@ -306,6 +340,7 @@ def analyze():
             "detector": detector,
             "cls": cls,
             "evalu": evalu,
+            "avisos": avisos,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

@@ -25,6 +25,13 @@
       {% if history_url %}<a class="back" href="{{ history_url }}">Ver histórico do atleta →</a>{% endif %}
     </div>
 
+    {% if avisos %}
+    <div class="aviso-box">
+      <b>⚠️ Atenção à confiabilidade da medição</b>
+      {% for a in avisos %}<p>• {{ a }}</p>{% endfor %}
+    </div>
+    {% endif %}
+
     {% if pdf %}
     <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar relatório completo (PDF)</a>
     {% endif %}
