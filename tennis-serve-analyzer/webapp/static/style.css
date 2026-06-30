@@ -284,6 +284,40 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
 .ref-mid { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; margin-top: 3px; }
 .ref-para { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 
+/* motor inteligente VF */
+.engine-card { border: 1px solid rgba(46,204,85,.35); }
+.engine-sub { font-size: 14px; margin: 18px 0 8px; }
+.risk-banner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; color: #fff; border-radius: 12px;
+  padding: 14px 16px; margin: 6px 0 10px;
+}
+.risk-label { font-size: 13px; font-weight: 600; opacity: .95; }
+.risk-level { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+.risk-fatores { margin: 4px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+.risk-fatores li { margin: 3px 0; }
+.musc-grid { display: grid; gap: 8px; }
+.musc-item {
+  display: flex; flex-direction: column; gap: 2px;
+  background: rgba(255,255,255,.03); border: 1px solid var(--line);
+  border-radius: 10px; padding: 9px 12px;
+}
+.musc-grupo { font-weight: 700; font-size: 13.5px; }
+.musc-motivo { font-size: 12.5px; color: var(--muted); }
+.ex-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.ex-card {
+  margin: 0; background: #06150c; border: 1px solid var(--line);
+  border-radius: 12px; overflow: hidden;
+}
+.ex-card img { width: 100%; height: 120px; object-fit: cover; display: block; background: #0b1f12; }
+.ex-card figcaption { padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.ex-nome { font-weight: 700; font-size: 12.5px; line-height: 1.2; }
+.ex-grupo { font-size: 11px; color: var(--muted); text-transform: capitalize; }
+.engine-treino { font-size: 13.5px; margin-top: 4px; }
+
 /* calibração pela quadra */
 .calib-canvas {
   display: block; margin: 10px auto; border-radius: 12px;

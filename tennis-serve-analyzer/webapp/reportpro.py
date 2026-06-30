@@ -117,6 +117,7 @@ def write_report_pdf(
     biomech: dict | None = None, biomech_png: str | None = None,
     evalu: dict | None = None, didatico_texto: str | None = None,
     referencias: list | None = None, glossario: list | None = None,
+    inteligencia: dict | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -205,6 +206,10 @@ def write_report_pdf(
             fig2 = _biomech_page(athlete, biomech, biomech_png)
             pdf.savefig(fig2)
             plt.close(fig2)
+        if inteligencia:
+            fi = _engine_page(athlete, inteligencia)
+            pdf.savefig(fi)
+            plt.close(fi)
         if referencias:
             fr = _references_table_page(athlete, referencias)
             pdf.savefig(fr)
@@ -270,6 +275,77 @@ def _glossary_page(athlete: str, glossario: list):
                 transform=ax.transAxes, wrap=True, linespacing=1.35)
         y -= 0.075
 
+    _signature(fig)
+    return fig
+
+
+def _engine_page(athlete: str, intel: dict):
+    """Página: plano inteligente (risco de lesão + músculos + treino)."""
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _page_header(fig, athlete, "Plano do atleta — Inteligência VF")
+
+    risco = intel.get("risco", {}) or {}
+    cor = risco.get("cor", "#334155")
+
+    # banner de risco
+    ax_b = fig.add_axes([0.06, 0.85, 0.88, 0.05]); ax_b.axis("off")
+    ax_b.add_patch(plt.Rectangle((0, 0), 1, 1, transform=ax_b.transAxes,
+                                 facecolor=cor, edgecolor="none"))
+    ax_b.text(0.02, 0.5, "Indice de risco de lesao", fontsize=11, color="white",
+              va="center", transform=ax_b.transAxes)
+    ax_b.text(0.98, 0.5, risco.get("nivel", "—"), fontsize=16, fontweight="bold",
+              color="white", va="center", ha="right", transform=ax_b.transAxes)
+
+    y = 0.82
+    fatores = risco.get("fatores", []) or []
+    if fatores:
+        fig.text(0.06, y, "Fatores considerados", fontsize=10.5,
+                 fontweight="bold", color="#15803d")
+        y -= 0.022
+        for f in fatores[:8]:
+            fig.text(0.07, y, f"- {f}", fontsize=8.8, color="#334155")
+            y -= 0.02
+        y -= 0.01
+
+    musculos = intel.get("musculos", []) or []
+    if musculos:
+        fig.text(0.06, y, "Musculos a priorizar", fontsize=10.5,
+                 fontweight="bold", color="#15803d")
+        y -= 0.024
+        for m in musculos:
+            grupo = str(m.get("grupo", "")).replace("_", " ").title()
+            fig.text(0.07, y, grupo, fontsize=9.5, fontweight="bold", color="#0f1714")
+            fig.text(0.30, y, m.get("motivo", ""), fontsize=8.3, color="#64748b")
+            y -= 0.026
+        y -= 0.01
+
+    exercicios = intel.get("exercicios", []) or []
+    if exercicios:
+        fig.text(0.06, y, "Exercicios recomendados (biblioteca VC Fisiocoach)",
+                 fontsize=10.5, fontweight="bold", color="#15803d")
+        y -= 0.024
+        for e in exercicios:
+            grupo = str(e.get("grupo", "")).replace("_", " ").title()
+            fig.text(0.07, y, f"- {e.get('nome', '')}", fontsize=9.2, color="#0f1714")
+            fig.text(0.62, y, grupo, fontsize=8.3, color="#94a3b8")
+            y -= 0.022
+        y -= 0.01
+
+    treino = intel.get("treino")
+    if treino:
+        fig.text(0.06, y, "Foco do treino", fontsize=10.5, fontweight="bold",
+                 color="#15803d")
+        y -= 0.02
+        ax_t = fig.add_axes([0.06, y - 0.08, 0.88, 0.08]); ax_t.axis("off")
+        ax_t.text(0, 1, treino, fontsize=9, color="#334155", va="top",
+                  transform=ax_t.transAxes, wrap=True, linespacing=1.4)
+
+    ax_n = fig.add_axes([0.06, 0.10, 0.88, 0.05]); ax_n.axis("off")
+    ax_n.text(0, 1, "Sistema de apoio a decisao do profissional, baseado em regras "
+              "transparentes que cruzam a biomecanica do saque com a anamnese. "
+              "Nao substitui avaliacao presencial nem diagnostico medico.",
+              fontsize=8, color="#94a3b8", va="top", transform=ax_n.transAxes,
+              wrap=True, linespacing=1.4)
     _signature(fig)
     return fig
 

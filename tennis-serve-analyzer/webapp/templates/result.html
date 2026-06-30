@@ -231,6 +231,54 @@
     </div>
     {% endif %}
 
+    {% if inteligencia %}
+    <div class="card engine-card">
+      <h2>🧠 Inteligência VF — plano do atleta</h2>
+      <p class="note">Cruza a biomecânica do saque com a ficha (anamnese) e a biblioteca
+        de exercícios VC Fisiocoach. Apoio à decisão do profissional, não diagnóstico médico.</p>
+
+      <div class="risk-banner" style="background: {{ inteligencia.risco.cor }}">
+        <span class="risk-label">Índice de risco de lesão</span>
+        <span class="risk-level">{{ inteligencia.risco.nivel }}</span>
+      </div>
+      {% if inteligencia.risco.fatores %}
+      <ul class="risk-fatores">
+        {% for f in inteligencia.risco.fatores %}<li>{{ f }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if inteligencia.musculos %}
+      <h3 class="engine-sub">Músculos a priorizar</h3>
+      <div class="musc-grid">
+        {% for m in inteligencia.musculos %}
+        <div class="musc-item">
+          <span class="musc-grupo">{{ m.grupo|replace("_"," ")|title }}</span>
+          <span class="musc-motivo">{{ m.motivo }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if inteligencia.exercicios %}
+      <h3 class="engine-sub">Exercícios recomendados (biblioteca VC Fisiocoach)</h3>
+      <div class="ex-grid">
+        {% for e in inteligencia.exercicios %}
+        <figure class="ex-card">
+          {% if e.gif_url %}<img src="{{ e.gif_url }}" alt="{{ e.nome }}" loading="lazy">{% endif %}
+          <figcaption>
+            <span class="ex-nome">{{ e.nome }}</span>
+            <span class="ex-grupo">{{ e.grupo|replace("_"," ")|title }}</span>
+          </figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <h3 class="engine-sub">Foco do treino</h3>
+      <p class="engine-treino">{{ inteligencia.treino }}</p>
+    </div>
+    {% endif %}
+
     {% if glossario %}
     <div class="card">
       <details>
