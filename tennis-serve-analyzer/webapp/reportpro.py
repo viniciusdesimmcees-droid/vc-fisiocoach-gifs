@@ -115,7 +115,7 @@ def write_gauge_png(path: str, peak_kmh: float, cls: dict) -> None:
 def write_report_pdf(
     path: str, athlete: str, summary: dict, cls: dict, speed_png: str,
     biomech: dict | None = None, biomech_png: str | None = None,
-    evalu: dict | None = None,
+    evalu: dict | None = None, didatico_texto: str | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -178,15 +178,22 @@ def write_report_pdf(
         ax_p = fig.add_axes([0.06, 0.20, 0.88, 0.21]); ax_p.axis("off")
         ax_p.imshow(mpimg.imread(speed_png))
 
-    # recomendações personalizadas
-    fig.text(0.06, 0.165, "Recomendações para evoluir", fontsize=12,
-             fontweight="bold", color="#15803d")
-    recs = (evalu or {}).get("recomendacoes", [])[:4]
-    rec_txt = "\n".join(f"• {t}" for t in recs) if recs else \
-        "Mantenha a consistência e a regularidade do saque."
-    ax_e = fig.add_axes([0.06, 0.09, 0.88, 0.065]); ax_e.axis("off")
-    ax_e.text(0, 1, rec_txt, fontsize=9.5, color="#334155", va="top",
-              transform=ax_e.transAxes, linespacing=1.6, wrap=True)
+    # Em palavras simples (para o aluno) — ou recomendações se não houver
+    if didatico_texto:
+        fig.text(0.06, 0.165, "Em palavras simples (para o aluno)", fontsize=12,
+                 fontweight="bold", color="#15803d")
+        ax_e = fig.add_axes([0.06, 0.085, 0.88, 0.07]); ax_e.axis("off")
+        ax_e.text(0, 1, didatico_texto, fontsize=10, color="#334155", va="top",
+                  transform=ax_e.transAxes, linespacing=1.6, wrap=True)
+    else:
+        fig.text(0.06, 0.165, "Recomendações para evoluir", fontsize=12,
+                 fontweight="bold", color="#15803d")
+        recs = (evalu or {}).get("recomendacoes", [])[:4]
+        rec_txt = "\n".join(f"• {t}" for t in recs) if recs else \
+            "Mantenha a consistência e a regularidade do saque."
+        ax_e = fig.add_axes([0.06, 0.09, 0.88, 0.065]); ax_e.axis("off")
+        ax_e.text(0, 1, rec_txt, fontsize=9.5, color="#334155", va="top",
+                  transform=ax_e.transAxes, linespacing=1.6, wrap=True)
 
     _signature(fig)
 

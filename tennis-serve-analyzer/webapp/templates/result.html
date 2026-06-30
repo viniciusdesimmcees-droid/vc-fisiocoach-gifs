@@ -68,6 +68,17 @@
       {% endif %}
     </div>
 
+    {% if didatico %}
+    <div class="card aluno-card">
+      <h2>📖 Resumo para o aluno <span class="hint">(em palavras simples)</span></h2>
+      <div class="explain">
+        {% for b in didatico %}
+        <div class="ex"><span class="ex-i">{{ b.icone }}</span><div><b>{{ b.titulo }}.</b> {{ b.texto }}</div></div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
     {% if evalu %}
     <div class="card">
       <h2>Nota técnica do saque</h2>
@@ -196,6 +207,19 @@
       <div class="downloads" style="margin-top:14px">
         <a href="{{ biomech.json }}" download>Baixar JSON (biomecânica)</a>
       </div>
+    </div>
+    {% endif %}
+
+    {% if glossario %}
+    <div class="card">
+      <details>
+        <summary><b>📚 Glossário</b> <span class="hint">— o que cada termo significa</span></summary>
+        <table class="angles" style="margin-top:12px">
+          {% for termo, expl in glossario %}
+          <tr><td style="vertical-align:top; white-space:nowrap"><b>{{ termo }}</b></td><td>{{ expl }}</td></tr>
+          {% endfor %}
+        </table>
+      </details>
     </div>
     {% endif %}
 

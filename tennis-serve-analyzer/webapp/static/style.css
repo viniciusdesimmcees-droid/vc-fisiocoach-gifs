@@ -271,6 +271,11 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
 }
 .ex b { color: var(--ink); }
 
+.aluno-card {
+  background: linear-gradient(180deg, #f0fbf3, #ffffff);
+  border: 1.5px solid #bdebcb;
+}
+
 /* calibração pela quadra */
 .calib-canvas {
   display: block; margin: 10px auto; border-radius: 12px;
