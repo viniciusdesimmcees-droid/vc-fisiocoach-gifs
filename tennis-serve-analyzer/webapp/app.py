@@ -151,6 +151,50 @@ def excluir_postura(assessment_id):
                     if athlete else url_for("historico"))
 
 
+@app.route("/historico/<athlete>/laudo.pdf")
+def laudo_atleta(athlete):
+    profile = history.get_profile(athlete)
+    h = history.get_history(athlete)
+    posturas = history.get_posture_history(athlete)
+    if not h and not profile and not posturas:
+        abort(404)
+
+    stats = history.athlete_stats(athlete) if h else {}
+    serve_png = history.evolution_png(athlete) if h else None
+    posture_png = history.posture_evolution_png(athlete) if posturas else None
+    last_post = posturas[-1] if posturas else None
+
+    last_img = None
+    if last_post and last_post.get("image_url"):
+        rel = last_post["image_url"].split("/static/", 1)[-1]
+        cand = os.path.join(STATIC, rel)
+        if os.path.exists(cand):
+            last_img = cand
+
+    import tempfile
+
+    fd, tmp = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        reportpro.write_athlete_dossier_pdf(
+            tmp, athlete, profile,
+            history.age_from_birthdate(profile.get("birthdate")) if profile else None,
+            history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
+            stats, serve_png, posture_png, last_post, last_img,
+        )
+        with open(tmp, "rb") as f:
+            data = f.read()
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="laudo_{athlete}.pdf"'},
+    )
+
+
 @app.route("/chart/evolucao/<athlete>.png")
 def chart_evolucao(athlete):
     return Response(history.evolution_png(athlete), mimetype="image/png")

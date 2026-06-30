@@ -22,6 +22,8 @@
   <div class="wrap">
     <a class="back" href="{{ url_for('historico') }}">← Todos os atletas</a>
 
+    <a class="pdf-btn" href="{{ url_for('laudo_atleta', athlete=athlete) }}">⬇️ Baixar laudo consolidado do atleta (PDF)</a>
+
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
         <h2 style="margin:0">Ficha do atleta</h2>
