@@ -87,6 +87,15 @@ input[type=text]:focus, input[type=number]:focus, select:focus {
   box-shadow: 0 0 0 4px rgba(34,197,94,.15);
 }
 input[type=file] { width: 100%; font-size: 14px; padding: 12px 0; }
+input[type=date] { width: 100%; padding: 13px 14px; border: 1.5px solid var(--line); border-radius: 13px; font-size: 15px; background: #fbfdfc; }
+textarea {
+  width: 100%; padding: 12px 14px; border: 1.5px solid var(--line);
+  border-radius: 13px; font-size: 15px; background: #fbfdfc; font-family: inherit;
+  resize: vertical;
+}
+textarea:focus, input[type=date]:focus {
+  outline: none; border-color: var(--green); box-shadow: 0 0 0 4px rgba(34,197,94,.15);
+}
 
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
@@ -203,6 +212,13 @@ a.back {
   display: inline-block; color: var(--green-dark); text-decoration: none;
   font-size: 14px; font-weight: 600;
 }
+
+.analise-row { border-bottom: 1px solid var(--line); padding: 10px 0; }
+.analise-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; }
+.analise-head > span:nth-child(2) { margin-left: auto; color: #334155; }
+.analise-edit summary { cursor: pointer; list-style: none; font-size: 18px; }
+.analise-edit summary::-webkit-details-marker { display: none; }
+.edit-form { margin-top: 10px; }
 
 footer.credit {
   text-align: center; color: var(--muted); font-size: 12.5px;

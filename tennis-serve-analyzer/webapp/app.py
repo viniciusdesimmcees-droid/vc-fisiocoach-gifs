@@ -22,7 +22,8 @@ import uuid
 import traceback
 
 from flask import (
-    Flask, request, render_template, url_for, send_from_directory, Response, abort
+    Flask, request, render_template, url_for, send_from_directory, Response, abort,
+    redirect,
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -89,14 +90,50 @@ def historico():
 @app.route("/historico/<athlete>")
 def historico_atleta(athlete):
     h = history.get_history(athlete)
-    if not h:
+    profile = history.get_profile(athlete)
+    if not h and not profile:
         abort(404)
     return render_template(
         "atleta.html",
         athlete=athlete,
-        stats=history.athlete_stats(athlete),
+        stats=history.athlete_stats(athlete) if h else {},
         rows=list(reversed(h)),  # mais recentes primeiro na tabela
+        profile=profile,
+        age=history.age_from_birthdate(profile.get("birthdate")) if profile else None,
+        imc=history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
     )
+
+
+@app.route("/atleta/<athlete>/ficha", methods=["GET", "POST"])
+def ficha_atleta(athlete):
+    if request.method == "POST":
+        data = {f: (request.form.get(f) or None) for f in history.ATHLETE_FIELDS}
+        history.save_profile(athlete, data)
+        return redirect(url_for("historico_atleta", athlete=athlete))
+    return render_template(
+        "ficha.html", athlete=athlete, profile=history.get_profile(athlete) or {}
+    )
+
+
+@app.route("/analise/<int:analysis_id>/excluir", methods=["POST"])
+def excluir_analise(analysis_id):
+    athlete = request.form.get("athlete", "")
+    history.delete_analysis(analysis_id)
+    return redirect(url_for("historico_atleta", athlete=athlete)
+                    if athlete else url_for("historico"))
+
+
+@app.route("/analise/<int:analysis_id>/editar", methods=["POST"])
+def editar_analise(analysis_id):
+    athlete = request.form.get("athlete", "")
+    history.update_analysis(
+        analysis_id,
+        peak_kmh=request.form.get("peak_kmh") or None,
+        mean_kmh=request.form.get("mean_kmh") or None,
+        created_at=request.form.get("created_at") or None,
+    )
+    return redirect(url_for("historico_atleta", athlete=athlete)
+                    if athlete else url_for("historico"))
 
 
 @app.route("/chart/evolucao/<athlete>.png")

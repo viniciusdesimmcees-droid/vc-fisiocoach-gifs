@@ -50,6 +50,14 @@ def _conn() -> sqlite3.Connection:
     return c
 
 
+# Campos da ficha/anamnese do atleta (além de "name").
+ATHLETE_FIELDS = [
+    "birthdate", "height_cm", "weight_kg", "dominant_hand", "level",
+    "since_year", "train_hours", "contact", "injuries", "pain",
+    "conditions", "goals", "notes",
+]
+
+
 def init_db() -> None:
     with _conn() as c:
         c.execute(
@@ -63,6 +71,93 @@ def init_db() -> None:
                 detector TEXT
             )"""
         )
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS athletes (
+                name TEXT PRIMARY KEY,
+                birthdate TEXT, height_cm REAL, weight_kg REAL,
+                dominant_hand TEXT, level TEXT, since_year INTEGER,
+                train_hours REAL, contact TEXT,
+                injuries TEXT, pain TEXT, conditions TEXT, goals TEXT,
+                notes TEXT, updated_at TEXT
+            )"""
+        )
+
+
+# ----------------------------- ficha do atleta -----------------------------
+
+def get_profile(name: str) -> dict | None:
+    with _conn() as c:
+        row = c.execute("SELECT * FROM athletes WHERE name = ?", (name,)).fetchone()
+    return dict(row) if row else None
+
+
+def save_profile(name: str, data: dict) -> None:
+    """Cria ou atualiza a ficha/anamnese do atleta."""
+    cols = ["name"] + ATHLETE_FIELDS + ["updated_at"]
+    vals = [name] + [data.get(f) for f in ATHLETE_FIELDS] + [
+        datetime.now(timezone.utc).isoformat()
+    ]
+    placeholders = ", ".join("?" for _ in cols)
+    with _conn() as c:
+        c.execute(
+            f"INSERT OR REPLACE INTO athletes ({', '.join(cols)}) "
+            f"VALUES ({placeholders})",
+            vals,
+        )
+
+
+def age_from_birthdate(birthdate: str | None) -> int | None:
+    if not birthdate:
+        return None
+    try:
+        b = datetime.fromisoformat(birthdate)
+    except ValueError:
+        try:
+            b = datetime.strptime(birthdate, "%Y-%m-%d")
+        except ValueError:
+            return None
+    today = datetime.now()
+    return today.year - b.year - ((today.month, today.day) < (b.month, b.day))
+
+
+def bmi(height_cm, weight_kg):
+    try:
+        h = float(height_cm) / 100.0
+        return round(float(weight_kg) / (h * h), 1) if h > 0 else None
+    except (TypeError, ValueError, ZeroDivisionError):
+        return None
+
+
+# ----------------------- editar/corrigir o histórico -----------------------
+
+def delete_analysis(analysis_id: int) -> None:
+    with _conn() as c:
+        c.execute("DELETE FROM analyses WHERE id = ?", (analysis_id,))
+
+
+def update_analysis(analysis_id: int, peak_kmh=None, mean_kmh=None,
+                    created_at=None) -> None:
+    sets, vals = [], []
+    if peak_kmh is not None:
+        sets.append("peak_kmh = ?"); vals.append(round(float(peak_kmh), 1))
+    if mean_kmh is not None:
+        sets.append("mean_kmh = ?"); vals.append(round(float(mean_kmh), 1))
+    if created_at:
+        sets.append("created_at = ?"); vals.append(created_at)
+    if not sets:
+        return
+    vals.append(analysis_id)
+    with _conn() as c:
+        c.execute(f"UPDATE analyses SET {', '.join(sets)} WHERE id = ?", vals)
+
+
+def rename_athlete(old: str, new: str) -> None:
+    new = new.strip()
+    if not new or new == old:
+        return
+    with _conn() as c:
+        c.execute("UPDATE analyses SET athlete = ? WHERE athlete = ?", (new, old))
+        c.execute("UPDATE OR REPLACE athletes SET name = ? WHERE name = ?", (new, old))
 
 
 def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector) -> None:

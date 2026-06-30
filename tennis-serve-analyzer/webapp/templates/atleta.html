@@ -23,6 +23,32 @@
     <a class="back" href="{{ url_for('historico') }}">← Todos os atletas</a>
 
     <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
+        <h2 style="margin:0">Ficha do atleta</h2>
+        <a class="back" href="{{ url_for('ficha_atleta', athlete=athlete) }}">{{ 'Editar ficha ✏️' if profile else 'Cadastrar ficha →' }}</a>
+      </div>
+      {% if profile %}
+      <div class="stats" style="margin-top:14px">
+        <div class="stat"><div class="v">{{ age if age is not none else '—' }}</div><div class="k">idade</div></div>
+        <div class="stat"><div class="v">{{ profile.height_cm|int if profile.height_cm else '—' }}</div><div class="k">altura cm</div></div>
+        <div class="stat"><div class="v">{{ imc if imc is not none else '—' }}</div><div class="k">IMC</div></div>
+      </div>
+      <table class="angles" style="margin-top:12px">
+        {% if profile.dominant_hand %}<tr><td>Mão dominante</td><td>{{ profile.dominant_hand|capitalize }}</td></tr>{% endif %}
+        {% if profile.level %}<tr><td>Nível</td><td>{{ profile.level }}</td></tr>{% endif %}
+        {% if profile.train_hours %}<tr><td>Treino</td><td>{{ profile.train_hours }} h/sem</td></tr>{% endif %}
+        {% if profile.injuries %}<tr><td>Lesões</td><td>{{ profile.injuries }}</td></tr>{% endif %}
+        {% if profile.pain %}<tr><td>Dores atuais</td><td>{{ profile.pain }}</td></tr>{% endif %}
+        {% if profile.goals %}<tr><td>Objetivos</td><td>{{ profile.goals }}</td></tr>{% endif %}
+      </table>
+      {% else %}
+      <p class="note">Sem ficha cadastrada. Cadastre a anamnese (idade, peso, lesões…) para
+        avaliações cada vez mais personalizadas.</p>
+      {% endif %}
+    </div>
+
+    {% if rows %}
+    <div class="card">
       <h2>Resumo</h2>
       <div class="stats">
         <div class="stat"><div class="v">{{ "%.0f"|format(stats.best) }}</div><div class="k">recorde km/h</div></div>
@@ -47,21 +73,35 @@
 
     <div class="card">
       <h2>Análises ({{ rows|length }})</h2>
-      <table class="angles">
-        <tr>
-          <td><strong>Data</strong></td>
-          <td style="text-align:center"><strong>Média</strong></td>
-          <td style="text-align:right"><strong>Pico</strong></td>
-        </tr>
-        {% for r in rows %}
-        <tr>
-          <td>{{ r.created_at[8:10] }}/{{ r.created_at[5:7] }}/{{ r.created_at[0:4] }}</td>
-          <td style="text-align:center">{{ "%.0f"|format(r.mean_kmh) }} km/h</td>
-          <td>{{ "%.0f"|format(r.peak_kmh) }} km/h</td>
-        </tr>
-        {% endfor %}
-      </table>
+      <p class="note">Corrija ou exclua uma análise feita errada usando ✏️.</p>
+      {% for r in rows %}
+      <div class="analise-row">
+        <div class="analise-head">
+          <span>{{ r.created_at[8:10] }}/{{ r.created_at[5:7] }}/{{ r.created_at[0:4] }}</span>
+          <span>média {{ "%.0f"|format(r.mean_kmh) }} · <b>pico {{ "%.0f"|format(r.peak_kmh) }} km/h</b></span>
+          <details class="analise-edit">
+            <summary>✏️</summary>
+            <form action="{{ url_for('editar_analise', analysis_id=r.id) }}" method="post" class="edit-form">
+              <input type="hidden" name="athlete" value="{{ athlete }}">
+              <div class="grid">
+                <div><label>Pico (km/h)</label><input type="number" name="peak_kmh" step="0.1" value="{{ r.peak_kmh }}"></div>
+                <div><label>Média (km/h)</label><input type="number" name="mean_kmh" step="0.1" value="{{ r.mean_kmh }}"></div>
+              </div>
+              <label>Data</label>
+              <input type="date" name="created_at" value="{{ r.created_at[0:10] }}">
+              <button type="submit">Salvar correção</button>
+            </form>
+            <form action="{{ url_for('excluir_analise', analysis_id=r.id) }}" method="post"
+                  onsubmit="return confirm('Excluir esta análise? Não dá para desfazer.');">
+              <input type="hidden" name="athlete" value="{{ athlete }}">
+              <button type="submit" class="rec-btn" style="margin-top:8px">🗑️ Excluir análise</button>
+            </form>
+          </details>
+        </div>
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
 
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
   </div>

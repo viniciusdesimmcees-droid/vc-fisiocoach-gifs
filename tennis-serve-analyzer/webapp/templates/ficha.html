@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ficha — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Ficha do atleta</h1>
+      <span>{{ athlete }} — cadastro e anamnese</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('historico_atleta', athlete=athlete) }}">← Voltar ao atleta</a>
+
+    <form class="card" action="{{ url_for('ficha_atleta', athlete=athlete) }}" method="post">
+      <h2>Dados do atleta</h2>
+      <div class="grid">
+        <div>
+          <label>Data de nascimento</label>
+          <input type="date" name="birthdate" value="{{ profile.birthdate or '' }}">
+        </div>
+        <div>
+          <label>Mão dominante</label>
+          <select name="dominant_hand">
+            <option value="">—</option>
+            <option value="destro" {{ 'selected' if profile.dominant_hand=='destro' }}>Destro</option>
+            <option value="canhoto" {{ 'selected' if profile.dominant_hand=='canhoto' }}>Canhoto</option>
+          </select>
+        </div>
+        <div>
+          <label>Altura (cm)</label>
+          <input type="number" name="height_cm" step="0.1" value="{{ profile.height_cm or '' }}">
+        </div>
+        <div>
+          <label>Peso (kg)</label>
+          <input type="number" name="weight_kg" step="0.1" value="{{ profile.weight_kg or '' }}">
+        </div>
+        <div>
+          <label>Nível</label>
+          <select name="level">
+            {% for lv in ['', 'Iniciante', 'Intermediário', 'Avançado', 'Profissional'] %}
+            <option value="{{ lv }}" {{ 'selected' if profile.level==lv }}>{{ lv or '—' }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Joga desde (ano)</label>
+          <input type="number" name="since_year" value="{{ profile.since_year or '' }}">
+        </div>
+        <div>
+          <label>Treino (horas/semana)</label>
+          <input type="number" name="train_hours" step="0.5" value="{{ profile.train_hours or '' }}">
+        </div>
+        <div>
+          <label>Contato</label>
+          <input type="text" name="contact" value="{{ profile.contact or '' }}">
+        </div>
+      </div>
+
+      <h2 style="margin-top:20px">Anamnese</h2>
+      <label>Histórico de lesões</label>
+      <textarea name="injuries" rows="2">{{ profile.injuries or '' }}</textarea>
+      <label>Dores atuais</label>
+      <textarea name="pain" rows="2">{{ profile.pain or '' }}</textarea>
+      <label>Condições médicas / cirurgias</label>
+      <textarea name="conditions" rows="2">{{ profile.conditions or '' }}</textarea>
+      <label>Objetivos</label>
+      <textarea name="goals" rows="2">{{ profile.goals or '' }}</textarea>
+      <label>Observações</label>
+      <textarea name="notes" rows="2">{{ profile.notes or '' }}</textarea>
+
+      <button type="submit">Salvar ficha</button>
+    </form>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>
