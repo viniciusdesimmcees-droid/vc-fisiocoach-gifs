@@ -43,6 +43,7 @@ import references  # noqa: E402
 import engine  # noqa: E402
 import strokes  # noqa: E402
 import posture  # noqa: E402
+import ballcal  # noqa: E402
 
 history.init_db()
 
@@ -411,8 +412,10 @@ def analyze():
 
     athlete = request.form.get("athlete", "Atleta").strip() or "Atleta"
 
-    # CALIBRAÇÃO (obrigatória — sem ela a velocidade fica errada).
-    # Prioridade: 2 pontos clicados na quadra > calibração manual.
+    # CALIBRAÇÃO. Prioridade: 2 pontos na quadra > manual (px) > automática
+    # pela bola (6,7 cm). A escala da bola também CRUZA com a manual para
+    # confirmar a medição. A falta de calibração só falha se a bola também não
+    # puder calibrar (decidido após o rastreio).
     ref_m = ref_px = None
     cal_dist = _f("calib_dist_m", 0.0)
     p1x, p1y = _f("calib_p1x", -1), _f("calib_p1y", -1)
@@ -425,18 +428,9 @@ def analyze():
         m_in, px_in = _f("ref_length_m", 0.0), _f("ref_length_px", 0.0)
         if m_in > 0 and px_in > 0:
             ref_m, ref_px = m_in, px_in
-    if ref_px is None or ref_m is None:
-        try:
-            os.remove(in_path)
-        except OSError:
-            pass
-        return render_template(
-            "index.html",
-            error="Calibre antes de analisar: em 'Calibração pela quadra', toque "
-            "em 2 pontos de uma medida conhecida (ex.: altura da rede = 0,914 m) e "
-            "informe a distância — ou use a calibração manual. Sem isso a "
-            "velocidade fica incorreta.",
-        ), 400
+
+    ball_d_cm = _f("ball_diameter_cm", 6.7)
+    ball_d_m = ball_d_cm / 100.0 if ball_d_cm > 0 else ballcal.BALL_DIAMETER_M
 
     fps_override = _f("fps", 0.0)
     detector = request.form.get("detector", "classic")
@@ -472,13 +466,68 @@ def analyze():
                 "fps inválido. Informe o fps real da captura no formulário."
             )
 
-        # A referência foi medida na resolução original; ajusta para a escala
-        # reduzida em que o rastreio rodou (mantém a velocidade correta).
-        calib = Calibration.from_reference(ref_m, ref_px * scale, fps)
+        # escala automática pela bola (régua independente, mesmo plano de voo)
+        ball_global = ballcal.ball_scale(trajectory, ball_d_m)
+
+        # decide a calibração: manual quando houver; senão, pela bola
+        if ref_px is not None and ref_m is not None:
+            # A referência foi medida na resolução original; ajusta para a escala
+            # reduzida em que o rastreio rodou (mantém a velocidade correta).
+            calib = Calibration.from_reference(ref_m, ref_px * scale, fps)
+            calib_mode = "manual"
+        elif ball_global:
+            calib = Calibration(meters_per_pixel=ball_global["mpp"], fps=fps)
+            calib_mode = "ball"
+        else:
+            try:
+                os.remove(in_path)
+            except OSError:
+                pass
+            return render_template(
+                "index.html",
+                error="Não foi possível calibrar: a bola não foi detectada o "
+                "suficiente para a calibração automática. Calibre tocando em 2 "
+                "pontos de uma medida conhecida na quadra (ex.: altura da rede = "
+                "0,914 m) e informe a distância.",
+            ), 400
+
         result = estimate(trajectory, calib)
+
+        # cruzamento de escalas (confiabilidade): mede a bola no plano do impacto
+        ball_impact = ballcal.ball_scale(
+            trajectory, ball_d_m, impact_frame=result.impact_frame
+        ) or ball_global
+        calib_cross = None
+        if calib_mode == "manual" and ball_impact:
+            calib_cross = ballcal.cross_check(
+                calib.meters_per_pixel, ball_impact["mpp"], result.peak_kmh
+            )
+        calibracao = {
+            "modo": calib_mode,
+            "bola": ball_impact,
+            "cross": calib_cross,
+            "ball_diameter_cm": round(ball_d_m * 100, 1),
+        }
 
         # ---- avisos automáticos de confiabilidade ----
         avisos = []
+        if calib_mode == "ball":
+            avisos.append(
+                f"Calibração automática pela bola ({calibracao['ball_diameter_cm']:.1f} cm). "
+                "Funciona bem com a bola nítida e de lado; para máxima precisão, "
+                "calibre também tocando em 2 pontos na quadra (uma confirma a outra)."
+            )
+        if calib_cross and calib_cross["nivel"] == "baixa":
+            avisos.append(
+                f"{calib_cross['verdict']}. A bola (6,7 cm) sugere ~"
+                f"{calib_cross['ball_peak_kmh']:.0f} km/h. Refaça a calibração da "
+                "quadra: provavelmente os 2 pontos ou a distância informada estão errados."
+            )
+        elif calib_cross and calib_cross["nivel"] == "media":
+            avisos.append(
+                f"{calib_cross['verdict']} (diferença de {calib_cross['abs_pct']:.0f}% "
+                f"entre a quadra e a bola; a bola sugere ~{calib_cross['ball_peak_kmh']:.0f} km/h)."
+            )
         file_fps = meta.get("fps") or 0
         if fps < 100:
             avisos.append(
@@ -560,6 +609,7 @@ def analyze():
                 glossario=glossario,
                 inteligencia=inteligencia,
                 golpe=golpe,
+                calibracao=calibracao,
             )
             pdf_ok = True
         except Exception:
@@ -589,6 +639,7 @@ def analyze():
             "referencias": referencias,
             "inteligencia": inteligencia,
             "golpe": golpe,
+            "calibracao": calibracao,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

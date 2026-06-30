@@ -50,6 +50,27 @@
     </div>
     {% endif %}
 
+    {% if calibracao and (calibracao.cross or calibracao.modo == 'ball') %}
+    <div class="calib-cross" style="border-color: {{ calibracao.cross.cor if calibracao.cross else '#d97706' }}">
+      <div class="cc-head">
+        <span class="cc-ico">📏</span>
+        <span class="cc-title">Calibração verificada pela bola ({{ calibracao.ball_diameter_cm }} cm)</span>
+      </div>
+      {% if calibracao.modo == 'ball' %}
+      <p class="cc-verdict" style="color:#b45309">Calibração feita automaticamente pelo tamanho da bola — a bola é a régua. Para máxima precisão, calibre também tocando 2 pontos na quadra (uma confirma a outra).</p>
+      {% elif calibracao.cross %}
+      <p class="cc-verdict" style="color: {{ calibracao.cross.cor }}">{{ calibracao.cross.icone }} {{ calibracao.cross.verdict }}</p>
+      <div class="cc-grid">
+        <div><span class="cc-k">Diferença quadra × bola</span><span class="cc-v">{{ calibracao.cross.abs_pct }}%</span></div>
+        <div><span class="cc-k">Velocidade que a bola sugere</span><span class="cc-v">{{ calibracao.cross.ball_peak_kmh|round|int }} km/h</span></div>
+      </div>
+      {% if calibracao.cross.nivel != 'alta' %}
+      <p class="note">Quando as duas escalas divergem, a calibração da quadra geralmente é a errada (2 pontos imprecisos ou distância informada incorreta). A bola, de tamanho conhecido, serve de referência independente.</p>
+      {% endif %}
+      {% endif %}
+    </div>
+    {% endif %}
+
     {% if pdf %}
     <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar relatório completo (PDF)</a>
     {% endif %}

@@ -98,6 +98,9 @@
       <p class="hint">Para medir a velocidade real, o app precisa saber o tamanho real de
         algo no vídeo. Toque em <b>2 pontos de uma medida conhecida</b> (ex.: altura da rede)
         e informe a distância — o app calcula o resto.</p>
+      <p class="hint">✨ <b>Novo — calibração automática pela bola:</b> a bola de tênis tem
+        6,7 cm. O app usa o tamanho dela no vídeo como régua independente para
+        <b>confirmar</b> a sua calibração (ou calibrar sozinho, se você não tocar na quadra).</p>
 
       <button type="button" id="btn-calib" class="ghost" style="width:100%">📐 Calibrar pela quadra</button>
 
@@ -139,6 +142,11 @@
           </div>
         </div>
         <p class="hint">Preencha os dois apenas se souber a medida em pixels.</p>
+        <div style="margin-top:10px">
+          <label>Diâmetro da bola (cm) <span class="hint">— para a calibração automática</span></label>
+          <input type="number" name="ball_diameter_cm" step="0.1" value="6.7"
+                 placeholder="6.7 (padrão) · foam/junior pode variar">
+        </div>
       </details>
 
       {% if dl_available %}

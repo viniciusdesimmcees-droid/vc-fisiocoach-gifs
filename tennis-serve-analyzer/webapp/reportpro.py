@@ -118,6 +118,7 @@ def write_report_pdf(
     evalu: dict | None = None, didatico_texto: str | None = None,
     referencias: list | None = None, glossario: list | None = None,
     inteligencia: dict | None = None, golpe: dict | None = None,
+    calibracao: dict | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -180,6 +181,21 @@ def write_report_pdf(
         ax.text(0.04, 0.62, k, fontsize=9, color="#64748b", transform=ax.transAxes)
         ax.text(0.04, 0.22, v, fontsize=14, fontweight="bold", color="#0f1714",
                 transform=ax.transAxes)
+
+    # confiabilidade da calibração (cruzamento com a bola)
+    if calibracao:
+        cross = calibracao.get("cross")
+        if calibracao.get("modo") == "ball":
+            ctxt = (f"Calibracao automatica pela bola ({calibracao.get('ball_diameter_cm', 6.7)} cm) "
+                    "— calibre tambem pela quadra para confirmar.")
+            ccor = "#d97706"
+        elif cross:
+            ctxt = f"Calibração × bola: {cross['verdict']} (dif. {cross['abs_pct']:.0f}%)."
+            ccor = cross["cor"]
+        else:
+            ctxt = None
+        if ctxt:
+            fig.text(0.06, 0.445, ctxt, fontsize=8.5, color=ccor, fontweight="bold")
 
     # gráfico de velocidade
     if speed_png and os.path.exists(speed_png):
