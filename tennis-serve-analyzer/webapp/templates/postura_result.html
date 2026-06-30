@@ -22,8 +22,10 @@
   <div class="wrap">
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
       <a class="back" href="{{ url_for('postura') }}">← Avaliar outra postura</a>
-      <a class="back" href="{{ url_for('index') }}">Analisador de saque →</a>
+      {% if history_url %}<a class="back" href="{{ history_url }}">📈 Evolução postural do atleta →</a>{% endif %}
     </div>
+
+    <p class="note">✓ Avaliação salva no histórico de <b>{{ athlete }}</b> — acompanhe a evolução das assimetrias ao longo do tempo.</p>
 
     {% if pdf %}
     <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar laudo postural (PDF)</a>

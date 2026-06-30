@@ -103,6 +103,46 @@
     </div>
     {% endif %}
 
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
+        <h2 style="margin:0">🧍 Avaliação postural</h2>
+        <a class="back" href="{{ url_for('postura') }}">Nova avaliação →</a>
+      </div>
+
+      {% if posturas %}
+      <img class="result" style="margin-top:12px" src="{{ url_for('chart_postura', athlete=athlete) }}" alt="Evolução postural">
+
+      <p class="note" style="margin-top:10px">Avaliações ({{ posturas|length }}) — quanto menor o ângulo, mais simétrico.</p>
+      {% for p in posturas %}
+      <div class="postura-hist-row">
+        <div class="phist-head">
+          <span><b>{{ p.created_at[8:10] }}/{{ p.created_at[5:7] }}/{{ p.created_at[0:4] }}</b> · {{ p.view_label }}</span>
+          <span class="phist-flag" style="background: {{ '#dc2626' if p.graves else ('#d97706' if p.alertas else '#15803d') }}">
+            {{ '🔺' if p.graves else ('⚠️' if p.alertas else '✅') }} {{ p.alertas }} atenção
+          </span>
+          <details class="analise-edit">
+            <summary>⋯</summary>
+            {% if p.image_url %}<a class="back" href="{{ p.image_url }}" target="_blank">Ver imagem anotada ↗</a>{% endif %}
+            <form action="{{ url_for('excluir_postura', assessment_id=p.id) }}" method="post"
+                  onsubmit="return confirm('Excluir esta avaliação postural?');">
+              <input type="hidden" name="athlete" value="{{ athlete }}">
+              <button type="submit" class="rec-btn" style="margin-top:8px">🗑️ Excluir</button>
+            </form>
+          </details>
+        </div>
+        <div class="phist-medidas">
+          {% for m in p.medidas %}
+          <span class="phist-chip" title="{{ m.nome }}">{{ m.icone }} {{ m.nome }}: {{ m.valor }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="note">Sem avaliações posturais ainda. Faça a primeira para acompanhar
+        a evolução das assimetrias (ombros, quadril, cabeça) ao longo do tempo.</p>
+      {% endif %}
+    </div>
+
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
   </div>
 </body>

@@ -96,13 +96,15 @@ def historico():
 def historico_atleta(athlete):
     h = history.get_history(athlete)
     profile = history.get_profile(athlete)
-    if not h and not profile:
+    posturas = history.get_posture_history(athlete)
+    if not h and not profile and not posturas:
         abort(404)
     return render_template(
         "atleta.html",
         athlete=athlete,
         stats=history.athlete_stats(athlete) if h else {},
         rows=list(reversed(h)),  # mais recentes primeiro na tabela
+        posturas=list(reversed(posturas)),
         profile=profile,
         age=history.age_from_birthdate(profile.get("birthdate")) if profile else None,
         imc=history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
@@ -141,9 +143,22 @@ def editar_analise(analysis_id):
                     if athlete else url_for("historico"))
 
 
+@app.route("/postura/<int:assessment_id>/excluir", methods=["POST"])
+def excluir_postura(assessment_id):
+    athlete = request.form.get("athlete", "")
+    history.delete_posture(assessment_id)
+    return redirect(url_for("historico_atleta", athlete=athlete)
+                    if athlete else url_for("historico"))
+
+
 @app.route("/chart/evolucao/<athlete>.png")
 def chart_evolucao(athlete):
     return Response(history.evolution_png(athlete), mimetype="image/png")
+
+
+@app.route("/chart/postura/<athlete>.png")
+def chart_postura(athlete):
+    return Response(history.posture_evolution_png(athlete), mimetype="image/png")
 
 
 @app.route("/chart/comparacao.png")
@@ -280,6 +295,13 @@ def postura_analisar():
         annotated = posture.annotate(img, kp, view)
         annot_path = os.path.join(job_dir, "postura_anotada.png")
         cv2.imwrite(annot_path, annotated)
+        img_url = url_for("static", filename=f"results/{job}/postura_anotada.png")
+
+        # salva no histórico do atleta (evolução postural ao longo do tempo)
+        try:
+            history.record_posture(athlete, view, resultado, img_url)
+        except Exception:
+            traceback.print_exc()  # histórico não pode derrubar o resultado
 
         pdf_ok = True
         try:
@@ -297,8 +319,9 @@ def postura_analisar():
             resultado=resultado,
             view_label={"frente": "de frente", "costas": "de costas",
                         "lado": "de lado", "lateral": "de lado"}.get(view, view),
-            imagem=url_for("static", filename=f"results/{job}/postura_anotada.png"),
+            imagem=img_url,
             pdf=url_for("static", filename=f"results/{job}/postura_laudo.pdf") if pdf_ok else None,
+            history_url=url_for("historico_atleta", athlete=athlete),
         )
     except Exception as e:
         traceback.print_exc()

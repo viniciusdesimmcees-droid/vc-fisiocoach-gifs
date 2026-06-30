@@ -13,6 +13,7 @@ disco persistente (ex.: /data em planos com armazenamento) — o código não mu
 from __future__ import annotations
 
 import io
+import json
 import os
 import sqlite3
 from datetime import datetime, timezone
@@ -96,6 +97,18 @@ def init_db() -> None:
                 notes TEXT, updated_at TEXT
             )"""
         )
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS posture_assessments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                athlete TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                view TEXT,
+                alertas INTEGER,
+                graves INTEGER,
+                image_url TEXT,
+                medidas TEXT
+            )"""
+        )
 
 
 # ----------------------------- ficha do atleta -----------------------------
@@ -175,6 +188,7 @@ def rename_athlete(old: str, new: str) -> None:
         return
     with _conn() as c:
         c.execute("UPDATE analyses SET athlete = ? WHERE athlete = ?", (new, old))
+        c.execute("UPDATE posture_assessments SET athlete = ? WHERE athlete = ?", (new, old))
         c.execute("UPDATE OR REPLACE athletes SET name = ? WHERE name = ?", (new, old))
     _sync()
 
@@ -195,6 +209,99 @@ def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector) -> None:
             ),
         )
     _sync()
+
+
+# ----------------------- avaliação postural (histórico) -----------------------
+
+VIEW_LABEL = {"frente": "Frontal", "costas": "Posterior",
+              "lado": "Lateral", "lateral": "Lateral"}
+
+
+def record_posture(athlete, view, resultado: dict, image_url=None) -> int:
+    """Salva uma avaliação postural no histórico do atleta."""
+    medidas = [
+        {"chave": m.get("chave"), "nome": m.get("nome"), "graus": m.get("graus"),
+         "valor": m.get("valor"), "situacao": m.get("situacao"),
+         "icone": m.get("icone")}
+        for m in resultado.get("medidas", [])
+    ]
+    with _conn() as c:
+        cur = c.execute(
+            "INSERT INTO posture_assessments "
+            "(athlete, created_at, view, alertas, graves, image_url, medidas) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (
+                (athlete or "Atleta").strip() or "Atleta",
+                datetime.now(timezone.utc).isoformat(),
+                view,
+                int(resultado.get("alertas", 0)),
+                int(resultado.get("graves", 0)),
+                image_url,
+                json.dumps(medidas, ensure_ascii=False),
+            ),
+        )
+        new_id = cur.lastrowid
+    _sync()
+    return new_id
+
+
+def get_posture_history(athlete: str) -> list[dict]:
+    with _conn() as c:
+        rows = c.execute(
+            "SELECT * FROM posture_assessments WHERE athlete = ? ORDER BY created_at",
+            (athlete,),
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        try:
+            d["medidas"] = json.loads(d.get("medidas") or "[]")
+        except (ValueError, TypeError):
+            d["medidas"] = []
+        d["view_label"] = VIEW_LABEL.get(d.get("view"), d.get("view") or "—")
+        out.append(d)
+    return out
+
+
+def delete_posture(assessment_id: int) -> None:
+    with _conn() as c:
+        c.execute("DELETE FROM posture_assessments WHERE id = ?", (assessment_id,))
+    _sync()
+
+
+def posture_evolution_png(athlete: str) -> bytes:
+    """Linhas de cada assimetria postural (graus) ao longo do tempo.
+    Quanto MENOR o ângulo, mais simétrico."""
+    h = get_posture_history(athlete)
+    fig, ax = plt.subplots(figsize=(8.5, 4.4))
+    # agrupa por métrica (chave): série de (data, |graus|)
+    series: dict[str, dict] = {}
+    for i, a in enumerate(h):
+        for m in a["medidas"]:
+            ch = m.get("chave")
+            if ch is None or m.get("graus") is None:
+                continue
+            s = series.setdefault(ch, {"nome": m.get("nome", ch), "x": [], "y": []})
+            s["x"].append(i + 1)
+            s["y"].append(abs(float(m["graus"])))
+
+    if series:
+        labels = [_short_date(a["created_at"]) for a in h]
+        for ch, s in series.items():
+            ax.plot(s["x"], s["y"], "-o", lw=2, ms=5, label=s["nome"])
+        ax.axhline(2.0, ls="--", lw=1, color="#15803d", alpha=0.7,
+                   label="Faixa simétrica (≤2°)")
+        ax.set_xticks(list(range(1, len(h) + 1)))
+        ax.set_xticklabels(labels, fontsize=8)
+        ax.legend(loc="upper right", fontsize=8, ncol=2)
+        ax.set_ylim(bottom=0)
+    else:
+        ax.text(0.5, 0.5, "Sem avaliações posturais ainda", ha="center", va="center")
+    ax.set_xlabel("Avaliações (por data)")
+    ax.set_ylabel("Assimetria (graus) — menor é melhor")
+    ax.set_title(f"Evolução postural — {athlete}")
+    ax.grid(True, alpha=0.3)
+    return _fig_to_png(fig)
 
 
 def list_athletes() -> list[dict]:
