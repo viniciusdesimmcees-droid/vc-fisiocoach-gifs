@@ -119,7 +119,8 @@ def write_report_pdf(
     referencias: list | None = None, glossario: list | None = None,
     inteligencia: dict | None = None, golpe: dict | None = None,
     calibracao: dict | None = None, confianca: dict | None = None,
-    captura: dict | None = None,
+    captura: dict | None = None, benchmark: dict | None = None,
+    radar_png: str | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -262,6 +263,10 @@ def write_report_pdf(
             fi = _engine_page(athlete, inteligencia)
             pdf.savefig(fi)
             plt.close(fi)
+        if benchmark:
+            fb = _benchmark_page(athlete, benchmark, radar_png)
+            pdf.savefig(fb)
+            plt.close(fb)
         if referencias:
             fr = _references_table_page(athlete, referencias)
             pdf.savefig(fr)
@@ -597,6 +602,67 @@ def write_posture_pdf(path: str, athlete: str, resultado: dict, annot_png: str) 
     with PdfPages(path) as pdf:
         pdf.savefig(fig)
         plt.close(fig)
+
+
+def _benchmark_page(athlete: str, bench: dict, radar_png: str | None):
+    """Página: benchmark vs. profissional (radar + níveis + o que falta)."""
+    import matplotlib.image as mpimg
+
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _page_header(fig, athlete, "Benchmark vs. Profissional")
+
+    # índice de nível
+    ax_b = fig.add_axes([0.06, 0.85, 0.88, 0.05]); ax_b.axis("off")
+    ax_b.add_patch(plt.Rectangle((0, 0), 1, 1, transform=ax_b.transAxes,
+                                 facecolor=bench["cor"], edgecolor="none"))
+    ax_b.text(0.02, 0.5, f"Índice de nível: {bench['indice']}/100", fontsize=12,
+              color="white", va="center", transform=ax_b.transAxes)
+    ax_b.text(0.98, 0.5, bench["nivel"], fontsize=15, fontweight="bold",
+              color="white", va="center", ha="right", transform=ax_b.transAxes)
+
+    y = 0.82
+    # radar à esquerda (se houver)
+    x_tab = 0.06
+    if radar_png and os.path.exists(radar_png):
+        img = mpimg.imread(radar_png)
+        ih, iw = img.shape[:2]
+        bw = 0.42
+        bh = bw * (ih / iw) * (8.27 / 11.69)
+        ax_i = fig.add_axes([0.05, 0.55, bw, min(0.30, bh)]); ax_i.axis("off")
+        ax_i.imshow(img)
+        x_tab = 0.50
+
+    fig.text(x_tab, y, "Métrica × nível", fontsize=11, fontweight="bold",
+             color="#15803d")
+    y -= 0.026
+    for m in bench["metricas"]:
+        fig.text(x_tab, y, m["nome"], fontsize=8.8, fontweight="bold", color="#0f1714")
+        fig.text(x_tab, y - 0.014, f"{m['valor']} · {m['nivel']} · {m['percentil']}% "
+                 "rumo ao pro", fontsize=7.8, color="#64748b")
+        y -= 0.034
+
+    # o que falta
+    if bench.get("faltam"):
+        y2 = 0.50
+        fig.text(0.06, y2, "O que falta para o nível profissional", fontsize=12,
+                 fontweight="bold", color="#15803d")
+        y2 -= 0.026
+        for m in bench["faltam"]:
+            fig.text(0.07, y2, f"{m['short']}: {m['gap']}", fontsize=9.5,
+                     fontweight="bold", color="#0f1714")
+            ax = fig.add_axes([0.07, y2 - 0.030, 0.87, 0.024]); ax.axis("off")
+            ax.text(0, 1, m["dica"], fontsize=8.3, color="#334155", va="top",
+                    transform=ax.transAxes, wrap=True)
+            y2 -= 0.050
+
+    ax_n = fig.add_axes([0.06, 0.10, 0.88, 0.05]); ax_n.axis("off")
+    ax_n.text(0, 1, "Faixas aproximadas da literatura de biomecanica do tenis e de "
+              "medicoes tipicas por nivel de jogo. Metricas 2D tem margem. Guia de "
+              "desenvolvimento e metas, nao avaliacao oficial de ranking.",
+              fontsize=8, color="#94a3b8", va="top", transform=ax_n.transAxes,
+              wrap=True, linespacing=1.4)
+    _signature(fig)
+    return fig
 
 
 def _engine_page(athlete: str, intel: dict):

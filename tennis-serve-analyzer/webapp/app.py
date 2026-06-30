@@ -47,6 +47,7 @@ import ballcal  # noqa: E402
 import confidence  # noqa: E402
 import preflight  # noqa: E402
 import validation  # noqa: E402
+import benchmark  # noqa: E402
 
 history.init_db()
 
@@ -634,6 +635,17 @@ def analyze():
             profile = None
         inteligencia = engine.evaluate(summary, bio_summary, profile)
 
+        # benchmark vs. profissional (percentil + radar + o que falta para o pro)
+        bench = benchmark.evaluate(summary, bio_summary)
+        radar_url = None
+        if bench and bench.get("tem_radar"):
+            try:
+                with open(base + "_radar.png", "wb") as _rf:
+                    _rf.write(benchmark.radar_png(bench["metricas"]))
+                radar_url = url_for("static", filename=f"results/{job}/saque_radar.png")
+            except Exception:
+                traceback.print_exc()
+
         # registra no histórico do atleta (com golpe + plano inteligente do dia)
         if result.peak_kmh > 0:
             try:
@@ -660,6 +672,8 @@ def analyze():
                 calibracao=calibracao,
                 confianca=conf,
                 captura=captura,
+                benchmark=bench,
+                radar_png=base + "_radar.png" if radar_url else None,
             )
             pdf_ok = True
         except Exception:
@@ -692,6 +706,8 @@ def analyze():
             "calibracao": calibracao,
             "confianca": conf,
             "captura": captura,
+            "benchmark": bench,
+            "radar": radar_url,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

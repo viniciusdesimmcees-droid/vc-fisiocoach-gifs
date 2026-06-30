@@ -325,6 +325,30 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
   border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px;
 }
 
+/* benchmark vs profissional */
+.bench-index { display: flex; align-items: center; gap: 14px; border: 2px solid var(--green); border-radius: 14px; padding: 12px 14px; margin: 4px 0 14px; }
+.bi-num { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+.bi-num span { font-size: 16px; color: var(--muted); font-weight: 700; }
+.bi-txt { display: flex; flex-direction: column; gap: 4px; }
+.bi-nivel { align-self: flex-start; color: #fff; font-weight: 800; font-size: 12.5px; padding: 4px 11px; border-radius: 999px; }
+.bi-resumo { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.bench-radar { width: 100%; max-width: 460px; display: block; margin: 6px auto 14px; }
+.bench-metrics { display: grid; gap: 12px; }
+.bm-row { }
+.bm-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.bm-nome { font-weight: 700; font-size: 13.5px; }
+.bm-nivel { font-size: 12px; font-weight: 700; color: var(--muted); }
+.bm-nivel.pro { color: var(--green-dark); }
+.bm-bar { height: 8px; background: #eef2f0; border-radius: 999px; overflow: hidden; margin: 5px 0 3px; }
+.bm-bar span { display: block; height: 100%; border-radius: 999px; }
+.bm-info { font-size: 12px; color: var(--muted); }
+.bench-sub { font-size: 14px; margin: 16px 0 8px; }
+.bench-gaps { display: grid; gap: 8px; }
+.gap-item { display: flex; flex-direction: column; gap: 2px; background: rgba(34,197,94,.05); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+.gap-nome { font-weight: 700; font-size: 13px; }
+.gap-val { font-weight: 400; color: var(--muted); }
+.gap-dica { font-size: 12.5px; color: var(--green-dark); }
+
 /* protocolo de captura */
 .proto-steps { margin: 8px 0 0; padding-left: 22px; }
 .proto-steps li { margin: 10px 0; font-size: 14px; line-height: 1.5; }

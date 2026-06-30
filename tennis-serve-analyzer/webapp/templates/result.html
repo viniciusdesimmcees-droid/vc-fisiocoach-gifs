@@ -301,6 +301,51 @@
     </div>
     {% endif %}
 
+    {% if benchmark %}
+    <div class="card bench-card">
+      <h2>🏆 Benchmark vs. profissional</h2>
+      <div class="bench-index" style="border-color: {{ benchmark.cor }}">
+        <div class="bi-num" style="color: {{ benchmark.cor }}">{{ benchmark.indice }}<span>/100</span></div>
+        <div class="bi-txt">
+          <span class="bi-nivel" style="background: {{ benchmark.cor }}">{{ benchmark.nivel }}</span>
+          <span class="bi-resumo">{{ benchmark.resumo }}</span>
+        </div>
+      </div>
+
+      {% if radar %}
+      <img class="bench-radar" src="{{ radar }}" alt="Radar atleta vs profissional">
+      {% endif %}
+
+      <div class="bench-metrics">
+        {% for m in benchmark.metricas %}
+        <div class="bm-row">
+          <div class="bm-top">
+            <span class="bm-nome">{{ m.nome }}</span>
+            <span class="bm-nivel {{ 'pro' if m.no_pro else '' }}">{{ m.nivel }}</span>
+          </div>
+          <div class="bm-bar"><span style="width: {{ m.percentil }}%; background: {{ benchmark.cor }}"></span></div>
+          <div class="bm-info">
+            <span>{{ m.valor }} · {{ m.percentil }}% rumo ao pro (alvo {{ m.pro_ref }})</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if benchmark.faltam %}
+      <h3 class="bench-sub">O que falta para o nível pro</h3>
+      <div class="bench-gaps">
+        {% for m in benchmark.faltam %}
+        <div class="gap-item">
+          <span class="gap-nome">{{ m.short }} <span class="gap-val">{{ m.gap }}</span></span>
+          <span class="gap-dica">↪ {{ m.dica }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <p class="note">Faixas aproximadas da literatura e de medições típicas por nível de jogo; métricas 2D têm margem. Guia de desenvolvimento e metas — não é avaliação oficial de ranking.</p>
+    </div>
+    {% endif %}
+
     {% if referencias %}
     <div class="card">
       <h2>🔬 Seus dados × referência científica</h2>
