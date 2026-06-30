@@ -32,6 +32,24 @@
     </div>
     {% endif %}
 
+    {% if golpe %}
+    <div class="stroke-bar">
+      <span class="stroke-ico">{{ golpe.icone }}</span>
+      <div class="stroke-txt">
+        <span class="stroke-nome">{{ golpe.nome }}</span>
+        {% if golpe.automatico %}
+        <span class="stroke-conf">Detecção automática · confiança {{ golpe.confianca_pct }}% ({{ golpe.confianca_nivel }})</span>
+        {% else %}
+        <span class="stroke-conf">Selecionado pelo profissional</span>
+        {% endif %}
+        {% if golpe.sinais %}<span class="stroke-sinal">{{ golpe.sinais[0] }}</span>{% endif %}
+        {% if golpe.sugestao_auto %}
+        <span class="stroke-sug">A detecção automática sugeriu: <b>{{ golpe.sugestao_auto.nome }}</b> ({{ golpe.sugestao_auto.confianca_pct }}%).</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
     {% if pdf %}
     <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar relatório completo (PDF)</a>
     {% endif %}

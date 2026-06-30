@@ -117,7 +117,7 @@ def write_report_pdf(
     biomech: dict | None = None, biomech_png: str | None = None,
     evalu: dict | None = None, didatico_texto: str | None = None,
     referencias: list | None = None, glossario: list | None = None,
-    inteligencia: dict | None = None,
+    inteligencia: dict | None = None, golpe: dict | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -136,7 +136,14 @@ def write_report_pdf(
              color="#0f1714", ha="right")
     fig.text(0.94, 0.937, summary.get("gerado_em", "")[:10], fontsize=10,
              color="#64748b", ha="right")
-    fig.add_artist(plt.Line2D([0.06, 0.94], [0.922, 0.922], color="#e6ece8", lw=1))
+    if golpe:
+        gtxt = f"Golpe: {golpe.get('nome', '')}"
+        if golpe.get("automatico"):
+            gtxt += f" (auto · confianca {golpe.get('confianca_pct', 0)}%)"
+        else:
+            gtxt += " (selecionado)"
+        fig.text(0.06, 0.915, gtxt, fontsize=9.5, color="#15803d", fontweight="bold")
+    fig.add_artist(plt.Line2D([0.06, 0.94], [0.905, 0.905], color="#e6ece8", lw=1))
 
     # velocímetro
     ax_g = fig.add_axes([0.08, 0.62, 0.5, 0.27])

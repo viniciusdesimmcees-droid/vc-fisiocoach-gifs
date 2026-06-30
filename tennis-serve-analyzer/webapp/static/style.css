@@ -284,6 +284,19 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
 .ref-mid { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 13px; margin-top: 3px; }
 .ref-para { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 
+/* golpe identificado */
+.stroke-bar {
+  display: flex; align-items: center; gap: 14px;
+  background: #fff; border: 1.5px solid var(--green); border-radius: 16px;
+  padding: 14px 18px; margin: 14px 0; box-shadow: var(--shadow);
+}
+.stroke-ico { font-size: 34px; line-height: 1; }
+.stroke-txt { display: flex; flex-direction: column; gap: 2px; }
+.stroke-nome { font-size: 18px; font-weight: 800; color: var(--ink); letter-spacing: -.3px; }
+.stroke-conf { font-size: 12.5px; font-weight: 700; color: var(--green-dark); }
+.stroke-sinal { font-size: 12.5px; color: var(--muted); }
+.stroke-sug { font-size: 12.5px; color: #b45309; margin-top: 2px; }
+
 /* glossário — termo em cima, explicação alinhada à esquerda (legível no celular) */
 .glossario { margin: 12px 0 0; }
 .gloss-item { padding: 11px 0; border-bottom: 1px solid var(--line); }

@@ -41,6 +41,7 @@ import insights  # noqa: E402
 import didactic  # noqa: E402
 import references  # noqa: E402
 import engine  # noqa: E402
+import strokes  # noqa: E402
 
 history.init_db()
 
@@ -230,6 +231,7 @@ def analyze():
     fps_override = _f("fps", 0.0)
     detector = request.form.get("detector", "classic")
     run_biomech = request.form.get("biomech") == "on"
+    golpe_manual = request.form.get("stroke", "auto")  # auto/saque/forehand/backhand
 
     # Deep learning indisponível (plano grátis): cai no clássico em vez de falhar.
     if detector == "dl" and not DL_AVAILABLE:
@@ -310,6 +312,15 @@ def analyze():
         bio_summary = biomech.get("summary") if biomech else None
         evalu = insights.evaluate(summary, bio_summary)
 
+        # ---- golpe (auto pela pose + escolha manual do profissional) ----
+        stroke_auto = biomech.get("stroke_auto") if biomech else None
+        if golpe_manual and golpe_manual != "auto":
+            golpe = strokes.manual(golpe_manual)
+            if golpe and stroke_auto and stroke_auto.get("golpe") != golpe_manual:
+                golpe["sugestao_auto"] = stroke_auto  # mostra divergência
+        else:
+            golpe = stroke_auto
+
         # relatório profissional: classificação + velocímetro + PDF
         cls = reportpro.classify(result.peak_kmh)
         # camada didática (linguagem simples para o aluno)
@@ -335,6 +346,7 @@ def analyze():
                 referencias=referencias,
                 glossario=glossario,
                 inteligencia=inteligencia,
+                golpe=golpe,
             )
             pdf_ok = True
         except Exception:
@@ -363,6 +375,7 @@ def analyze():
             "glossario": glossario,
             "referencias": referencias,
             "inteligencia": inteligencia,
+            "golpe": golpe,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),
@@ -402,6 +415,13 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
     frames, pmeta = pose.estimate_video(
         in_path, max_width=POSE_MAX_WIDTH, max_frames=POSE_MAX_FRAMES
     )
+    # reconhecimento automático do golpe (usa a sequência de pose)
+    try:
+        stroke_auto = strokes.classify(frames, fps)
+    except Exception:
+        traceback.print_exc()
+        stroke_auto = None
+
     side = choose_serve_side(frames)
     angles = compute_angles(frames, side)
     phases = segment_phases(angles)
@@ -417,6 +437,7 @@ def _run_biomech(in_path, job_dir, job, athlete, fps):
     bsummary["metricas_avancadas"] = deep
     return {
         "summary": bsummary,
+        "stroke_auto": stroke_auto,
         "plot_path": b + "_angulos.png",
         "plot": url_for("static", filename=f"results/{job}/biomech_angulos.png"),
         "json": url_for("static", filename=f"results/{job}/biomech_resumo.json"),
