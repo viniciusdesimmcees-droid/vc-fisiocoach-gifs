@@ -39,6 +39,7 @@ import history  # noqa: E402
 import reportpro  # noqa: E402
 import insights  # noqa: E402
 import didactic  # noqa: E402
+import references  # noqa: E402
 
 history.init_db()
 
@@ -313,6 +314,8 @@ def analyze():
         # camada didática (linguagem simples para o aluno)
         didatico = didactic.student_summary(summary, evalu, cls["nivel"])
         glossario = didactic.glossario(bool(biomech))
+        # comparação com referências científicas
+        referencias = references.compare(summary, bio_summary)
         reportpro.write_gauge_png(base + "_gauge.png", result.peak_kmh, cls)
         try:
             reportpro.write_report_pdf(
@@ -322,6 +325,8 @@ def analyze():
                 biomech_png=biomech.get("plot_path") if biomech else None,
                 evalu=evalu,
                 didatico_texto=didactic.plain_text(summary, evalu),
+                referencias=referencias,
+                glossario=glossario,
             )
             pdf_ok = True
         except Exception:
@@ -348,6 +353,7 @@ def analyze():
             "avisos": avisos,
             "didatico": didatico,
             "glossario": glossario,
+            "referencias": referencias,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

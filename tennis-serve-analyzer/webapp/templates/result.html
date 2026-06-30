@@ -210,6 +210,27 @@
     </div>
     {% endif %}
 
+    {% if referencias %}
+    <div class="card">
+      <h2>🔬 Seus dados × referência científica</h2>
+      <p class="note">Cada medida comparada com faixas de referência da literatura do tênis.</p>
+      {% for r in referencias %}
+      <div class="ref-row">
+        <div class="ref-top">
+          <span class="ref-nome">{{ r.nome }}</span>
+          <span class="ref-sit" style="color: {{ r.cor }}">{{ r.icone }} {{ r.situacao }}</span>
+        </div>
+        <div class="ref-mid">
+          <span><b>Seu valor:</b> {{ r.valor }}</span>
+          <span class="hint">Referência: {{ r.ref }}</span>
+        </div>
+        <div class="ref-para">{{ r.para }}</div>
+      </div>
+      {% endfor %}
+      <p class="note">Faixas aproximadas da literatura; estimativas 2D têm margem — guia educativo, não diagnóstico médico.</p>
+    </div>
+    {% endif %}
+
     {% if glossario %}
     <div class="card">
       <details>

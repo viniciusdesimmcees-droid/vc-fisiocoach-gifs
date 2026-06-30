@@ -116,6 +116,7 @@ def write_report_pdf(
     path: str, athlete: str, summary: dict, cls: dict, speed_png: str,
     biomech: dict | None = None, biomech_png: str | None = None,
     evalu: dict | None = None, didatico_texto: str | None = None,
+    referencias: list | None = None, glossario: list | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -204,6 +205,73 @@ def write_report_pdf(
             fig2 = _biomech_page(athlete, biomech, biomech_png)
             pdf.savefig(fig2)
             plt.close(fig2)
+        if referencias:
+            fr = _references_table_page(athlete, referencias)
+            pdf.savefig(fr)
+            plt.close(fr)
+        if glossario:
+            fg = _glossary_page(athlete, glossario)
+            pdf.savefig(fg)
+            plt.close(fg)
+
+
+def _page_header(fig, athlete: str, subtitulo: str) -> None:
+    fig.patch.set_facecolor("white")
+    fig.text(0.06, 0.955, "VF Tênis Scanner", fontsize=22, fontweight="bold",
+             color="#15803d")
+    fig.text(0.06, 0.935, subtitulo, fontsize=12, color="#334155")
+    fig.text(0.94, 0.955, athlete, fontsize=13, fontweight="bold",
+             color="#0f1714", ha="right")
+    fig.add_artist(plt.Line2D([0.06, 0.94], [0.922, 0.922], color="#e6ece8", lw=1))
+
+
+def _references_table_page(athlete: str, rows: list):
+    """Página: seus dados × referência científica."""
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _page_header(fig, athlete, "Seus dados × referência científica")
+
+    y = 0.90
+    fig.text(0.06, y, "Métrica", fontsize=8.5, color="#94a3b8")
+    fig.text(0.45, y, "Seu valor", fontsize=8.5, color="#94a3b8")
+    fig.text(0.60, y, "Referência", fontsize=8.5, color="#94a3b8")
+    y -= 0.024
+    for r in rows:
+        fig.text(0.06, y, r["nome"], fontsize=9.5, color="#0f1714")
+        fig.text(0.45, y, r["valor"], fontsize=9.5, fontweight="bold", color="#0f1714")
+        fig.text(0.60, y, r["ref"], fontsize=8, color="#334155")
+        fig.text(0.06, y - 0.018, r["situacao"], fontsize=8.5,
+                 fontweight="bold", color=r["cor"])
+        fig.text(0.30, y - 0.018, r["para"], fontsize=7.8, color="#64748b")
+        fig.add_artist(plt.Line2D([0.06, 0.94], [y - 0.03, y - 0.03],
+                                  color="#eef2f0", lw=0.8))
+        y -= 0.052
+
+    ax = fig.add_axes([0.06, y - 0.06, 0.88, 0.06]); ax.axis("off")
+    ax.text(0, 1, "Faixas aproximadas da literatura de biomecânica do tênis. "
+            "Algumas são estimativas 2D (têm margem). Use como guia educativo e de "
+            "acompanhamento — não substitui avaliação presencial nem diagnóstico médico.",
+            fontsize=8, color="#94a3b8", va="top", transform=ax.transAxes,
+            wrap=True, linespacing=1.4)
+    _signature(fig)
+    return fig
+
+
+def _glossary_page(athlete: str, glossario: list):
+    """Página: glossário com explicações simples."""
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _page_header(fig, athlete, "Glossário — o que cada termo significa")
+
+    y = 0.89
+    for termo, expl in glossario:
+        fig.text(0.06, y, f"{termo}", fontsize=10.5, fontweight="bold",
+                 color="#15803d")
+        ax = fig.add_axes([0.06, y - 0.058, 0.88, 0.052]); ax.axis("off")
+        ax.text(0, 1, expl, fontsize=9, color="#334155", va="top",
+                transform=ax.transAxes, wrap=True, linespacing=1.35)
+        y -= 0.075
+
+    _signature(fig)
+    return fig
 
 
 def _biomech_page(athlete: str, b: dict, biomech_png: str | None):
