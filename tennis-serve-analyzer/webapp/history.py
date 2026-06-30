@@ -22,6 +22,16 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+import storage  # persistência opcional (Dataset do HF)
+
+
+def _sync() -> None:
+    """Salva o banco no cofre permanente após cada gravação (se ativado)."""
+    try:
+        storage.push_db(DB_PATH)
+    except Exception:
+        pass
+
 CREDIT = "Sistema criado e desenvolvido por Vinícius Camargos da Fonseca."
 
 def _default_db_path() -> str:
@@ -59,6 +69,11 @@ ATHLETE_FIELDS = [
 
 
 def init_db() -> None:
+    # restaura o banco do cofre permanente (se ativado) antes de abrir
+    try:
+        storage.pull_db(DB_PATH)
+    except Exception:
+        pass
     with _conn() as c:
         c.execute(
             """CREATE TABLE IF NOT EXISTS analyses (
@@ -104,6 +119,7 @@ def save_profile(name: str, data: dict) -> None:
             f"VALUES ({placeholders})",
             vals,
         )
+    _sync()
 
 
 def age_from_birthdate(birthdate: str | None) -> int | None:
@@ -133,6 +149,7 @@ def bmi(height_cm, weight_kg):
 def delete_analysis(analysis_id: int) -> None:
     with _conn() as c:
         c.execute("DELETE FROM analyses WHERE id = ?", (analysis_id,))
+    _sync()
 
 
 def update_analysis(analysis_id: int, peak_kmh=None, mean_kmh=None,
@@ -149,6 +166,7 @@ def update_analysis(analysis_id: int, peak_kmh=None, mean_kmh=None,
     vals.append(analysis_id)
     with _conn() as c:
         c.execute(f"UPDATE analyses SET {', '.join(sets)} WHERE id = ?", vals)
+    _sync()
 
 
 def rename_athlete(old: str, new: str) -> None:
@@ -158,6 +176,7 @@ def rename_athlete(old: str, new: str) -> None:
     with _conn() as c:
         c.execute("UPDATE analyses SET athlete = ? WHERE athlete = ?", (new, old))
         c.execute("UPDATE OR REPLACE athletes SET name = ? WHERE name = ?", (new, old))
+    _sync()
 
 
 def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector) -> None:
@@ -175,6 +194,7 @@ def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector) -> None:
                 detector,
             ),
         )
+    _sync()
 
 
 def list_athletes() -> list[dict]:

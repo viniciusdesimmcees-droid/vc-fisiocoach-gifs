@@ -4,3 +4,4 @@ matplotlib>=3.7
 pillow>=10.0
 flask>=3.0
 gunicorn>=21.0
+huggingface_hub>=0.20
