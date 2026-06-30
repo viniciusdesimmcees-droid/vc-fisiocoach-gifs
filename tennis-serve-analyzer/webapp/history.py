@@ -87,6 +87,12 @@ def init_db() -> None:
                 detector TEXT
             )"""
         )
+        # migração: colunas do golpe + plano inteligente (bancos antigos)
+        existing = {r["name"] for r in c.execute("PRAGMA table_info(analyses)")}
+        if "stroke" not in existing:
+            c.execute("ALTER TABLE analyses ADD COLUMN stroke TEXT")
+        if "intel" not in existing:
+            c.execute("ALTER TABLE analyses ADD COLUMN intel TEXT")
         c.execute(
             """CREATE TABLE IF NOT EXISTS athletes (
                 name TEXT PRIMARY KEY,
@@ -193,12 +199,13 @@ def rename_athlete(old: str, new: str) -> None:
     _sync()
 
 
-def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector) -> None:
+def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
+                    stroke=None, intel=None) -> None:
     with _conn() as c:
         c.execute(
             "INSERT INTO analyses "
-            "(athlete, created_at, peak_kmh, mean_kmh, fps, detector) "
-            "VALUES (?, ?, ?, ?, ?, ?)",
+            "(athlete, created_at, peak_kmh, mean_kmh, fps, detector, stroke, intel) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 athlete.strip() or "Atleta",
                 datetime.now(timezone.utc).isoformat(),
@@ -206,9 +213,30 @@ def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector) -> None:
                 round(float(mean_kmh), 1),
                 float(fps),
                 detector,
+                json.dumps(stroke, ensure_ascii=False) if stroke else None,
+                json.dumps(intel, ensure_ascii=False) if intel else None,
             ),
         )
     _sync()
+
+
+def latest_extras(athlete: str) -> tuple[dict | None, dict | None]:
+    """Golpe reconhecido + plano inteligente da análise mais recente que os têm."""
+    golpe = intel = None
+    for r in reversed(get_history(athlete)):
+        if golpe is None and r.get("stroke"):
+            try:
+                golpe = json.loads(r["stroke"])
+            except (ValueError, TypeError):
+                pass
+        if intel is None and r.get("intel"):
+            try:
+                intel = json.loads(r["intel"])
+            except (ValueError, TypeError):
+                pass
+        if golpe and intel:
+            break
+    return golpe, intel
 
 
 # ----------------------- avaliação postural (histórico) -----------------------

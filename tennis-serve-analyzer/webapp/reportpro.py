@@ -310,8 +310,9 @@ def _info_boxes(fig, items, y0, x0=0.06, bw=0.42, bh=0.058, gap_x=0.46, gap_y=0.
 
 def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                               serve_png=None, posture_png=None,
-                              last_posture=None, last_posture_img=None) -> None:
-    """Laudo consolidado do atleta: ficha + evolução do saque + postura."""
+                              last_posture=None, last_posture_img=None,
+                              golpe=None, inteligencia=None) -> None:
+    """Laudo consolidado do atleta: ficha + saque + golpe + postura + plano."""
     profile = profile or {}
     with PdfPages(path) as pdf:
         # ---------------- Página 1: ficha + saque ----------------
@@ -347,6 +348,11 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
         # resumo do saque
         fig.text(0.06, y, "Evolução do saque", fontsize=12, fontweight="bold",
                  color="#15803d")
+        if golpe:
+            gtxt = f"Último golpe reconhecido: {golpe.get('nome', '')}"
+            if golpe.get("automatico"):
+                gtxt += f" (auto · {golpe.get('confianca_pct', 0)}%)"
+            fig.text(0.94, y, gtxt, fontsize=9.5, color="#334155", ha="right")
         y -= 0.012
         if stats:
             srv = [
@@ -424,6 +430,12 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             _signature(fig2)
             pdf.savefig(fig2)
             plt.close(fig2)
+
+        # ---------------- Página 3: plano inteligente ----------------
+        if inteligencia:
+            fig3 = _engine_page(athlete, inteligencia)
+            pdf.savefig(fig3)
+            plt.close(fig3)
 
 
 def _situacao_cor(sit):

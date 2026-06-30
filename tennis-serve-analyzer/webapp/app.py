@@ -163,6 +163,7 @@ def laudo_atleta(athlete):
     serve_png = history.evolution_png(athlete) if h else None
     posture_png = history.posture_evolution_png(athlete) if posturas else None
     last_post = posturas[-1] if posturas else None
+    golpe, inteligencia = history.latest_extras(athlete)
 
     last_img = None
     if last_post and last_post.get("image_url"):
@@ -181,6 +182,7 @@ def laudo_atleta(athlete):
             history.age_from_birthdate(profile.get("birthdate")) if profile else None,
             history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
             stats, serve_png, posture_png, last_post, last_img,
+            golpe=golpe, inteligencia=inteligencia,
         )
         with open(tmp, "rb") as f:
             data = f.read()
@@ -500,14 +502,6 @@ def analyze():
         summary = report.write_summary_json(
             base + "_resumo.json", athlete, result, meta, calib.meters_per_pixel
         )
-        # registra no histórico do atleta (só análises com leitura válida)
-        if result.peak_kmh > 0:
-            try:
-                history.record_analysis(
-                    athlete, result.peak_kmh, result.mean_kmh, fps, detector
-                )
-            except Exception:
-                traceback.print_exc()  # histórico não pode derrubar o resultado
         # ---- biomecânica (opcional) — roda ANTES do PDF para entrar nele ----
         biomech = None
         if run_biomech and DL_AVAILABLE:
@@ -542,6 +536,17 @@ def analyze():
         except Exception:
             profile = None
         inteligencia = engine.evaluate(summary, bio_summary, profile)
+
+        # registra no histórico do atleta (com golpe + plano inteligente do dia)
+        if result.peak_kmh > 0:
+            try:
+                history.record_analysis(
+                    athlete, result.peak_kmh, result.mean_kmh, fps, detector,
+                    stroke=golpe, intel=inteligencia,
+                )
+            except Exception:
+                traceback.print_exc()  # histórico não pode derrubar o resultado
+
         reportpro.write_gauge_png(base + "_gauge.png", result.peak_kmh, cls)
         try:
             reportpro.write_report_pdf(
