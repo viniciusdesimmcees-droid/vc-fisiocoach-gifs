@@ -45,6 +45,7 @@ import strokes  # noqa: E402
 import posture  # noqa: E402
 import ballcal  # noqa: E402
 import confidence  # noqa: E402
+import preflight  # noqa: E402
 
 history.init_db()
 
@@ -548,6 +549,8 @@ def analyze():
 
         # selo de confiança da medição (fps + calibração cruzada + rastreio)
         conf = confidence.evaluate(result, meta, fps, file_fps, calibracao)
+        # pré-voo: qualidade da captura (lixo entra, lixo sai)
+        captura = preflight.check(trajectory, meta, result, calib, calibracao)
 
         base = os.path.join(job_dir, "saque")
         report.write_trajectory_csv(base + "_trajetoria.csv", trajectory)
@@ -615,6 +618,7 @@ def analyze():
                 golpe=golpe,
                 calibracao=calibracao,
                 confianca=conf,
+                captura=captura,
             )
             pdf_ok = True
         except Exception:
@@ -646,6 +650,7 @@ def analyze():
             "golpe": golpe,
             "calibracao": calibracao,
             "confianca": conf,
+            "captura": captura,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

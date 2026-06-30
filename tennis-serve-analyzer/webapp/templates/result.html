@@ -50,6 +50,32 @@
     </div>
     {% endif %}
 
+    {% if captura and captura.itens %}
+    <div class="preflight" style="border-color: {{ captura.cor }}">
+      <div class="pf-head">
+        <span class="pf-ico">🎬</span>
+        <span class="pf-title">Qualidade da captura</span>
+        <span class="pf-grade" style="background: {{ captura.cor }}">{{ captura.nivel }} · {{ captura.nota }}/100</span>
+      </div>
+      <p class="pf-resumo">{{ captura.resumo }}</p>
+      <details class="pf-det" {{ 'open' if captura.n_graves or captura.n_avisos else '' }}>
+        <summary>Ver checagens da captura</summary>
+        <div class="pf-items">
+          {% for it in captura.itens %}
+          <div class="pf-item">
+            <div class="pf-item-top">
+              <span class="pf-item-nome">{{ it.icone }} {{ it.nome }}</span>
+              <span class="pf-item-val">{{ it.valor }}</span>
+            </div>
+            <div class="pf-item-msg">{{ it.mensagem }}</div>
+            {% if it.corrigir %}<div class="pf-item-fix">↪ Como melhorar: {{ it.corrigir }}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </details>
+    </div>
+    {% endif %}
+
     {% if calibracao and (calibracao.cross or calibracao.modo == 'ball') %}
     <div class="calib-cross" style="border-color: {{ calibracao.cross.cor if calibracao.cross else '#d97706' }}">
       <div class="cc-head">

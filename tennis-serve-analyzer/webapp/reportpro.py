@@ -119,6 +119,7 @@ def write_report_pdf(
     referencias: list | None = None, glossario: list | None = None,
     inteligencia: dict | None = None, golpe: dict | None = None,
     calibracao: dict | None = None, confianca: dict | None = None,
+    captura: dict | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -210,12 +211,25 @@ def write_report_pdf(
         else:
             ctxt = None
         if ctxt:
-            fig.text(0.06, 0.425, ctxt, fontsize=8.5, color=ccor, fontweight="bold")
+            fig.text(0.06, 0.432, ctxt, fontsize=8.5, color=ccor, fontweight="bold")
+
+    # qualidade da captura (pré-voo)
+    if captura:
+        aled = captura.get("n_graves", 0) + captura.get("n_avisos", 0)
+        cap_txt = f"Qualidade da captura: {captura['nivel']} ({captura['nota']}/100)"
+        if aled:
+            probs = [i["nome"] for i in captura.get("itens", [])
+                     if i["status"] in ("grave", "aviso")]
+            cap_txt += " — atenção: " + ", ".join(probs[:3]) + "."
+        else:
+            cap_txt += " — dentro do protocolo."
+        fig.text(0.06, 0.413, cap_txt, fontsize=8.5, color=captura["cor"],
+                 fontweight="bold")
 
     # gráfico de velocidade
     if speed_png and os.path.exists(speed_png):
         import matplotlib.image as mpimg
-        ax_p = fig.add_axes([0.06, 0.20, 0.88, 0.21]); ax_p.axis("off")
+        ax_p = fig.add_axes([0.06, 0.19, 0.88, 0.195]); ax_p.axis("off")
         ax_p.imshow(mpimg.imread(speed_png))
 
     # Em palavras simples (para o aluno) — ou recomendações se não houver
