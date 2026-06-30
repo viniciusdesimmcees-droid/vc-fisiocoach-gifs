@@ -44,6 +44,7 @@ import engine  # noqa: E402
 import strokes  # noqa: E402
 import posture  # noqa: E402
 import ballcal  # noqa: E402
+import confidence  # noqa: E402
 
 history.init_db()
 
@@ -545,6 +546,9 @@ def analyze():
                 "o enquadramento (câmera lateral, bola visível)."
             )
 
+        # selo de confiança da medição (fps + calibração cruzada + rastreio)
+        conf = confidence.evaluate(result, meta, fps, file_fps, calibracao)
+
         base = os.path.join(job_dir, "saque")
         report.write_trajectory_csv(base + "_trajetoria.csv", trajectory)
         report.write_speed_plot(base + "_velocidade.png", result, athlete)
@@ -610,6 +614,7 @@ def analyze():
                 inteligencia=inteligencia,
                 golpe=golpe,
                 calibracao=calibracao,
+                confianca=conf,
             )
             pdf_ok = True
         except Exception:
@@ -640,6 +645,7 @@ def analyze():
             "inteligencia": inteligencia,
             "golpe": golpe,
             "calibracao": calibracao,
+            "confianca": conf,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

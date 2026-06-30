@@ -118,7 +118,7 @@ def write_report_pdf(
     evalu: dict | None = None, didatico_texto: str | None = None,
     referencias: list | None = None, glossario: list | None = None,
     inteligencia: dict | None = None, golpe: dict | None = None,
-    calibracao: dict | None = None,
+    calibracao: dict | None = None, confianca: dict | None = None,
 ) -> None:
     """Monta um relatório PDF A4 profissional (1 página; 2 se houver biomecânica)."""
     r = summary.get("resultado", {})
@@ -165,8 +165,10 @@ def write_report_pdf(
                  wrap=True, transform=ax_desc.transAxes)
 
     # métricas-chave
+    peak_metric = (f"{peak:.0f} ± {confianca['margem_kmh']} km/h"
+                   if confianca else f"{peak:.0f} km/h")
     metrics = [
-        ("Velocidade de pico", f"{peak:.0f} km/h"),
+        ("Velocidade de pico", peak_metric),
         ("Velocidade média", f"{r.get('velocidade_media_kmh', 0):.0f} km/h"),
         ("Quadro do impacto", str(r.get("quadro_impacto", "—"))),
         ("Captura", f"{cap.get('fps', 0):.0f} fps · {cap.get('resolucao', '—')}"),
@@ -182,6 +184,19 @@ def write_report_pdf(
         ax.text(0.04, 0.22, v, fontsize=14, fontweight="bold", color="#0f1714",
                 transform=ax.transAxes)
 
+    # selo de confiança da medição (margem + nível)
+    if confianca:
+        ax_s = fig.add_axes([0.06, 0.450, 0.88, 0.035]); ax_s.axis("off")
+        ax_s.add_patch(plt.Rectangle((0, 0), 1, 1, transform=ax_s.transAxes,
+                                     facecolor="#f7faf8", edgecolor=confianca["cor"],
+                                     linewidth=1.4))
+        ax_s.text(0.02, 0.5, f"Confiança {confianca['nivel']}", fontsize=11,
+                  fontweight="bold", color=confianca["cor"], va="center",
+                  transform=ax_s.transAxes)
+        ax_s.text(0.98, 0.5, f"{confianca['headline']}  (erro ~{confianca['erro_rel_pct']:.0f}%)",
+                  fontsize=11, fontweight="bold", color="#0f1714", va="center",
+                  ha="right", transform=ax_s.transAxes)
+
     # confiabilidade da calibração (cruzamento com a bola)
     if calibracao:
         cross = calibracao.get("cross")
@@ -195,7 +210,7 @@ def write_report_pdf(
         else:
             ctxt = None
         if ctxt:
-            fig.text(0.06, 0.445, ctxt, fontsize=8.5, color=ccor, fontweight="bold")
+            fig.text(0.06, 0.425, ctxt, fontsize=8.5, color=ccor, fontweight="bold")
 
     # gráfico de velocidade
     if speed_png and os.path.exists(speed_png):

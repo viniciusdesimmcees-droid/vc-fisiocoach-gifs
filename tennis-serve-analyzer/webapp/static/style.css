@@ -325,6 +325,25 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
   border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px;
 }
 
+/* selo de confiança da medição */
+.seal {
+  border: 2px solid var(--green); border-radius: 16px;
+  padding: 14px 16px; margin: 14px 0 6px; background: rgba(34,197,94,.05);
+}
+.seal-main { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.seal-headline { font-size: 26px; font-weight: 800; letter-spacing: -.5px; color: var(--ink); }
+.seal-level { color: #fff; font-weight: 800; font-size: 13px; padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
+.seal-resumo { font-size: 13px; color: var(--muted); margin: 8px 0 0; line-height: 1.5; }
+.seal-det { margin-top: 8px; }
+.seal-det summary { font-size: 12.5px; color: var(--green-dark); font-weight: 700; cursor: pointer; }
+.seal-factors { margin-top: 10px; display: grid; gap: 8px; }
+.seal-f { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+.seal-f-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.seal-f-nome { font-weight: 700; font-size: 13px; }
+.seal-f-val { font-size: 12px; color: var(--muted); flex: 1; }
+.seal-f-pct { font-weight: 800; font-size: 13px; color: var(--ink); }
+.seal-f-txt { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
 /* calibração cruzada pela bola */
 .calib-cross {
   background: #fff; border: 1.5px solid #d97706; border-radius: 16px;

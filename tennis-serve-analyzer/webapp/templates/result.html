@@ -80,6 +80,32 @@
 
       <img class="gauge" src="{{ gauge }}" alt="Velocímetro do saque">
 
+      {% if confianca %}
+      <div class="seal" style="border-color: {{ confianca.cor }}">
+        <div class="seal-main">
+          <span class="seal-headline">{{ confianca.headline }}</span>
+          <span class="seal-level" style="background: {{ confianca.cor }}">Confiança {{ confianca.nivel }}</span>
+        </div>
+        <p class="seal-resumo">{{ confianca.resumo }}</p>
+        <details class="seal-det">
+          <summary>Como calculamos (fps · calibração · rastreio)</summary>
+          <div class="seal-factors">
+            {% for f in confianca.fatores %}
+            <div class="seal-f">
+              <div class="seal-f-top">
+                <span class="seal-f-nome">{{ f.nome }}</span>
+                <span class="seal-f-val">{{ f.valor }}</span>
+                <span class="seal-f-pct">±{{ f.contrib_pct }}%</span>
+              </div>
+              <div class="seal-f-txt">{{ f.texto }}</div>
+            </div>
+            {% endfor %}
+            <p class="note">As incertezas se somam em quadratura → erro total ≈ {{ confianca.erro_rel_pct }}%. Estimativa de engenharia, não certificado de laboratório.</p>
+          </div>
+        </details>
+      </div>
+      {% endif %}
+
       {% if cls %}
       <div class="level" style="border-color: {{ cls.cor }}">
         <span class="level-badge" style="background: {{ cls.cor }}">{{ cls.nivel }}</span>
