@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protocolo de Captura — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Protocolo de Captura</h1>
+      <span>Como filmar para uma medição de nível pericial</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('index') }}">← Voltar</a>
+      <a class="back" href="{{ url_for('validacao') }}">🔬 Validação & acurácia →</a>
+    </div>
+
+    <div class="card">
+      <h2>📋 Os 5 passos do protocolo</h2>
+      <ol class="proto-steps">
+        <li><b>Câmera de lado (perpendicular ao saque).</b> Fique na lateral, na linha
+          do saque. A bola deve <b>atravessar a tela na horizontal</b> — esse é o fator
+          que mais afeta a precisão.</li>
+        <li><b>Slow-motion 120–240 fps.</b> Use o app de câmera nativo do celular em
+          câmera lenta. A 30/60 fps a bola "pula" demais entre quadros.</li>
+        <li><b>Calibração.</b> Toque em 2 pontos de uma medida conhecida (altura da
+          rede = 0,914 m no centro) <i>ou</i> deixe a calibração automática pela bola
+          (6,7 cm) confirmar a escala.</li>
+        <li><b>Boa luz e contraste.</b> Bola amarela visível, fundo limpo, sem
+          contraluz. Isso evita buracos no rastreio e desfoque.</li>
+        <li><b>Enquadramento estável.</b> Câmera fixa (tripé/apoio), corpo e bola
+          inteiros no quadro do carregamento ao impacto.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>✅ Faça / ❌ Evite</h2>
+      <div class="proto-grid">
+        <div class="proto-do">
+          <h3>✅ Faça</h3>
+          <ul>
+            <li>Filme de lado, câmera parada</li>
+            <li>Câmera lenta (120–240 fps)</li>
+            <li>Calibre na quadra e deixe a bola confirmar</li>
+            <li>Luz boa, bola e fundo contrastantes</li>
+            <li>Mantenha a bola sempre no quadro</li>
+          </ul>
+        </div>
+        <div class="proto-dont">
+          <h3>❌ Evite</h3>
+          <ul>
+            <li>Filmar de frente ou por trás</li>
+            <li>30/60 fps para saques rápidos</li>
+            <li>Não calibrar (a velocidade fica sem escala)</li>
+            <li>Contraluz, penumbra, fundo poluído</li>
+            <li>Zoom digital ou câmera tremendo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>☑️ Checklist antes de gravar</h2>
+      <div class="proto-check">
+        {% for item in ['Câmera de lado, na linha do saque',
+                        'Slow-motion ligado (120–240 fps)',
+                        'Tripé ou apoio firme (câmera parada)',
+                        'Corpo inteiro + bola no quadro',
+                        'Boa iluminação, bola contrastante',
+                        'Medida de referência visível para calibrar'] %}
+        <label class="proto-check-item"><input type="checkbox"> {{ item }}</label>
+        {% endfor %}
+      </div>
+      <p class="note">Seguindo este protocolo, a análise tende a sair com
+        <b>Confiança Alta</b> e a captura classificada como <b>Boa</b> no pré-voo.</p>
+    </div>
+
+    <a class="pdf-btn" href="{{ url_for('index') }}">Analisar um saque agora →</a>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>

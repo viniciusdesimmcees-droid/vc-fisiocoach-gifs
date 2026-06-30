@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Validação & Acurácia — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Validação & Acurácia</h1>
+      <span>Metodologia, precisão esperada e autoteste por física</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('index') }}">← Voltar</a>
+      <a class="back" href="{{ url_for('protocolo') }}">📋 Protocolo de captura →</a>
+    </div>
+
+    <div class="card seal-cert">
+      <div class="cert-badge">🔬 Selo de Validação Científica</div>
+      <p class="cert-sub">Transparência total do método e dos limites. Sob protocolo, a
+        velocidade é medida com a acurácia abaixo — e você pode <b>verificar você
+        mesmo</b> com o autoteste de queda livre.</p>
+      <a class="pdf-btn" href="{{ url_for('ficha_tecnica') }}" download>⬇️ Baixar Ficha Técnica de Acurácia (PDF)</a>
+    </div>
+
+    <div class="card">
+      <h2>📊 Acurácia esperada</h2>
+      <p class="note">Derivada do modelo de incerteza do sistema (erro = √(fps² + calibração² + rastreio²)).</p>
+      {% for s in spec %}
+      <div class="spec-row">
+        <div class="spec-top">
+          <span class="spec-nome">{{ s.nome }}</span>
+          <span class="spec-err">± {{ s.erro_pct }}%</span>
+        </div>
+        <div class="spec-cond">{{ s.cond }}</div>
+        <div class="spec-margins">
+          {% for v in ref_speeds %}
+          <span class="spec-chip">{{ v }} km/h → ±{{ s.margens[v] }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      <p class="note">Estimativa de engenharia (não certificação de laboratório). Cada
+        análise mostra a sua própria margem no selo de confiança.</p>
+    </div>
+
+    <div class="card">
+      <h2>🧪 Autoteste por queda livre <span class="hint">(sem radar)</span></h2>
+      <p>Solte uma bola de uma <b>altura medida H</b>. Pela física, a velocidade no
+        impacto é conhecida: <b>v = √(2 · g · H)</b> (g = 9,81 m/s²). Filme a queda
+        seguindo o protocolo, meça no app e compare — é uma velocidade de referência
+        independente para checar toda a cadeia de medição.</p>
+
+      <div class="dropcalc">
+        <div class="grid">
+          <div>
+            <label>Altura da queda (m)</label>
+            <input type="number" id="dc-h" step="0.05" value="2.0" min="0.1">
+          </div>
+          <div>
+            <label>Velocidade medida no app (km/h) <span class="hint">(opcional)</span></label>
+            <input type="number" id="dc-m" step="0.1" placeholder="ex.: 22.0">
+          </div>
+        </div>
+        <div id="dc-out" class="dc-out"></div>
+      </div>
+
+      <p class="note" style="margin-top:12px">Velocidades de referência por altura:</p>
+      <table class="angles">
+        <tr><td><b>Altura</b></td><td style="text-align:right"><b>Velocidade no impacto</b></td></tr>
+        {% for d in drops %}
+        <tr><td>{{ d.altura_m }} m</td><td>{{ d.v_kmh }} km/h</td></tr>
+        {% endfor %}
+      </table>
+      <p class="note">O autoteste valida a cadeia (calibração + rastreio + fps) em
+        baixa velocidade. Para alta velocidade, o fator decisivo é o fps adequado —
+        conferido automaticamente no pré-voo. Para checar alta velocidade, use uma
+        máquina de bolas com velocidade conhecida ou filme ao lado de um radar.</p>
+    </div>
+
+    <div class="card">
+      <h2>📖 Metodologia</h2>
+      {% for titulo, texto in metodologia %}
+      <details class="metod">
+        <summary><b>{{ titulo }}</b></summary>
+        <p>{{ texto }}</p>
+      </details>
+      {% endfor %}
+    </div>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+
+  <script>
+    (function () {
+      var g = 9.81;
+      var h = document.getElementById('dc-h');
+      var m = document.getElementById('dc-m');
+      var out = document.getElementById('dc-out');
+      function render() {
+        var H = parseFloat(h.value);
+        if (!(H > 0)) { out.innerHTML = ''; return; }
+        var vms = Math.sqrt(2 * g * H);
+        var vkmh = vms * 3.6;
+        var html = '<div class="dc-exp">Velocidade esperada no impacto: <b>' +
+          vkmh.toFixed(1) + ' km/h</b> (' + vms.toFixed(2) + ' m/s)</div>';
+        var M = parseFloat(m.value);
+        if (M > 0) {
+          var errpct = (M - vkmh) / vkmh * 100;
+          var a = Math.abs(errpct), cor, txt;
+          if (a <= 7) { cor = '#15803d'; txt = 'Excelente — dentro da margem esperada'; }
+          else if (a <= 15) { cor = '#d97706'; txt = 'Bom — pequena diferença, aceitável'; }
+          else { cor = '#dc2626'; txt = 'Fora da margem — revise calibração/fps/captura'; }
+          html += '<div class="dc-cmp" style="color:' + cor + '"><b>' +
+            (errpct >= 0 ? '+' : '') + errpct.toFixed(1) + '%</b> vs. esperado — ' + txt + '</div>';
+        }
+        out.innerHTML = html;
+      }
+      h.addEventListener('input', render);
+      m.addEventListener('input', render);
+      render();
+    })();
+  </script>
+</body>
+</html>

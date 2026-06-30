@@ -28,6 +28,8 @@
     <div style="display:flex; gap:10px; flex-wrap:wrap">
       <a class="back" href="{{ url_for('historico') }}">📊 Ver histórico dos atletas →</a>
       <a class="back" href="{{ url_for('postura') }}">🧍 Avaliação postural →</a>
+      <a class="back" href="{{ url_for('protocolo') }}">📋 Protocolo de captura →</a>
+      <a class="back" href="{{ url_for('validacao') }}">🔬 Validação & acurácia →</a>
     </div>
 
     <form class="card" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">

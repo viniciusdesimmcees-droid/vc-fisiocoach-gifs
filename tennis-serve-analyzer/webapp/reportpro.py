@@ -492,6 +492,60 @@ def _situacao_cor(sit):
     return "#15803d"
 
 
+def write_spec_pdf(path: str, spec: list, drops: list, ref_speeds, metodologia: list) -> None:
+    """Ficha Técnica de Acurácia (selo de validação científica)."""
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _page_header(fig, "Selo de Validação Científica", "Ficha Técnica de Acurácia")
+
+    y = 0.89
+    fig.text(0.06, y, "Acurácia esperada", fontsize=12, fontweight="bold",
+             color="#15803d")
+    y -= 0.028
+    fig.text(0.06, y, "Erro = √(fps² + calibração² + rastreio²). Estimativa de "
+             "engenharia, não certificação de laboratório.", fontsize=8.5,
+             color="#64748b")
+    y -= 0.022
+    for s in spec:
+        fig.text(0.06, y, s["nome"], fontsize=10.5, fontweight="bold", color="#0f1714")
+        fig.text(0.94, y, f"± {s['erro_pct']}%", fontsize=10.5, fontweight="bold",
+                 color="#15803d", ha="right")
+        fig.text(0.06, y - 0.016, s["cond"], fontsize=8.2, color="#64748b")
+        margens = "   ".join(f"{v} km/h → ±{s['margens'][v]}" for v in ref_speeds)
+        fig.text(0.06, y - 0.030, margens, fontsize=8.5, color="#334155")
+        fig.add_artist(plt.Line2D([0.06, 0.94], [y - 0.040, y - 0.040],
+                                  color="#eef2f0", lw=0.8))
+        y -= 0.058
+
+    # autoteste por queda livre
+    y -= 0.01
+    fig.text(0.06, y, "Autoteste por queda livre (verificável)", fontsize=12,
+             fontweight="bold", color="#15803d")
+    y -= 0.024
+    fig.text(0.06, y, "Solte uma bola de uma altura H; pela física a velocidade no "
+             "impacto é v = √(2·g·H), g = 9,81 m/s². Filme, meça e compare.",
+             fontsize=9, color="#334155")
+    y -= 0.026
+    cols = "    ".join(f"{d['altura_m']}m={d['v_kmh']}km/h" for d in drops)
+    fig.text(0.06, y, cols, fontsize=9, fontweight="bold", color="#0f1714")
+    y -= 0.03
+
+    # metodologia
+    fig.text(0.06, y, "Metodologia e limites", fontsize=12, fontweight="bold",
+             color="#15803d")
+    y -= 0.022
+    for titulo, texto in metodologia:
+        fig.text(0.06, y, titulo, fontsize=10, fontweight="bold", color="#0f1714")
+        ax = fig.add_axes([0.06, y - 0.052, 0.88, 0.05]); ax.axis("off")
+        ax.text(0, 1, texto, fontsize=8.3, color="#334155", va="top",
+                transform=ax.transAxes, wrap=True, linespacing=1.35)
+        y -= 0.075
+
+    _signature(fig)
+    with PdfPages(path) as pdf:
+        pdf.savefig(fig)
+        plt.close(fig)
+
+
 def write_posture_pdf(path: str, athlete: str, resultado: dict, annot_png: str) -> None:
     """Laudo PDF da avaliação postural (1 página): imagem anotada + medidas."""
     import matplotlib.image as mpimg

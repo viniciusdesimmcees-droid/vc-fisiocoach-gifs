@@ -46,6 +46,7 @@ import posture  # noqa: E402
 import ballcal  # noqa: E402
 import confidence  # noqa: E402
 import preflight  # noqa: E402
+import validation  # noqa: E402
 
 history.init_db()
 
@@ -383,6 +384,46 @@ def postura_analisar():
             os.remove(in_path)
         except OSError:
             pass
+
+
+@app.route("/protocolo")
+def protocolo():
+    return render_template("protocolo.html")
+
+
+@app.route("/validacao")
+def validacao():
+    return render_template(
+        "validacao.html",
+        spec=validation.accuracy_spec(),
+        drops=validation.drop_table(),
+        ref_speeds=validation.REF_SPEEDS,
+        metodologia=validation.METODOLOGIA,
+    )
+
+
+@app.route("/validacao/ficha.pdf")
+def ficha_tecnica():
+    import tempfile
+
+    fd, tmp = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        reportpro.write_spec_pdf(
+            tmp, validation.accuracy_spec(), validation.drop_table(),
+            validation.REF_SPEEDS, validation.METODOLOGIA,
+        )
+        with open(tmp, "rb") as f:
+            data = f.read()
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition": 'attachment; filename="ficha_tecnica_acuracia.pdf"'},
+    )
 
 
 @app.route("/manifest.webmanifest")
