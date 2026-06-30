@@ -283,11 +283,14 @@
     <div class="card">
       <details>
         <summary><b>📚 Glossário</b> <span class="hint">— o que cada termo significa</span></summary>
-        <table class="angles" style="margin-top:12px">
+        <dl class="glossario">
           {% for termo, expl in glossario %}
-          <tr><td style="vertical-align:top; white-space:nowrap"><b>{{ termo }}</b></td><td>{{ expl }}</td></tr>
+          <div class="gloss-item">
+            <dt>{{ termo }}</dt>
+            <dd>{{ expl }}</dd>
+          </div>
           {% endfor %}
-        </table>
+        </dl>
       </details>
     </div>
     {% endif %}
