@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configurações — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Configurações</h1>
+      <span>Quais métricas o scanner deve ler</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('index') }}">← Voltar</a>
+
+    {% if salvo %}<div class="ok-box">✅ Preferências salvas.</div>{% endif %}
+
+    <form class="card" action="{{ url_for('configuracoes') }}" method="post">
+      <h2>Métricas na leitura do scanner</h2>
+      <p class="note">Desmarque as métricas que você <b>não</b> quer que participem da
+        análise (referências científicas e benchmark). As marcadas continuam sendo
+        lidas e comparadas.</p>
+
+      <div class="metric-toggles">
+        {% for chave, nome in metricas %}
+        <label class="metric-toggle">
+          <input type="checkbox" name="metrica" value="{{ chave }}"
+                 {{ 'checked' if chave not in excluidas else '' }}>
+          <span>{{ nome }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <button type="submit">Salvar preferências</button>
+    </form>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>

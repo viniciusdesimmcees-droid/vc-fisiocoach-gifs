@@ -28,7 +28,11 @@
     <p class="note">✓ Avaliação salva no histórico de <b>{{ athlete }}</b> — acompanhe a evolução das assimetrias ao longo do tempo.</p>
 
     {% if pdf %}
-    <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar laudo postural (PDF)</a>
+    <div class="pdf-actions">
+      <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar laudo postural (PDF)</a>
+      <button type="button" class="pdf-btn share-btn share-pdf" data-url="{{ pdf }}"
+              data-title="Laudo postural — {{ athlete }}">📤 Enviar (WhatsApp, e-mail…)</button>
+    </div>
     {% endif %}
 
     <div class="postura-grid">
@@ -70,5 +74,6 @@
 
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
   </div>
+  <script src="{{ url_for('static', filename='share.js') }}"></script>
 </body>
 </html>

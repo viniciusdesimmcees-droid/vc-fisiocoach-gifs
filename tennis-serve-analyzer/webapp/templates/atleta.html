@@ -22,7 +22,12 @@
   <div class="wrap">
     <a class="back" href="{{ url_for('historico') }}">← Todos os atletas</a>
 
-    <a class="pdf-btn" href="{{ url_for('laudo_atleta', athlete=athlete) }}">⬇️ Baixar laudo consolidado do atleta (PDF)</a>
+    <div class="pdf-actions">
+      <a class="pdf-btn" href="{{ url_for('laudo_atleta', athlete=athlete) }}" download>⬇️ Laudo consolidado (PDF)</a>
+      <button type="button" class="pdf-btn share-btn share-pdf"
+              data-url="{{ url_for('laudo_atleta', athlete=athlete) }}"
+              data-title="Laudo completo — {{ athlete }}">📤 Enviar ao aluno (WhatsApp, e-mail…)</button>
+    </div>
 
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
@@ -114,17 +119,34 @@
       {% if posturas %}
       <img class="result" style="margin-top:12px" src="{{ url_for('chart_postura', athlete=athlete) }}" alt="Evolução postural">
 
+      {# comparativo primeira x última foto #}
+      {% set com_foto = posturas | selectattr('tem_imagem') | list %}
+      {% if com_foto|length >= 2 %}
+      <h3 class="bench-sub">Comparativo: primeira × última avaliação</h3>
+      <div class="compare-photos">
+        <figure>
+          <img src="{{ url_for('postura_imagem', assessment_id=com_foto[-1].id) }}" alt="Primeira avaliação" loading="lazy">
+          <figcaption>Primeira · {{ com_foto[-1].created_at[8:10] }}/{{ com_foto[-1].created_at[5:7] }}/{{ com_foto[-1].created_at[0:4] }}</figcaption>
+        </figure>
+        <figure>
+          <img src="{{ url_for('postura_imagem', assessment_id=com_foto[0].id) }}" alt="Última avaliação" loading="lazy">
+          <figcaption>Última · {{ com_foto[0].created_at[8:10] }}/{{ com_foto[0].created_at[5:7] }}/{{ com_foto[0].created_at[0:4] }}</figcaption>
+        </figure>
+      </div>
+      {% endif %}
+
       <p class="note" style="margin-top:10px">Avaliações ({{ posturas|length }}) — quanto menor o ângulo, mais simétrico.</p>
       {% for p in posturas %}
       <div class="postura-hist-row">
         <div class="phist-head">
+          {% if p.tem_imagem %}<a href="{{ url_for('postura_imagem', assessment_id=p.id) }}" target="_blank"><img class="phist-thumb" src="{{ url_for('postura_imagem', assessment_id=p.id) }}" alt="foto"></a>{% endif %}
           <span><b>{{ p.created_at[8:10] }}/{{ p.created_at[5:7] }}/{{ p.created_at[0:4] }}</b> · {{ p.view_label }}</span>
           <span class="phist-flag" style="background: {{ '#dc2626' if p.graves else ('#d97706' if p.alertas else '#15803d') }}">
             {{ '🔺' if p.graves else ('⚠️' if p.alertas else '✅') }} {{ p.alertas }} atenção
           </span>
           <details class="analise-edit">
             <summary>⋯</summary>
-            {% if p.image_url %}<a class="back" href="{{ p.image_url }}" target="_blank">Ver imagem anotada ↗</a>{% endif %}
+            {% if p.tem_imagem %}<a class="back" href="{{ url_for('postura_imagem', assessment_id=p.id) }}" target="_blank">Ver foto ↗</a>{% endif %}
             <form action="{{ url_for('excluir_postura', assessment_id=p.id) }}" method="post"
                   onsubmit="return confirm('Excluir esta avaliação postural?');">
               <input type="hidden" name="athlete" value="{{ athlete }}">
@@ -145,7 +167,26 @@
       {% endif %}
     </div>
 
+    <div class="card">
+      <details>
+        <summary><b>⚙️ Gerenciar atleta</b> <span class="hint">— renomear ou excluir</span></summary>
+        <form action="{{ url_for('renomear_atleta', athlete=athlete) }}" method="post" style="margin-top:12px">
+          <label>Renomear atleta</label>
+          <div class="grid">
+            <input type="text" name="novo_nome" value="{{ athlete }}" required>
+            <button type="submit">Salvar novo nome</button>
+          </div>
+        </form>
+        <form action="{{ url_for('excluir_atleta', athlete=athlete) }}" method="post"
+              onsubmit="return confirm('Excluir DEFINITIVAMENTE {{ athlete }} e todo o histórico (saques, posturas, ficha)? Não dá para desfazer.');"
+              style="margin-top:14px">
+          <button type="submit" class="rec-btn">🗑️ Excluir atleta e todo o histórico</button>
+        </form>
+      </details>
+    </div>
+
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
   </div>
+  <script src="{{ url_for('static', filename='share.js') }}"></script>
 </body>
 </html>

@@ -108,9 +108,12 @@ def _gap_txt(v, pro_ref, direction, unid):
         return f"Reduzir ~{v - pro_ref:.0f} {unid} para o padrão pro."
 
 
-def evaluate(summary: dict, biomech: dict | None) -> dict | None:
+def evaluate(summary: dict, biomech: dict | None, excluded=None) -> dict | None:
+    excluded = excluded or set()
     metricas = []
     for r in REFS:
+        if r["chave"] in excluded:
+            continue
         v = r["get"](summary, biomech)
         if v is None:
             continue

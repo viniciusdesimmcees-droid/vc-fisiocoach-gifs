@@ -48,6 +48,7 @@ import confidence  # noqa: E402
 import preflight  # noqa: E402
 import validation  # noqa: E402
 import benchmark  # noqa: E402
+import metrics  # noqa: E402
 
 history.init_db()
 
@@ -148,12 +149,70 @@ def editar_analise(analysis_id):
                     if athlete else url_for("historico"))
 
 
+@app.route("/postura/<int:assessment_id>/imagem.png")
+def postura_imagem(assessment_id):
+    data = history.get_posture_image(assessment_id)
+    if not data:
+        abort(404)
+    return Response(data, mimetype="image/png",
+                    headers={"Cache-Control": "public, max-age=86400"})
+
+
 @app.route("/postura/<int:assessment_id>/excluir", methods=["POST"])
 def excluir_postura(assessment_id):
     athlete = request.form.get("athlete", "")
     history.delete_posture(assessment_id)
     return redirect(url_for("historico_atleta", athlete=athlete)
                     if athlete else url_for("historico"))
+
+
+@app.route("/atleta/<athlete>/renomear", methods=["POST"])
+def renomear_atleta(athlete):
+    novo = (request.form.get("novo_nome") or "").strip()
+    if novo and novo != athlete:
+        history.rename_athlete(athlete, novo)
+        return redirect(url_for("historico_atleta", athlete=novo))
+    return redirect(url_for("historico_atleta", athlete=athlete))
+
+
+@app.route("/atleta/<athlete>/excluir", methods=["POST"])
+def excluir_atleta(athlete):
+    history.delete_athlete(athlete)
+    return redirect(url_for("historico"))
+
+
+@app.route("/configuracoes", methods=["GET", "POST"])
+def configuracoes():
+    if request.method == "POST":
+        # as marcadas para PARTICIPAR vêm no form; as ausentes ficam excluídas
+        incluidas = set(request.form.getlist("metrica"))
+        excluidas = [k for k, _ in metrics.METRIC_REGISTRY if k not in incluidas]
+        history.set_excluded_metrics(excluidas)
+        return redirect(url_for("configuracoes", salvo=1))
+    excluidas = history.get_excluded_metrics()
+    return render_template(
+        "configuracoes.html",
+        metricas=metrics.METRIC_REGISTRY,
+        excluidas=excluidas,
+        salvo=request.args.get("salvo"),
+    )
+
+
+def _montar_objetivo(profile, inteligencia):
+    """Texto de objetivo para o atleta: metas da ficha + foco do plano."""
+    partes = []
+    if profile and profile.get("goals"):
+        partes.append(f"Meta do atleta: {profile['goals']}.")
+    if inteligencia and inteligencia.get("treino"):
+        partes.append(inteligencia["treino"])
+    if inteligencia and inteligencia.get("musculos"):
+        grupos = ", ".join(m["grupo"].replace("_", " ")
+                           for m in inteligencia["musculos"][:3])
+        partes.append(f"Prioridade física da fase: {grupos}.")
+    if not partes:
+        partes.append("Evoluir a técnica e a potência do saque com consistência e "
+                      "prevenção de lesões, acompanhando a evolução ao longo do tempo.")
+    return " ".join(partes)
 
 
 @app.route("/historico/<athlete>/laudo.pdf")
@@ -170,14 +229,33 @@ def laudo_atleta(athlete):
     last_post = posturas[-1] if posturas else None
     golpe, inteligencia = history.latest_extras(athlete)
 
-    last_img = None
-    if last_post and last_post.get("image_url"):
-        rel = last_post["image_url"].split("/static/", 1)[-1]
-        cand = os.path.join(STATIC, rel)
-        if os.path.exists(cand):
-            last_img = cand
-
     import tempfile
+
+    tmp_imgs = []
+
+    def _img_tmp(assessment_id):
+        b = history.get_posture_image(assessment_id)
+        if not b:
+            return None
+        fd_i, p_i = tempfile.mkstemp(suffix=".png")
+        with os.fdopen(fd_i, "wb") as f:
+            f.write(b)
+        tmp_imgs.append(p_i)
+        return p_i
+
+    com_foto = [p for p in posturas if p.get("tem_imagem")]
+    first_img = _img_tmp(com_foto[0]["id"]) if com_foto else None
+    last_img = _img_tmp(com_foto[-1]["id"]) if com_foto else None
+
+    # histórico completo de saques (do primeiro ao último) para anexar ao laudo
+    all_serves = [
+        {"data": (a.get("created_at") or "")[:10],
+         "peak": a.get("peak_kmh"),
+         "nivel": reportpro.classify(a.get("peak_kmh") or 0)["nivel"]}
+        for a in h
+    ]
+    # objetivo para o atleta (metas da ficha + foco do plano inteligente)
+    objetivo = _montar_objetivo(profile, inteligencia)
 
     fd, tmp = tempfile.mkstemp(suffix=".pdf")
     os.close(fd)
@@ -188,14 +266,17 @@ def laudo_atleta(athlete):
             history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
             stats, serve_png, posture_png, last_post, last_img,
             golpe=golpe, inteligencia=inteligencia,
+            all_serves=all_serves, posture_first_img=first_img,
+            posturas=posturas, objetivo=objetivo,
         )
         with open(tmp, "rb") as f:
             data = f.read()
     finally:
-        try:
-            os.remove(tmp)
-        except OSError:
-            pass
+        for p_i in tmp_imgs + [tmp]:
+            try:
+                os.remove(p_i)
+            except OSError:
+                pass
     return Response(
         data, mimetype="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="laudo_{athlete}.pdf"'},
@@ -347,12 +428,21 @@ def postura_analisar():
         annot_path = os.path.join(job_dir, "postura_anotada.png")
         cv2.imwrite(annot_path, annotated)
         img_url = url_for("static", filename=f"results/{job}/postura_anotada.png")
+        # bytes da foto anotada para guardar no banco (permanente / comparativo)
+        ok_enc, buf_png = cv2.imencode(".png", annotated)
+        img_bytes = buf_png.tobytes() if ok_enc else None
 
         # salva no histórico do atleta (evolução postural ao longo do tempo)
+        assessment_id = None
         try:
-            history.record_posture(athlete, view, resultado, img_url)
+            assessment_id = history.record_posture(
+                athlete, view, resultado, img_url, image_bytes=img_bytes
+            )
         except Exception:
             traceback.print_exc()  # histórico não pode derrubar o resultado
+        # usa a imagem permanente do banco quando disponível
+        if assessment_id:
+            img_url = url_for("postura_imagem", assessment_id=assessment_id)
 
         pdf_ok = True
         try:
@@ -626,8 +716,13 @@ def analyze():
         # camada didática (linguagem simples para o aluno)
         didatico = didactic.student_summary(summary, evalu, cls["nivel"])
         glossario = didactic.glossario(bool(biomech))
+        # métricas que o operador marcou para não participar da leitura
+        try:
+            excluded_metrics = history.get_excluded_metrics()
+        except Exception:
+            excluded_metrics = set()
         # comparação com referências científicas
-        referencias = references.compare(summary, bio_summary)
+        referencias = references.compare(summary, bio_summary, excluded_metrics)
         # motor inteligente: risco de lesão + músculos + treino (usa a ficha)
         try:
             profile = history.get_profile(athlete)
@@ -636,7 +731,7 @@ def analyze():
         inteligencia = engine.evaluate(summary, bio_summary, profile)
 
         # benchmark vs. profissional (percentil + radar + o que falta para o pro)
-        bench = benchmark.evaluate(summary, bio_summary)
+        bench = benchmark.evaluate(summary, bio_summary, excluded_metrics)
         radar_url = None
         if bench and bench.get("tem_radar"):
             try:

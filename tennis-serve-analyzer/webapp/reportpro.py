@@ -358,11 +358,19 @@ def _info_boxes(fig, items, y0, x0=0.06, bw=0.42, bh=0.058, gap_x=0.46, gap_y=0.
     return y0 - rows * gap_y
 
 
+def _load_img(p):
+    import matplotlib.image as mpimg
+    return mpimg.imread(p)
+
+
 def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                               serve_png=None, posture_png=None,
                               last_posture=None, last_posture_img=None,
-                              golpe=None, inteligencia=None) -> None:
-    """Laudo consolidado do atleta: ficha + saque + golpe + postura + plano."""
+                              golpe=None, inteligencia=None,
+                              all_serves=None, posture_first_img=None,
+                              posturas=None, objetivo=None) -> None:
+    """Laudo completo do atleta: ficha + saque + golpe + postura (com fotos) +
+    plano + histórico completo + objetivo para o atleta."""
     profile = profile or {}
     with PdfPages(path) as pdf:
         # ---------------- Página 1: ficha + saque ----------------
@@ -437,6 +445,24 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                 ax_e = fig2.add_axes([0.06, 0.62, 0.88, 0.26]); ax_e.axis("off")
                 ax_e.imshow(_png_bytes_to_img(posture_png))
 
+            # comparativo primeira × última foto (permanentes, do banco)
+            if posture_first_img and os.path.exists(posture_first_img) and \
+                    last_posture_img and os.path.exists(last_posture_img) and \
+                    posture_first_img != last_posture_img:
+                fig2.text(0.06, 0.58, "Comparativo: primeira × última avaliação",
+                          fontsize=12, fontweight="bold", color="#15803d")
+                for j, imgp in enumerate((posture_first_img, last_posture_img)):
+                    img = _load_img(imgp)
+                    ih, iw = img.shape[:2]
+                    bw = 0.40
+                    bh = min(0.30, bw * (ih / iw) * (8.27 / 11.69))
+                    ax_c = fig2.add_axes([0.06 + j * 0.46, 0.55 - bh, bw, bh])
+                    ax_c.axis("off"); ax_c.imshow(img)
+                    fig2.text(0.06 + j * 0.46 + bw / 2, 0.55 - bh - 0.015,
+                              "Primeira" if j == 0 else "Última", fontsize=9,
+                              color="#64748b", ha="center")
+                last_posture = None  # medidas já cobertas; evita sobrepor
+
             if last_posture:
                 view_lbl = {"frente": "frontal", "costas": "posterior",
                             "lado": "lateral", "lateral": "lateral"}.get(
@@ -448,11 +474,7 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                 # imagem anotada à esquerda
                 x_tab = 0.06
                 if last_posture_img and os.path.exists(last_posture_img):
-                    img = _png_bytes_to_img(open(last_posture_img, "rb").read()) \
-                        if last_posture_img.endswith(".png") else None
-                    if img is None:
-                        import matplotlib.image as mpimg
-                        img = mpimg.imread(last_posture_img)
+                    img = _load_img(last_posture_img)
                     ih, iw = img.shape[:2]
                     box_w = 0.30
                     box_h = min(0.40, box_w * (ih / iw) * (8.27 / 11.69))
@@ -486,6 +508,62 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             fig3 = _engine_page(athlete, inteligencia)
             pdf.savefig(fig3)
             plt.close(fig3)
+
+        # ---------------- Página 4: histórico completo + objetivo ----------------
+        if all_serves or posturas or objetivo:
+            fig4 = plt.figure(figsize=(8.27, 11.69))
+            _page_header(fig4, athlete, "Histórico Completo e Objetivo")
+            y = 0.90
+
+            if objetivo:
+                fig4.text(0.06, y, "Objetivo para o atleta", fontsize=12,
+                          fontweight="bold", color="#15803d")
+                ax_o = fig4.add_axes([0.06, y - 0.10, 0.88, 0.09]); ax_o.axis("off")
+                ax_o.text(0, 1, objetivo, fontsize=10, color="#334155", va="top",
+                          transform=ax_o.transAxes, wrap=True, linespacing=1.5)
+                y -= 0.14
+
+            if all_serves:
+                fig4.text(0.06, y, f"Todos os saques analisados ({len(all_serves)})",
+                          fontsize=12, fontweight="bold", color="#15803d")
+                y -= 0.008
+                fig4.text(0.06, y - 0.016, "Cada linha mostra a data, a velocidade de "
+                          "pico e a classificação — do primeiro ao mais recente.",
+                          fontsize=8.3, color="#64748b")
+                y -= 0.034
+                for a in all_serves[-14:]:
+                    d = a.get("data", "")
+                    dbr = f"{d[8:10]}/{d[5:7]}/{d[0:4]}" if len(d) >= 10 else d
+                    fig4.text(0.07, y, dbr, fontsize=9, color="#334155")
+                    fig4.text(0.40, y, f"{(a.get('peak') or 0):.0f} km/h", fontsize=9,
+                              fontweight="bold", color="#0f1714")
+                    fig4.text(0.62, y, a.get("nivel", ""), fontsize=9, color="#64748b")
+                    y -= 0.0185
+                y -= 0.015
+
+            if posturas:
+                fig4.text(0.06, y, f"Todas as avaliações posturais ({len(posturas)})",
+                          fontsize=12, fontweight="bold", color="#15803d")
+                y -= 0.028
+                for p in posturas[-10:]:
+                    d = (p.get("created_at") or "")[:10]
+                    dbr = f"{d[8:10]}/{d[5:7]}/{d[0:4]}" if len(d) >= 10 else d
+                    flag = ("atenção" if p.get("graves") else
+                            ("leve" if p.get("alertas") else "simétrico"))
+                    fig4.text(0.07, y, dbr, fontsize=9, color="#334155")
+                    fig4.text(0.40, y, p.get("view_label", ""), fontsize=9, color="#0f1714")
+                    fig4.text(0.62, y, f"{p.get('alertas', 0)} alerta(s) · {flag}",
+                              fontsize=9, color="#64748b")
+                    y -= 0.0185
+
+            ax_n = fig4.add_axes([0.06, 0.08, 0.88, 0.05]); ax_n.axis("off")
+            ax_n.text(0, 1, "Laudo gerado pelo VF Tênis Scanner com todo o histórico do "
+                      "atleta. Cada seção traz a explicação e o objetivo correspondente.",
+                      fontsize=8, color="#94a3b8", va="top", transform=ax_n.transAxes,
+                      wrap=True, linespacing=1.4)
+            _signature(fig4)
+            pdf.savefig(fig4)
+            plt.close(fig4)
 
 
 def _situacao_cor(sit):

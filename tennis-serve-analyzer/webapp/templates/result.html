@@ -98,7 +98,11 @@
     {% endif %}
 
     {% if pdf %}
-    <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar relatório completo (PDF)</a>
+    <div class="pdf-actions">
+      <a class="pdf-btn" href="{{ pdf }}" download>⬇️ Baixar relatório (PDF)</a>
+      <button type="button" class="pdf-btn share-btn share-pdf" data-url="{{ pdf }}"
+              data-title="Laudo do saque — {{ athlete }}">📤 Enviar (WhatsApp, e-mail…)</button>
+    </div>
     {% endif %}
 
     <div class="card">
@@ -436,5 +440,6 @@
 
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
   </div>
+  <script src="{{ url_for('static', filename='share.js') }}"></script>
 </body>
 </html>

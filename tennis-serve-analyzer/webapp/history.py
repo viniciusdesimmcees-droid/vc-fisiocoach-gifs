@@ -115,6 +115,16 @@ def init_db() -> None:
                 medidas TEXT
             )"""
         )
+        # migração: guarda a FOTO anotada no banco (permanente) para comparativo
+        pcols = {r["name"] for r in c.execute("PRAGMA table_info(posture_assessments)")}
+        if "image_blob" not in pcols:
+            c.execute("ALTER TABLE posture_assessments ADD COLUMN image_blob BLOB")
+        # configurações do operador (ex.: métricas excluídas da leitura)
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS settings (
+                key TEXT PRIMARY KEY, value TEXT
+            )"""
+        )
 
 
 # ----------------------------- ficha do atleta -----------------------------
@@ -199,6 +209,45 @@ def rename_athlete(old: str, new: str) -> None:
     _sync()
 
 
+def delete_athlete(name: str) -> None:
+    """Apaga o atleta e TUDO dele: análises, avaliações posturais e ficha."""
+    with _conn() as c:
+        c.execute("DELETE FROM analyses WHERE athlete = ?", (name,))
+        c.execute("DELETE FROM posture_assessments WHERE athlete = ?", (name,))
+        c.execute("DELETE FROM athletes WHERE name = ?", (name,))
+    _sync()
+
+
+# ----------------------------- configurações -------------------------------
+
+def get_setting(key: str, default=None):
+    with _conn() as c:
+        row = c.execute("SELECT value FROM settings WHERE key = ?", (key,)).fetchone()
+    return row["value"] if row else default
+
+
+def set_setting(key: str, value: str) -> None:
+    with _conn() as c:
+        c.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)",
+                  (key, value))
+    _sync()
+
+
+def get_excluded_metrics() -> set[str]:
+    """Métricas que o operador marcou para NÃO participar da leitura."""
+    raw = get_setting("excluded_metrics")
+    if not raw:
+        return set()
+    try:
+        return set(json.loads(raw))
+    except (ValueError, TypeError):
+        return set()
+
+
+def set_excluded_metrics(keys) -> None:
+    set_setting("excluded_metrics", json.dumps(sorted(set(keys)), ensure_ascii=False))
+
+
 def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
                     stroke=None, intel=None) -> None:
     with _conn() as c:
@@ -245,8 +294,10 @@ VIEW_LABEL = {"frente": "Frontal", "costas": "Posterior",
               "lado": "Lateral", "lateral": "Lateral"}
 
 
-def record_posture(athlete, view, resultado: dict, image_url=None) -> int:
-    """Salva uma avaliação postural no histórico do atleta."""
+def record_posture(athlete, view, resultado: dict, image_url=None,
+                   image_bytes: bytes | None = None) -> int:
+    """Salva uma avaliação postural no histórico do atleta. A foto anotada é
+    guardada no banco (BLOB) para ficar permanente e permitir o comparativo."""
     medidas = [
         {"chave": m.get("chave"), "nome": m.get("nome"), "graus": m.get("graus"),
          "valor": m.get("valor"), "situacao": m.get("situacao"),
@@ -256,8 +307,8 @@ def record_posture(athlete, view, resultado: dict, image_url=None) -> int:
     with _conn() as c:
         cur = c.execute(
             "INSERT INTO posture_assessments "
-            "(athlete, created_at, view, alertas, graves, image_url, medidas) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "(athlete, created_at, view, alertas, graves, image_url, medidas, image_blob) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 (athlete or "Atleta").strip() or "Atleta",
                 datetime.now(timezone.utc).isoformat(),
@@ -266,11 +317,23 @@ def record_posture(athlete, view, resultado: dict, image_url=None) -> int:
                 int(resultado.get("graves", 0)),
                 image_url,
                 json.dumps(medidas, ensure_ascii=False),
+                sqlite3.Binary(image_bytes) if image_bytes else None,
             ),
         )
         new_id = cur.lastrowid
     _sync()
     return new_id
+
+
+def get_posture_image(assessment_id: int) -> bytes | None:
+    with _conn() as c:
+        row = c.execute(
+            "SELECT image_blob FROM posture_assessments WHERE id = ?",
+            (assessment_id,),
+        ).fetchone()
+    if row and row["image_blob"] is not None:
+        return bytes(row["image_blob"])
+    return None
 
 
 def get_posture_history(athlete: str) -> list[dict]:
@@ -282,6 +345,7 @@ def get_posture_history(athlete: str) -> list[dict]:
     out = []
     for r in rows:
         d = dict(r)
+        d["tem_imagem"] = d.pop("image_blob", None) is not None
         try:
             d["medidas"] = json.loads(d.get("medidas") or "[]")
         except (ValueError, TypeError):
