@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Montar relatório — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Montar relatório — {{ athlete }}</h1>
+      <span>Marque o que enviar ao atleta (ou tudo)</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('historico_atleta', athlete=athlete) }}">← Voltar ao aluno</a>
+
+    <form id="rel-form" class="card" action="{{ url_for('relatorio_custom', athlete=athlete) }}" method="get">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
+        <h2 style="margin:0">Seções do relatório</h2>
+        <button type="button" id="rel-tudo" class="ghost s3d-btn">Marcar tudo</button>
+      </div>
+      <div class="metric-toggles" style="margin-top:12px">
+        {% for chave, nome in secoes %}
+        <label class="metric-toggle">
+          <input type="checkbox" name="sec" value="{{ chave }}" checked>
+          <span>{{ nome }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      {% if rows %}
+      <h2 style="margin-top:22px">Análises individuais para anexar</h2>
+      <p class="note">Cada análise marcada entra como anexo com o relatório completo
+        (velocímetro, golpe, percurso da bola, plano e biomecânica daquele dia).</p>
+      <div class="metric-toggles">
+        {% for r in rows %}
+        <label class="metric-toggle">
+          <input type="checkbox" name="an" value="{{ r.id }}">
+          <span>{{ r.created_at[8:10] }}/{{ r.created_at[5:7] }}/{{ r.created_at[0:4] }} —
+            <b>pico {{ "%.0f"|format(r.peak_kmh) }} km/h</b>
+            {% if not r.incluida %}<span class="fora-badge">fora do laudo</span>{% endif %}</span>
+        </label>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <p class="note" style="margin-top:14px">{{ n_posturas }} avaliação(ões) postural(is)
+        no histórico — entram nas seções de postura/comparativo quando marcadas.</p>
+
+      <button type="submit">⬇️ Gerar e baixar o relatório (PDF)</button>
+      <button type="button" id="rel-share" class="share-btn share-pdf" data-url=""
+              data-title="Relatório — {{ athlete }}"
+              style="margin-top:10px">📤 Gerar e enviar (WhatsApp, e-mail…)</button>
+    </form>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='share.js') }}"></script>
+  <script>
+    const form = document.getElementById('rel-form');
+    document.getElementById('rel-tudo').addEventListener('click', ()=>{
+      form.querySelectorAll('input[type=checkbox]').forEach(c=>{ c.checked = true; });
+    });
+    // monta a URL do PDF com as escolhas atuais ANTES do share.js ler o data-url
+    const shareBtn = document.getElementById('rel-share');
+    shareBtn.addEventListener('click', ()=>{
+      const params = new URLSearchParams(new FormData(form));
+      shareBtn.setAttribute('data-url', form.action + '?' + params.toString());
+    }, true);
+  </script>
+</body>
+</html>

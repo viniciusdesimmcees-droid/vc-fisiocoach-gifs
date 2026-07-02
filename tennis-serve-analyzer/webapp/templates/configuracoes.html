@@ -39,6 +39,28 @@
         {% endfor %}
       </div>
 
+      <h2 style="margin-top:24px">Como a análise é feita</h2>
+      <p class="note">Ligue/desligue cada bloco da avaliação. O que estiver desligado
+        não aparece no resultado nem no PDF.</p>
+      <div class="metric-toggles">
+        {% for chave, nome, desc in pref_labels %}
+        <label class="metric-toggle" style="flex-direction:column; align-items:flex-start">
+          <span style="display:flex; align-items:center; gap:10px">
+            <input type="checkbox" name="pref" value="{{ chave }}"
+                   {{ 'checked' if prefs.get(chave) else '' }}>
+            <b style="font-size:13.5px">{{ nome }}</b>
+          </span>
+          {% if desc %}<span class="hint" style="margin-left:28px">{{ desc }}</span>{% endif %}
+        </label>
+        {% endfor %}
+      </div>
+
+      <div style="margin-top:14px">
+        <label>Diâmetro padrão da bola (cm) <span class="hint">— usado quando o campo da análise fica vazio; foam/junior variam</span></label>
+        <input type="number" name="ball_diameter_cm" step="0.1" min="3" max="12"
+               value="{{ prefs.get('ball_diameter_cm', 6.7) }}">
+      </div>
+
       <button type="submit">Salvar preferências</button>
     </form>
 

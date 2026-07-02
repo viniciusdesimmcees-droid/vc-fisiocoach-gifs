@@ -123,6 +123,8 @@ def historico_atleta(athlete):
         stats=history.athlete_stats(athlete) if h else {},
         rows=list(reversed(h)),  # mais recentes primeiro na tabela
         posturas=list(reversed(posturas)),
+        sessoes=avatar.sessions(posturas),
+        pares_foto=avatar.photo_pairs(posturas),
         profile=profile,
         age=history.age_from_birthdate(profile.get("birthdate")) if profile else None,
         imc=history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
@@ -243,6 +245,19 @@ def excluir_atleta(athlete):
     return redirect(url_for("historico"))
 
 
+PREF_LABELS = [
+    ("usar_bola", "Verificação/calibração automática pelo tamanho da bola",
+     "Usa a bola (diâmetro conhecido) como régua independente para confirmar a calibração."),
+    ("previoo", "Pré-voo: checagem da qualidade da captura",
+     "Avisa sobre câmera não-lateral, fps baixo, bola pouco visível, desfoque."),
+    ("didatico", "Resumo didático (em palavras simples para o aluno)", ""),
+    ("glossario", "Glossário de termos", ""),
+    ("referencias", "Comparação com referências científicas", ""),
+    ("benchmark", "Benchmark vs. profissional (radar + percentil)", ""),
+    ("plano", "Plano inteligente (risco de lesão + músculos + treino)", ""),
+]
+
+
 @app.route("/configuracoes", methods=["GET", "POST"])
 def configuracoes():
     if request.method == "POST":
@@ -250,12 +265,23 @@ def configuracoes():
         incluidas = set(request.form.getlist("metrica"))
         excluidas = [k for k, _ in metrics.METRIC_REGISTRY if k not in incluidas]
         history.set_excluded_metrics(excluidas)
+        # como a análise é feita
+        prefs = {k: (k in set(request.form.getlist("pref")))
+                 for k, _l, _d in PREF_LABELS}
+        try:
+            prefs["ball_diameter_cm"] = float(
+                request.form.get("ball_diameter_cm") or 6.7)
+        except (TypeError, ValueError):
+            prefs["ball_diameter_cm"] = 6.7
+        history.set_analysis_prefs(prefs)
         return redirect(url_for("configuracoes", salvo=1))
     excluidas = history.get_excluded_metrics()
     return render_template(
         "configuracoes.html",
         metricas=metrics.METRIC_REGISTRY,
         excluidas=excluidas,
+        prefs=history.get_analysis_prefs(),
+        pref_labels=PREF_LABELS,
         salvo=request.args.get("salvo"),
     )
 
@@ -277,13 +303,20 @@ def _montar_objetivo(profile, inteligencia):
     return " ".join(partes)
 
 
-def _build_dossier_bytes(athlete, profile, h, posturas):
-    """Gera o PDF do laudo consolidado e devolve os bytes."""
+def _build_dossier_bytes(athlete, profile, h, posturas, secoes=None,
+                         analise_ids=None):
+    """Gera o PDF do laudo (completo ou personalizado) e devolve os bytes.
+    `secoes`: conjunto de seções a incluir (None = todas).
+    `analise_ids`: análises individuais para anexar o relatório completo."""
     import tempfile
 
+    def S(k):
+        return secoes is None or k in secoes
+
     stats = history.athlete_stats(athlete) if h else {}
-    serve_png = history.evolution_png(athlete) if h else None
-    posture_png = history.posture_evolution_png(athlete) if posturas else None
+    serve_png = history.evolution_png(athlete) if (h and S("saque")) else None
+    posture_png = (history.posture_evolution_png(athlete)
+                   if (posturas and S("postura")) else None)
     last_post = posturas[-1] if posturas else None
     golpe, inteligencia = history.latest_extras(athlete)
 
@@ -299,9 +332,15 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
         tmp_imgs.append(p_i)
         return p_i
 
-    com_foto = [p for p in posturas if p.get("tem_imagem")]
-    first_img = _img_tmp(com_foto[0]["id"]) if com_foto else None
-    last_img = _img_tmp(com_foto[-1]["id"]) if com_foto else None
+    # par de fotos da MESMA vista (frontal com frontal etc.)
+    pares = avatar.photo_pairs(posturas)
+    if pares:
+        first_img = _img_tmp(pares[0]["antes"]["id"])
+        last_img = _img_tmp(pares[0]["agora"]["id"])
+    else:
+        com_foto = [p for p in posturas if p.get("tem_imagem")]
+        first_img = None
+        last_img = _img_tmp(com_foto[-1]["id"]) if com_foto else None
     all_serves = [
         {"data": (a.get("created_at") or "")[:10], "peak": a.get("peak_kmh"),
          "nivel": reportpro.classify(a.get("peak_kmh") or 0)["nivel"]}
@@ -312,25 +351,37 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
     # mapa corporal (boneco com os pontos da avaliação)
     mapa_png = None
     pontos_corpo = []
-    try:
-        pontos_corpo, risco_av = avatar.build(profile, posturas, inteligencia)
-        if pontos_corpo:
-            mapa_png = bodymap.render_png(pontos_corpo, risco_av)
-    except Exception:
-        traceback.print_exc()
+    if S("mapa"):
+        try:
+            pontos_corpo, risco_av = avatar.build(profile, posturas, inteligencia)
+            if pontos_corpo:
+                mapa_png = bodymap.render_png(pontos_corpo, risco_av)
+        except Exception:
+            traceback.print_exc()
 
-    # comparativo postural (primeira × última) para o PDF
+    # comparativo postural (primeira × última, por vista) para o PDF
     comp = None
     compare_png = None
-    try:
-        comp = avatar.compare(posturas)
-        if comp:
-            compare_png = bodymap.render_compare_png(
-                comp["antes"]["pontos"], comp["agora"]["pontos"],
-                comp["antes"]["data"], comp["agora"]["data"],
-            )
-    except Exception:
-        traceback.print_exc()
+    if S("comparativo"):
+        try:
+            comp = avatar.compare(posturas)
+            if comp:
+                compare_png = bodymap.render_compare_png(
+                    comp["antes"]["pontos"], comp["agora"]["pontos"],
+                    comp["antes"]["data"], comp["agora"]["data"],
+                )
+        except Exception:
+            traceback.print_exc()
+
+    # análises individuais escolhidas para anexar (relatório completo de cada)
+    analises = []
+    for aid in (analise_ids or []):
+        try:
+            row = history.get_analysis(aid)
+            if row and row.get("athlete") == athlete:
+                analises.append((row, history.get_analysis_traj(aid)))
+        except Exception:
+            traceback.print_exc()
 
     fd, tmp = tempfile.mkstemp(suffix=".pdf")
     os.close(fd)
@@ -345,6 +396,7 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
             posturas=posturas, objetivo=objetivo,
             bodymap_png=mapa_png, pontos_corpo=pontos_corpo,
             comp=comp, compare_png=compare_png,
+            secoes=secoes, analises=analises,
         )
         with open(tmp, "rb") as f:
             return f.read()
@@ -354,6 +406,55 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
                 os.remove(p_i)
             except OSError:
                 pass
+
+
+SECOES_RELATORIO = [
+    ("ficha", "Ficha do atleta (idade, IMC, lesões, objetivos)"),
+    ("saque", "Evolução do saque (recorde, média, gráfico, golpe)"),
+    ("postura", "Avaliação postural (evolução + fotos da mesma vista)"),
+    ("comparativo", "Comparativo postural antes × agora"),
+    ("mapa", "Mapa corporal (boneco com os pontos)"),
+    ("plano", "Plano inteligente (risco + músculos + treino)"),
+    ("historico", "Histórico completo + objetivo para o atleta"),
+]
+
+
+@app.route("/atleta/<athlete>/relatorio")
+def relatorio_form(athlete):
+    """Montar relatório personalizado: marcar seções e análises."""
+    profile = history.get_profile(athlete)
+    h = history.get_history(athlete, only_included=False)
+    posturas = history.get_posture_history(athlete)
+    if not h and not profile and not posturas:
+        abort(404)
+    return render_template(
+        "relatorio.html", athlete=athlete, secoes=SECOES_RELATORIO,
+        rows=list(reversed(h)), n_posturas=len(posturas),
+    )
+
+
+@app.route("/atleta/<athlete>/relatorio.pdf")
+def relatorio_custom(athlete):
+    """PDF personalizado: ?sec=ficha&sec=saque…&an=12&an=15"""
+    profile = history.get_profile(athlete)
+    h = history.get_history(athlete)
+    posturas = history.get_posture_history(athlete)
+    if not h and not profile and not posturas:
+        abort(404)
+    secoes = set(request.args.getlist("sec")) or None  # vazio = tudo
+    analise_ids = []
+    for x in request.args.getlist("an"):
+        try:
+            analise_ids.append(int(x))
+        except (TypeError, ValueError):
+            pass
+    data = _build_dossier_bytes(athlete, profile, h, posturas,
+                                secoes=secoes, analise_ids=analise_ids)
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition":
+                 f'attachment; filename="relatorio_{athlete}.pdf"'},
+    )
 
 
 @app.route("/historico/<athlete>/laudo.pdf")
@@ -810,7 +911,15 @@ def analyze():
         if m_in > 0 and px_in > 0:
             ref_m, ref_px = m_in, px_in
 
-    ball_d_cm = _f("ball_diameter_cm", 6.7)
+    # preferências do operador (Configurações): como a análise é feita
+    try:
+        prefs = history.get_analysis_prefs()
+    except Exception:
+        prefs = dict(history.DEFAULT_ANALYSIS_PREFS)
+
+    ball_d_cm = _f("ball_diameter_cm", 0.0)
+    if ball_d_cm <= 0:
+        ball_d_cm = float(prefs.get("ball_diameter_cm") or 6.7)
     ball_d_m = ball_d_cm / 100.0 if ball_d_cm > 0 else ballcal.BALL_DIAMETER_M
 
     fps_override = _f("fps", 0.0)
@@ -848,7 +957,8 @@ def analyze():
             )
 
         # escala automática pela bola (régua independente, mesmo plano de voo)
-        ball_global = ballcal.ball_scale(trajectory, ball_d_m)
+        ball_global = (ballcal.ball_scale(trajectory, ball_d_m)
+                       if prefs.get("usar_bola", True) else None)
 
         # decide a calibração: manual quando houver; senão, pela bola
         if ref_px is not None and ref_m is not None:
@@ -875,9 +985,9 @@ def analyze():
         result = estimate(trajectory, calib)
 
         # cruzamento de escalas (confiabilidade): mede a bola no plano do impacto
-        ball_impact = ballcal.ball_scale(
+        ball_impact = (ballcal.ball_scale(
             trajectory, ball_d_m, impact_frame=result.impact_frame
-        ) or ball_global
+        ) or ball_global) if prefs.get("usar_bola", True) else None
         calib_cross = None
         if calib_mode == "manual" and ball_impact:
             calib_cross = ballcal.cross_check(
@@ -929,7 +1039,8 @@ def analyze():
         # selo de confiança da medição (fps + calibração cruzada + rastreio)
         conf = confidence.evaluate(result, meta, fps, file_fps, calibracao)
         # pré-voo: qualidade da captura (lixo entra, lixo sai)
-        captura = preflight.check(trajectory, meta, result, calib, calibracao)
+        captura = (preflight.check(trajectory, meta, result, calib, calibracao)
+                   if prefs.get("previoo", True) else None)
 
         base = os.path.join(job_dir, "saque")
         report.write_trajectory_csv(base + "_trajetoria.csv", trajectory)
@@ -961,24 +1072,29 @@ def analyze():
         # relatório profissional: classificação + velocímetro + PDF
         cls = reportpro.classify(result.peak_kmh)
         # camada didática (linguagem simples para o aluno)
-        didatico = didactic.student_summary(summary, evalu, cls["nivel"])
-        glossario = didactic.glossario(bool(biomech))
+        didatico = (didactic.student_summary(summary, evalu, cls["nivel"])
+                    if prefs.get("didatico", True) else None)
+        glossario = (didactic.glossario(bool(biomech))
+                     if prefs.get("glossario", True) else None)
         # métricas que o operador marcou para não participar da leitura
         try:
             excluded_metrics = history.get_excluded_metrics()
         except Exception:
             excluded_metrics = set()
         # comparação com referências científicas
-        referencias = references.compare(summary, bio_summary, excluded_metrics)
+        referencias = (references.compare(summary, bio_summary, excluded_metrics)
+                       if prefs.get("referencias", True) else None)
         # motor inteligente: risco de lesão + músculos + treino (usa a ficha)
         try:
             profile = history.get_profile(athlete)
         except Exception:
             profile = None
-        inteligencia = engine.evaluate(summary, bio_summary, profile)
+        inteligencia = (engine.evaluate(summary, bio_summary, profile)
+                        if prefs.get("plano", True) else None)
 
         # benchmark vs. profissional (percentil + radar + o que falta para o pro)
-        bench = benchmark.evaluate(summary, bio_summary, excluded_metrics)
+        bench = (benchmark.evaluate(summary, bio_summary, excluded_metrics)
+                 if prefs.get("benchmark", True) else None)
         radar_url = None
         if bench and bench.get("tem_radar"):
             try:
@@ -1021,7 +1137,8 @@ def analyze():
                 biomech=bio_summary,
                 biomech_png=biomech.get("plot_path") if biomech else None,
                 evalu=evalu,
-                didatico_texto=didactic.plain_text(summary, evalu),
+                didatico_texto=(didactic.plain_text(summary, evalu)
+                                if prefs.get("didatico", True) else None),
                 referencias=referencias,
                 glossario=glossario,
                 inteligencia=inteligencia,

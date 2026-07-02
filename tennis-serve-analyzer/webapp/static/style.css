@@ -362,6 +362,10 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
 .s3d-controls input[type=range] { flex: 1; accent-color: var(--green-2); }
 .s3d-fases { display: block; }
 
+/* sessões posturais */
+.sessao-head { font-weight: 800; font-size: 13.5px; color: var(--green-dark);
+  margin: 16px 0 4px; padding-top: 10px; border-top: 2px solid var(--line); }
+
 /* manual do operador */
 .man-sum { cursor: pointer; font-size: 15px; padding: 2px 0; }
 .man-list { margin: 10px 0 2px; padding-left: 20px; }

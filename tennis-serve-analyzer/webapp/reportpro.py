@@ -370,74 +370,85 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                               all_serves=None, posture_first_img=None,
                               posturas=None, objetivo=None,
                               bodymap_png=None, pontos_corpo=None,
-                              comp=None, compare_png=None) -> None:
-    """Laudo completo do atleta: ficha + saque + golpe + postura (com fotos) +
-    plano + histórico completo + objetivo para o atleta."""
+                              comp=None, compare_png=None,
+                              secoes=None, analises=None) -> None:
+    """Laudo do atleta: ficha + saque + postura (fotos) + comparativo + mapa +
+    plano + histórico + objetivo. `secoes` (conjunto) permite montar um
+    relatório personalizado; None = tudo. `analises` = [(row, percurso_bytes)]
+    anexa o relatório completo de cada análise escolhida."""
     profile = profile or {}
+
+    def S(k):
+        return secoes is None or k in secoes
+
     with PdfPages(path) as pdf:
         # ---------------- Página 1: ficha + saque ----------------
-        fig = plt.figure(figsize=(8.27, 11.69))
-        _page_header(fig, athlete, "Laudo Consolidado do Atleta")
+        if S("ficha") or S("saque"):
+            fig = plt.figure(figsize=(8.27, 11.69))
+            _page_header(fig, athlete, "Laudo do Atleta")
+            y = 0.895
 
-        fig.text(0.06, 0.895, "Ficha do atleta", fontsize=12, fontweight="bold",
-                 color="#15803d")
-        info = [
-            ("Idade", f"{age} anos" if age is not None else "—"),
-            ("Altura", f"{int(profile['height_cm'])} cm" if profile.get("height_cm") else "—"),
-            ("IMC", imc if imc is not None else "—"),
-            ("Mão dominante", (profile.get("dominant_hand") or "—").capitalize()),
-            ("Nível", profile.get("level") or "—"),
-            ("Treino", f"{profile['train_hours']} h/sem" if profile.get("train_hours") else "—"),
-        ]
-        y = _info_boxes(fig, info, 0.825)
+            if S("ficha"):
+                fig.text(0.06, y, "Ficha do atleta", fontsize=12, fontweight="bold",
+                         color="#15803d")
+                info = [
+                    ("Idade", f"{age} anos" if age is not None else "—"),
+                    ("Altura", f"{int(profile['height_cm'])} cm" if profile.get("height_cm") else "—"),
+                    ("IMC", imc if imc is not None else "—"),
+                    ("Mão dominante", (profile.get("dominant_hand") or "—").capitalize()),
+                    ("Nível", profile.get("level") or "—"),
+                    ("Treino", f"{profile['train_hours']} h/sem" if profile.get("train_hours") else "—"),
+                ]
+                y = _info_boxes(fig, info, y - 0.07)
 
-        # texto clínico (lesões / dores / objetivos)
-        clin = []
-        if profile.get("injuries"):
-            clin.append(f"Lesões: {profile['injuries']}")
-        if profile.get("pain"):
-            clin.append(f"Dores atuais: {profile['pain']}")
-        if profile.get("goals"):
-            clin.append(f"Objetivos: {profile['goals']}")
-        if clin:
-            ax = fig.add_axes([0.06, y - 0.04, 0.88, 0.05]); ax.axis("off")
-            ax.text(0, 1, "\n".join(clin), fontsize=9, color="#334155", va="top",
-                    transform=ax.transAxes, wrap=True, linespacing=1.5)
-            y -= 0.07
+                clin = []
+                if profile.get("injuries"):
+                    clin.append(f"Lesões: {profile['injuries']}")
+                if profile.get("pain"):
+                    clin.append(f"Dores atuais: {profile['pain']}")
+                if profile.get("goals"):
+                    clin.append(f"Objetivos: {profile['goals']}")
+                if clin:
+                    ax = fig.add_axes([0.06, y - 0.04, 0.88, 0.05]); ax.axis("off")
+                    ax.text(0, 1, "\n".join(clin), fontsize=9, color="#334155",
+                            va="top", transform=ax.transAxes, wrap=True,
+                            linespacing=1.5)
+                    y -= 0.07
 
-        # resumo do saque
-        fig.text(0.06, y, "Evolução do saque", fontsize=12, fontweight="bold",
-                 color="#15803d")
-        if golpe:
-            gtxt = f"Último golpe reconhecido: {golpe.get('nome', '')}"
-            if golpe.get("automatico"):
-                gtxt += f" (auto · {golpe.get('confianca_pct', 0)}%)"
-            fig.text(0.94, y, gtxt, fontsize=9.5, color="#334155", ha="right")
-        y -= 0.012
-        if stats:
-            srv = [
-                ("Recorde", f"{stats.get('best', 0):.0f} km/h"),
-                ("Média", f"{stats.get('avg', 0):.0f} km/h"),
-                ("Último", f"{stats.get('last', 0):.0f} km/h"),
-                ("Evolução", f"{'+' if stats.get('delta', 0) >= 0 else ''}"
-                 f"{stats.get('delta', 0):.0f} km/h ({stats.get('delta_pct', 0):+.0f}%)"),
-            ]
-            y = _info_boxes(fig, srv, y - 0.07)
-        else:
-            fig.text(0.06, y - 0.03, "Sem análises de saque registradas.",
-                     fontsize=9.5, color="#64748b")
-            y -= 0.05
+            if S("saque"):
+                fig.text(0.06, y, "Evolução do saque", fontsize=12,
+                         fontweight="bold", color="#15803d")
+                if golpe:
+                    gtxt = f"Último golpe reconhecido: {golpe.get('nome', '')}"
+                    if golpe.get("automatico"):
+                        gtxt += f" (auto · {golpe.get('confianca_pct', 0)}%)"
+                    fig.text(0.94, y, gtxt, fontsize=9.5, color="#334155", ha="right")
+                y -= 0.012
+                if stats:
+                    srv = [
+                        ("Recorde", f"{stats.get('best', 0):.0f} km/h"),
+                        ("Média", f"{stats.get('avg', 0):.0f} km/h"),
+                        ("Último", f"{stats.get('last', 0):.0f} km/h"),
+                        ("Evolução", f"{'+' if stats.get('delta', 0) >= 0 else ''}"
+                         f"{stats.get('delta', 0):.0f} km/h ({stats.get('delta_pct', 0):+.0f}%)"),
+                    ]
+                    y = _info_boxes(fig, srv, y - 0.07)
+                else:
+                    fig.text(0.06, y - 0.03, "Sem análises de saque registradas.",
+                             fontsize=9.5, color="#64748b")
+                    y -= 0.05
 
-        if serve_png:
-            ax_p = fig.add_axes([0.06, max(0.10, y - 0.30), 0.88, 0.28]); ax_p.axis("off")
-            ax_p.imshow(_png_bytes_to_img(serve_png))
+                if serve_png:
+                    ax_p = fig.add_axes([0.06, max(0.10, y - 0.30), 0.88, 0.28])
+                    ax_p.axis("off")
+                    ax_p.imshow(_png_bytes_to_img(serve_png))
 
-        _signature(fig)
-        pdf.savefig(fig)
-        plt.close(fig)
+            _signature(fig)
+            pdf.savefig(fig)
+            plt.close(fig)
 
         # ---------------- Página 2: postura ----------------
-        if posture_png or last_posture:
+        if (posture_png or last_posture) and S("postura"):
             fig2 = plt.figure(figsize=(8.27, 11.69))
             _page_header(fig2, athlete, "Laudo Consolidado — Avaliação Postural")
 
@@ -506,7 +517,7 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             plt.close(fig2)
 
         # ---------------- Página: comparativo postural (antes × agora) ----------------
-        if compare_png and comp:
+        if compare_png and comp and S("comparativo"):
             figc = plt.figure(figsize=(8.27, 11.69))
             _page_header(figc, athlete, "Comparativo Postural — Antes × Agora")
             ax_c = figc.add_axes([0.08, 0.46, 0.84, 0.43]); ax_c.axis("off")
@@ -542,7 +553,7 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             plt.close(figc)
 
         # ---------------- Página: mapa corporal (boneco) ----------------
-        if bodymap_png:
+        if bodymap_png and S("mapa"):
             figm = plt.figure(figsize=(8.27, 11.69))
             _page_header(figm, athlete, "Mapa Corporal do Aluno")
             ax_m = figm.add_axes([0.08, 0.42, 0.84, 0.47]); ax_m.axis("off")
@@ -570,13 +581,13 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             plt.close(figm)
 
         # ---------------- Página 3: plano inteligente ----------------
-        if inteligencia:
+        if inteligencia and S("plano"):
             fig3 = _engine_page(athlete, inteligencia)
             pdf.savefig(fig3)
             plt.close(fig3)
 
         # ---------------- Página 4: histórico completo + objetivo ----------------
-        if all_serves or posturas or objetivo:
+        if (all_serves or posturas or objetivo) and S("historico"):
             fig4 = plt.figure(figsize=(8.27, 11.69))
             _page_header(fig4, athlete, "Histórico Completo e Objetivo")
             y = 0.90
@@ -630,6 +641,12 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             _signature(fig4)
             pdf.savefig(fig4)
             plt.close(fig4)
+
+        # -------- Anexos: relatório completo de cada análise escolhida --------
+        for row, tb in (analises or []):
+            for f in _analysis_figures(row, tb):
+                pdf.savefig(f)
+                plt.close(f)
 
 
 def write_manual_pdf(path: str, secoes: list, versao: str = "1.0") -> None:
@@ -704,9 +721,8 @@ def write_manual_pdf(path: str, secoes: list, versao: str = "1.0") -> None:
         plt.close(fig)
 
 
-def write_analysis_pdf(path: str, row: dict, percurso_png: bytes | None = None) -> None:
-    """Relatório completo de UMA análise já feita, reconstruído do banco:
-    velocidade + golpe + percurso + plano inteligente + biomecânica."""
+def _analysis_figures(row: dict, percurso_png: bytes | None = None) -> list:
+    """Páginas do relatório de UMA análise (para PDF próprio ou anexo do laudo)."""
     athlete = row.get("athlete", "Atleta")
     peak = float(row.get("peak_kmh") or 0)
     cls = classify(peak)
@@ -714,7 +730,8 @@ def write_analysis_pdf(path: str, row: dict, percurso_png: bytes | None = None) 
     data_br = f"{d[8:10]}/{d[5:7]}/{d[0:4]}" if len(d) >= 10 else d
     golpe = row.get("stroke")
 
-    with PdfPages(path) as pdf:
+    figs = []
+    if True:
         fig = plt.figure(figsize=(8.27, 11.69))
         _page_header(fig, athlete, f"Relatório do Saque — {data_br}")
 
@@ -750,17 +767,21 @@ def write_analysis_pdf(path: str, row: dict, percurso_png: bytes | None = None) 
             ax_p.imshow(_png_bytes_to_img(percurso_png))
 
         _signature(fig)
-        pdf.savefig(fig)
-        plt.close(fig)
+        figs.append(fig)
 
-        if row.get("intel"):
-            fi = _engine_page(athlete, row["intel"])
-            pdf.savefig(fi)
-            plt.close(fi)
-        if row.get("biomech"):
-            fb = _biomech_page(athlete, row["biomech"], None)
-            pdf.savefig(fb)
-            plt.close(fb)
+    if row.get("intel"):
+        figs.append(_engine_page(athlete, row["intel"]))
+    if row.get("biomech"):
+        figs.append(_biomech_page(athlete, row["biomech"], None))
+    return figs
+
+
+def write_analysis_pdf(path: str, row: dict, percurso_png: bytes | None = None) -> None:
+    """Relatório completo de UMA análise já feita, reconstruído do banco."""
+    with PdfPages(path) as pdf:
+        for f in _analysis_figures(row, percurso_png):
+            pdf.savefig(f)
+            plt.close(f)
 
 
 def _situacao_cor(sit):

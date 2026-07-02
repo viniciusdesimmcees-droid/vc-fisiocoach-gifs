@@ -255,6 +255,37 @@ def set_excluded_metrics(keys) -> None:
     set_setting("excluded_metrics", json.dumps(sorted(set(keys)), ensure_ascii=False))
 
 
+# Como a análise é feita: o operador liga/desliga cada bloco e define o padrão.
+DEFAULT_ANALYSIS_PREFS = {
+    "ball_diameter_cm": 6.7,   # diâmetro padrão da bola (foam/junior variam)
+    "usar_bola": True,         # verificação/calibração automática pela bola
+    "previoo": True,           # checagem da qualidade da captura
+    "didatico": True,          # resumo em palavras simples
+    "glossario": True,         # glossário de termos
+    "referencias": True,       # comparação com referências científicas
+    "benchmark": True,         # benchmark vs. profissional
+    "plano": True,             # plano inteligente (risco/músculos/treino)
+}
+
+
+def get_analysis_prefs() -> dict:
+    prefs = dict(DEFAULT_ANALYSIS_PREFS)
+    raw = get_setting("analysis_prefs")
+    if raw:
+        try:
+            for k, v in json.loads(raw).items():
+                if k in prefs:
+                    prefs[k] = v
+        except (ValueError, TypeError):
+            pass
+    return prefs
+
+
+def set_analysis_prefs(prefs: dict) -> None:
+    clean = {k: prefs[k] for k in DEFAULT_ANALYSIS_PREFS if k in prefs}
+    set_setting("analysis_prefs", json.dumps(clean, ensure_ascii=False))
+
+
 def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
                     stroke=None, intel=None, traj_bytes=None,
                     biomech=None) -> int:

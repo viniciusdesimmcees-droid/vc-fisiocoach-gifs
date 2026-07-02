@@ -28,7 +28,8 @@
               data-url="{{ url_for('laudo_atleta', athlete=athlete) }}"
               data-title="Laudo completo — {{ athlete }}">📤 Enviar ao aluno (WhatsApp, e-mail…)</button>
     </div>
-    <a class="pdf-btn export-btn" href="{{ url_for('exportar_atleta', athlete=athlete) }}" download>📦 Exportar livro de dados completo (ZIP: PDF + fotos + percursos da bola + JSON)</a>
+    <a class="pdf-btn" style="background:#c2410c; margin-top:0" href="{{ url_for('relatorio_form', athlete=athlete) }}">🧾 Montar relatório personalizado (marcar o que enviar)</a>
+    <a class="pdf-btn export-btn" style="margin-top:10px" href="{{ url_for('exportar_atleta', athlete=athlete) }}" download>📦 Exportar livro de dados completo (ZIP: PDF + fotos + percursos da bola + JSON)</a>
     <a class="pdf-btn boneco-btn" href="{{ url_for('boneco_atleta', athlete=athlete) }}">🧍‍♂️ Ver boneco 3D do aluno (pontos positivos e a trabalhar)</a>
     <div class="pdf-actions" style="margin-top:10px">
       <a class="pdf-btn boneco-btn" style="background:#a21caf" href="{{ url_for('boneco_comparar', athlete=athlete) }}">🆚 Comparativo 3D (antes × agora)</a>
@@ -140,28 +141,34 @@
       {% if posturas %}
       <img class="result" style="margin-top:12px" src="{{ url_for('chart_postura', athlete=athlete) }}" alt="Evolução postural">
 
-      {# comparativo primeira x última foto #}
-      {% set com_foto = posturas | selectattr('tem_imagem') | list %}
-      {% if com_foto|length >= 2 %}
-      <h3 class="bench-sub">Comparativo: primeira × última avaliação</h3>
+      {# comparativos por VISTA: frontal×frontal, lateral×lateral… nunca vistas misturadas #}
+      {% for par in pares_foto %}
+      <h3 class="bench-sub">Comparativo {{ par.view_label }}: primeira × última
+        {% if par.mesmo_dia %}<span class="fora-badge">mesmo dia</span>{% endif %}</h3>
       <div class="compare-photos">
         <figure>
-          <img src="{{ url_for('postura_imagem', assessment_id=com_foto[-1].id) }}" alt="Primeira avaliação" loading="lazy">
-          <figcaption>Primeira · {{ com_foto[-1].created_at[8:10] }}/{{ com_foto[-1].created_at[5:7] }}/{{ com_foto[-1].created_at[0:4] }}</figcaption>
+          <img src="{{ url_for('postura_imagem', assessment_id=par.antes.id) }}" alt="Primeira {{ par.view_label }}" loading="lazy">
+          <figcaption>Primeira · {{ par.antes.data }}</figcaption>
         </figure>
         <figure>
-          <img src="{{ url_for('postura_imagem', assessment_id=com_foto[0].id) }}" alt="Última avaliação" loading="lazy">
-          <figcaption>Última · {{ com_foto[0].created_at[8:10] }}/{{ com_foto[0].created_at[5:7] }}/{{ com_foto[0].created_at[0:4] }}</figcaption>
+          <img src="{{ url_for('postura_imagem', assessment_id=par.agora.id) }}" alt="Última {{ par.view_label }}" loading="lazy">
+          <figcaption>Última · {{ par.agora.data }}</figcaption>
         </figure>
       </div>
+      {% endfor %}
+      {% if pares_foto and pares_foto[0].mesmo_dia %}
+      <p class="note">As avaliações comparadas são do mesmo dia. Faça uma nova sessão
+        (outro dia) para o comparativo mostrar a evolução real.</p>
       {% endif %}
 
-      <p class="note" style="margin-top:10px">Avaliações ({{ posturas|length }}) — quanto menor o ângulo, mais simétrico.</p>
-      {% for p in posturas %}
+      <p class="note" style="margin-top:10px">Sessões ({{ sessoes|length }}) · avaliações ({{ posturas|length }}) — quanto menor o ângulo, mais simétrico.</p>
+      {% for s in sessoes %}
+      <div class="sessao-head">📅 Sessão de {{ s.data }} <span class="hint">— {{ s.itens|length }} avaliação(ões): {{ s.vistas }}</span></div>
+      {% for p in s.itens %}
       <div class="postura-hist-row">
         <div class="phist-head">
           {% if p.tem_imagem %}<a href="{{ url_for('postura_imagem', assessment_id=p.id) }}" target="_blank"><img class="phist-thumb" src="{{ url_for('postura_imagem', assessment_id=p.id) }}" alt="foto"></a>{% endif %}
-          <span><b>{{ p.created_at[8:10] }}/{{ p.created_at[5:7] }}/{{ p.created_at[0:4] }}</b> · {{ p.view_label }}</span>
+          <span><b>{{ p.view_label }}</b></span>
           <span class="phist-flag" style="background: {{ '#dc2626' if p.graves else ('#d97706' if p.alertas else '#15803d') }}">
             {{ '🔺' if p.graves else ('⚠️' if p.alertas else '✅') }} {{ p.alertas }} atenção
           </span>
@@ -181,6 +188,7 @@
           {% endfor %}
         </div>
       </div>
+      {% endfor %}
       {% endfor %}
       {% else %}
       <p class="note">Sem avaliações posturais ainda. Faça a primeira para acompanhar

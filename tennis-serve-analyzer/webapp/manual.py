@@ -6,7 +6,7 @@ escritos para o professor/operador, não para programador).
 
 from __future__ import annotations
 
-VERSAO = "1.0"
+VERSAO = "1.1"
 
 SECOES = [
     {"icone": "🎾", "titulo": "1. O que é o VF Tênis Scanner",
@@ -117,12 +117,20 @@ SECOES = [
          "Livro de dados (ZIP): TUDO do aluno — laudo, dados brutos em JSON, "
          "gráficos, todas as fotos posturais, o percurso da bola de cada saque e o "
          "relatório PDF de cada análise.",
+         "Relatório personalizado ('🧾 Montar relatório'): marque só as seções que "
+         "quer enviar ao atleta (ficha, saque, postura, comparativo, mapa, plano, "
+         "histórico) e anexe as análises individuais que escolher.",
          "Botão '📤 Enviar' em todo PDF: compartilha direto no WhatsApp, e-mail etc.",
      ]},
     {"icone": "⚙️", "titulo": "10. Configurações e armazenamento permanente",
      "itens": [
          "Configurações: desmarque métricas que não devem participar da leitura "
          "(referências e benchmark respeitam a escolha).",
+         "Como a análise é feita: ligue/desligue cada bloco (verificação pela bola, "
+         "pré-voo, didático, glossário, referências, benchmark, plano) e defina o "
+         "diâmetro padrão da bola (foam/junior variam).",
+         "Avaliações posturais do mesmo dia formam uma SESSÃO; o comparativo só "
+         "compara a mesma vista (frontal com frontal, lateral com lateral).",
          "Armazenamento permanente: confira o selo no topo do Histórico. Verde ✅ = "
          "tudo salvo num Dataset privado do Hugging Face; amarelo ⚠️ = configure o "
          "segredo HF_TOKEN (passo a passo na página 'Armazenamento permanente').",
