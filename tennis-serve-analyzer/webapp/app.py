@@ -110,7 +110,8 @@ def persistencia():
 
 @app.route("/historico/<athlete>")
 def historico_atleta(athlete):
-    h = history.get_history(athlete)
+    # mostra TODAS as análises (inclusive as fora do laudo) para o operador
+    h = history.get_history(athlete, only_included=False)
     profile = history.get_profile(athlete)
     posturas = history.get_posture_history(athlete)
     if not h and not profile and not posturas:
@@ -317,6 +318,19 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
     except Exception:
         traceback.print_exc()
 
+    # comparativo postural (primeira × última) para o PDF
+    comp = None
+    compare_png = None
+    try:
+        comp = avatar.compare(posturas)
+        if comp:
+            compare_png = bodymap.render_compare_png(
+                comp["antes"]["pontos"], comp["agora"]["pontos"],
+                comp["antes"]["data"], comp["agora"]["data"],
+            )
+    except Exception:
+        traceback.print_exc()
+
     fd, tmp = tempfile.mkstemp(suffix=".pdf")
     os.close(fd)
     try:
@@ -329,6 +343,7 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
             all_serves=all_serves, posture_first_img=first_img,
             posturas=posturas, objetivo=objetivo,
             bodymap_png=mapa_png, pontos_corpo=pontos_corpo,
+            comp=comp, compare_png=compare_png,
         )
         with open(tmp, "rb") as f:
             return f.read()
@@ -352,6 +367,44 @@ def laudo_atleta(athlete):
         data, mimetype="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="laudo_{athlete}.pdf"'},
     )
+
+
+@app.route("/analise/<int:analysis_id>/relatorio.pdf")
+def relatorio_analise(analysis_id):
+    """Relatório completo de qualquer análise já feita (reconstruído do banco)."""
+    row = history.get_analysis(analysis_id)
+    if not row:
+        abort(404)
+    percurso = history.get_analysis_traj(analysis_id)
+
+    import tempfile
+
+    fd, tmp = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        reportpro.write_analysis_pdf(tmp, row, percurso)
+        with open(tmp, "rb") as f:
+            data = f.read()
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    d = (row.get("created_at") or "")[:10]
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition":
+                 f'attachment; filename="saque_{row.get("athlete", "atleta")}_{d}.pdf"'},
+    )
+
+
+@app.route("/analise/<int:analysis_id>/incluir", methods=["POST"])
+def incluir_analise(analysis_id):
+    athlete = request.form.get("athlete", "")
+    incluir = request.form.get("incluir") == "1"
+    history.set_analysis_included(analysis_id, incluir)
+    return redirect(url_for("historico_atleta", athlete=athlete)
+                    if athlete else url_for("historico"))
 
 
 @app.route("/analise/<int:analysis_id>/percurso.png")
@@ -404,13 +457,31 @@ def exportar_atleta(athlete):
             if img:
                 d = (p.get("created_at") or "")[:10]
                 z.writestr(f"{_safe(athlete)}/fotos_avaliacao/{d}_id{p['id']}.png", img)
-        # 5) percursos da bola (print do scanner) de cada saque
-        for a in h:
+        # 5) percursos da bola + relatório completo de CADA análise já feita
+        h_all = history.get_history(athlete, only_included=False)
+        import tempfile
+        for a in h_all:
+            d = (a.get("created_at") or "")[:10]
             tb = history.get_analysis_traj(a["id"]) if a.get("tem_percurso") else None
             if tb:
-                d = (a.get("created_at") or "")[:10]
                 z.writestr(f"{_safe(athlete)}/percurso_bola/{d}_id{a['id']}_"
                            f"{(a.get('peak_kmh') or 0):.0f}kmh.png", tb)
+            try:
+                row = history.get_analysis(a["id"])
+                fd_r, tmp_r = tempfile.mkstemp(suffix=".pdf")
+                os.close(fd_r)
+                try:
+                    reportpro.write_analysis_pdf(tmp_r, row, tb)
+                    with open(tmp_r, "rb") as f_r:
+                        z.writestr(f"{_safe(athlete)}/relatorios_saque/{d}_id{a['id']}_"
+                                   f"{(a.get('peak_kmh') or 0):.0f}kmh.pdf", f_r.read())
+                finally:
+                    try:
+                        os.remove(tmp_r)
+                    except OSError:
+                        pass
+            except Exception:
+                traceback.print_exc()
         # 6) leia-me
         z.writestr(f"{_safe(athlete)}/LEIA-ME.txt",
                    "Livro de dados do atleta — VF Tenis Scanner\n"
@@ -421,7 +492,8 @@ def exportar_atleta(athlete):
                    "- dados.json: todos os dados brutos do atleta\n"
                    "- graficos/: evolucao do saque e da postura\n"
                    "- fotos_avaliacao/: fotos anotadas de cada avaliacao postural\n"
-                   "- percurso_bola/: o caminho da bola rastreado pelo scanner em cada saque\n")
+                   "- percurso_bola/: o caminho da bola rastreado pelo scanner em cada saque\n"
+                   "- relatorios_saque/: o relatorio completo em PDF de CADA analise ja feita\n")
 
     return Response(
         buf.getvalue(), mimetype="application/zip",

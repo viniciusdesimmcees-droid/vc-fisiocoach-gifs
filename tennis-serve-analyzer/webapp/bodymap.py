@@ -66,6 +66,44 @@ def _draw_body(ax):
     ax.axis("off")
 
 
+def _draw_markers(ax, pontos, positions):
+    count: dict[tuple, int] = {}
+    for p in pontos:
+        for (x, y) in positions.get(p.get("regiao"), []):
+            key = (round(x, 2), round(y, 2))
+            n = count[key] = count.get(key, 0) + 1
+            ax.scatter([x], [y + (n - 1) * 0.085], s=200,
+                       c=p.get("cor", "#94a3b8"), edgecolors="white",
+                       linewidths=1.6, zorder=5)
+
+
+def render_compare_png(antes_pontos, agora_pontos,
+                       data_antes: str = "", data_agora: str = "") -> bytes:
+    """Dois bonecos lado a lado: primeira × última avaliação postural."""
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.6, 5.2))
+    for ax, pontos, titulo in ((ax1, antes_pontos, f"Antes · {data_antes}"),
+                               (ax2, agora_pontos, f"Agora · {data_agora}")):
+        _draw_body(ax)
+        ax.set_title(titulo, fontsize=11, color="#334155")
+        _draw_markers(ax, pontos, FRONT_POS)
+
+    handles = [
+        Line2D([], [], marker="o", ls="", ms=10, mfc="#22c55e", mec="white",
+               label="Simétrico"),
+        Line2D([], [], marker="o", ls="", ms=10, mfc="#f59e0b", mec="white",
+               label="Assimetria leve"),
+        Line2D([], [], marker="o", ls="", ms=10, mfc="#ef4444", mec="white",
+               label="Assimetria a observar"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=3, frameon=False,
+               fontsize=9)
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=115, bbox_inches="tight")
+    plt.close(fig)
+    buf.seek(0)
+    return buf.read()
+
+
 def render_png(pontos: list, risco: dict | None = None) -> bytes:
     """Boneco frente + costas com os pontos coloridos. Retorna PNG bytes."""
     fig, (axf, axb) = plt.subplots(1, 2, figsize=(7.6, 5.4))

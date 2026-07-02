@@ -369,7 +369,8 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                               golpe=None, inteligencia=None,
                               all_serves=None, posture_first_img=None,
                               posturas=None, objetivo=None,
-                              bodymap_png=None, pontos_corpo=None) -> None:
+                              bodymap_png=None, pontos_corpo=None,
+                              comp=None, compare_png=None) -> None:
     """Laudo completo do atleta: ficha + saque + golpe + postura (com fotos) +
     plano + histórico completo + objetivo para o atleta."""
     profile = profile or {}
@@ -504,6 +505,42 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             pdf.savefig(fig2)
             plt.close(fig2)
 
+        # ---------------- Página: comparativo postural (antes × agora) ----------------
+        if compare_png and comp:
+            figc = plt.figure(figsize=(8.27, 11.69))
+            _page_header(figc, athlete, "Comparativo Postural — Antes × Agora")
+            ax_c = figc.add_axes([0.08, 0.46, 0.84, 0.43]); ax_c.axis("off")
+            ax_c.imshow(_png_bytes_to_img(compare_png))
+
+            y = 0.435
+            figc.text(0.06, y, "O que mudou", fontsize=12, fontweight="bold",
+                      color="#15803d")
+            y -= 0.020
+            figc.text(0.06, y, comp.get("resumo", ""), fontsize=9.5,
+                      fontweight="bold", color="#334155")
+            y -= 0.028
+            for d in comp.get("deltas", [])[:10]:
+                figc.text(0.07, y, d.get("nome", ""), fontsize=9.5,
+                          fontweight="bold", color="#0f1714")
+                figc.text(0.50, y, f"{d.get('antes', '')} → {d.get('agora', '')}",
+                          fontsize=9, color="#334155")
+                figc.text(0.94, y, d.get("verdito", ""), fontsize=9,
+                          fontweight="bold", color=d.get("cor", "#334155"),
+                          ha="right")
+                figc.add_artist(plt.Line2D([0.06, 0.94], [y - 0.010, y - 0.010],
+                                           color="#eef2f0", lw=0.8))
+                y -= 0.026
+
+            ax_n = figc.add_axes([0.06, 0.09, 0.88, 0.04]); ax_n.axis("off")
+            ax_n.text(0, 1, "Comparacao medida a medida entre a primeira e a ultima "
+                      "avaliacao postural. Quanto menor o angulo de assimetria, "
+                      "melhor. Versao 3D interativa disponivel no aplicativo.",
+                      fontsize=8, color="#94a3b8", va="top",
+                      transform=ax_n.transAxes, wrap=True, linespacing=1.4)
+            _signature(figc)
+            pdf.savefig(figc)
+            plt.close(figc)
+
         # ---------------- Página: mapa corporal (boneco) ----------------
         if bodymap_png:
             figm = plt.figure(figsize=(8.27, 11.69))
@@ -593,6 +630,65 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             _signature(fig4)
             pdf.savefig(fig4)
             plt.close(fig4)
+
+
+def write_analysis_pdf(path: str, row: dict, percurso_png: bytes | None = None) -> None:
+    """Relatório completo de UMA análise já feita, reconstruído do banco:
+    velocidade + golpe + percurso + plano inteligente + biomecânica."""
+    athlete = row.get("athlete", "Atleta")
+    peak = float(row.get("peak_kmh") or 0)
+    cls = classify(peak)
+    d = (row.get("created_at") or "")[:10]
+    data_br = f"{d[8:10]}/{d[5:7]}/{d[0:4]}" if len(d) >= 10 else d
+    golpe = row.get("stroke")
+
+    with PdfPages(path) as pdf:
+        fig = plt.figure(figsize=(8.27, 11.69))
+        _page_header(fig, athlete, f"Relatório do Saque — {data_br}")
+
+        if golpe:
+            gtxt = f"Golpe: {golpe.get('nome', '')}"
+            if golpe.get("automatico"):
+                gtxt += f" (auto · confianca {golpe.get('confianca_pct', 0)}%)"
+            fig.text(0.06, 0.895, gtxt, fontsize=10, fontweight="bold",
+                     color="#15803d")
+
+        # velocímetro + classificação
+        ax_g = fig.add_axes([0.08, 0.60, 0.5, 0.26])
+        draw_gauge(ax_g, peak, cls)
+        fig.text(0.62, 0.80, f"Classificação: {cls['nivel']}", fontsize=12,
+                 fontweight="bold", color=cls["cor"])
+        fig.text(0.62, 0.775, cls["faixa"], fontsize=10, color="#64748b")
+        ax_d = fig.add_axes([0.62, 0.63, 0.32, 0.12]); ax_d.axis("off")
+        ax_d.text(0, 1, cls["descricao"], fontsize=9.5, color="#64748b",
+                  va="top", wrap=True, transform=ax_d.transAxes)
+
+        _info_boxes(fig, [
+            ("Velocidade de pico", f"{peak:.0f} km/h"),
+            ("Velocidade média", f"{(row.get('mean_kmh') or 0):.0f} km/h"),
+            ("Captura", f"{(row.get('fps') or 0):.0f} fps · detector {row.get('detector', '—')}"),
+            ("Data da análise", data_br),
+        ], 0.52)
+
+        # percurso da bola (prova visual do que foi medido)
+        if percurso_png:
+            fig.text(0.06, 0.40, "Percurso da bola rastreado", fontsize=12,
+                     fontweight="bold", color="#15803d")
+            ax_p = fig.add_axes([0.08, 0.13, 0.84, 0.26]); ax_p.axis("off")
+            ax_p.imshow(_png_bytes_to_img(percurso_png))
+
+        _signature(fig)
+        pdf.savefig(fig)
+        plt.close(fig)
+
+        if row.get("intel"):
+            fi = _engine_page(athlete, row["intel"])
+            pdf.savefig(fi)
+            plt.close(fi)
+        if row.get("biomech"):
+            fb = _biomech_page(athlete, row["biomech"], None)
+            pdf.savefig(fb)
+            plt.close(fb)
 
 
 def _situacao_cor(sit):

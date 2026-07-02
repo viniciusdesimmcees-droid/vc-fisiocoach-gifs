@@ -41,12 +41,20 @@
           <b id="s3d-nome">Preparação</b>
           <span id="s3d-info"></span>
         </div>
+        <!-- controles do modo apresentação (aparecem só em tela cheia) -->
+        <div class="s3d-fsbar">
+          <button type="button" id="fs-play">⏸️</button>
+          <input type="range" id="fs-scrub" min="0" max="1000" value="0">
+          <button type="button" id="fs-speed">1×</button>
+          <button type="button" id="fs-exit">✕</button>
+        </div>
       </div>
 
       <div class="s3d-controls">
         <button type="button" id="s3d-play" class="ghost s3d-btn">⏸️ Pausar</button>
         <input type="range" id="s3d-scrub" min="0" max="1000" value="0">
         <button type="button" id="s3d-speed" class="ghost s3d-btn">1×</button>
+        <button type="button" id="s3d-fs" class="ghost s3d-btn">⛶ Apresentar</button>
       </div>
       <p class="note">🖐️ Arraste para girar em volta do atleta · use a barra para avançar
         quadro a quadro. Animação <b>ilustrativa guiada pelos ângulos medidos</b> — não é
@@ -155,23 +163,52 @@
       rig.pelvis.position.y = 0.94 + p.py;
     }
 
-    // controles
+    // controles (normais + overlay do modo apresentação)
     let playing = true, t = 0, speed = 1;
     const DUR = 3800; // ms por ciclo
-    const scrub = document.getElementById('s3d-scrub');
+    const scrubs = [document.getElementById('s3d-scrub'), document.getElementById('fs-scrub')];
     const btnPlay = document.getElementById('s3d-play');
+    const fsPlay = document.getElementById('fs-play');
     const btnSpeed = document.getElementById('s3d-speed');
-    btnPlay.addEventListener('click', ()=>{
-      playing = !playing;
-      btnPlay.textContent = playing ? '⏸️ Pausar' : '▶️ Reproduzir';
-    });
-    btnSpeed.addEventListener('click', ()=>{
+    const fsSpeed = document.getElementById('fs-speed');
+
+    function setPlaying(p){
+      playing = p;
+      btnPlay.textContent = p ? '⏸️ Pausar' : '▶️ Reproduzir';
+      fsPlay.textContent = p ? '⏸️' : '▶️';
+    }
+    function toggleSpeed(){
       speed = speed === 1 ? 0.4 : 1;
       btnSpeed.textContent = speed === 1 ? '1×' : '0.4× (câmera lenta)';
-    });
-    scrub.addEventListener('input', ()=>{
-      playing = false; btnPlay.textContent = '▶️ Reproduzir';
-      t = parseInt(scrub.value) / 1000;
+      fsSpeed.textContent = speed === 1 ? '1×' : '0.4×';
+    }
+    btnPlay.addEventListener('click', ()=>setPlaying(!playing));
+    fsPlay.addEventListener('click', ()=>setPlaying(!playing));
+    btnSpeed.addEventListener('click', toggleSpeed);
+    fsSpeed.addEventListener('click', toggleSpeed);
+    scrubs.forEach(s=>s.addEventListener('input', ()=>{
+      setPlaying(false);
+      t = parseInt(s.value) / 1000;
+    }));
+
+    // ---- modo apresentação (tela cheia na quadra) ----
+    let wakeLock = null;
+    async function enterFs(){
+      wrap.classList.add('fsmode');
+      try { if (wrap.requestFullscreen) await wrap.requestFullscreen(); } catch(e){}
+      try { if (navigator.wakeLock) wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
+      resize();
+    }
+    async function exitFs(){
+      wrap.classList.remove('fsmode');
+      try { if (document.fullscreenElement) await document.exitFullscreen(); } catch(e){}
+      try { if (wakeLock) { wakeLock.release(); wakeLock = null; } } catch(e){}
+      resize();
+    }
+    document.getElementById('s3d-fs').addEventListener('click', enterFs);
+    document.getElementById('fs-exit').addEventListener('click', exitFs);
+    document.addEventListener('fullscreenchange', ()=>{
+      if (!document.fullscreenElement && wrap.classList.contains('fsmode')) exitFs();
     });
 
     // lista de fases
@@ -194,8 +231,14 @@
     });
 
     function resize(){
-      const w = wrap.clientWidth, h = Math.min(Math.round(w*1.05), 520);
-      wrap.style.height = h + 'px';
+      let w, h;
+      if (wrap.classList.contains('fsmode')){
+        w = window.innerWidth; h = window.innerHeight;
+        wrap.style.height = '';
+      } else {
+        w = wrap.clientWidth; h = Math.min(Math.round(w*1.05), 520);
+        wrap.style.height = h + 'px';
+      }
       renderer.setSize(w, h, false);
       camera.aspect = w/h; camera.updateProjectionMatrix();
     }
@@ -208,7 +251,8 @@
       if (playing){
         t += (dt / DUR) * speed;
         if (t > 1.18) t = 0;               // pequena pausa no fim do ciclo
-        scrub.value = Math.round(Math.min(1, t) * 1000);
+        const sv = Math.round(Math.min(1, t) * 1000);
+        scrubs.forEach(s=>{ s.value = sv; });
       }
       const tt = Math.min(1, t);
       const {v, fase} = poseAt(tt);

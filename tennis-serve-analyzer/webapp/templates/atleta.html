@@ -88,13 +88,27 @@
       <h2>Análises ({{ rows|length }})</h2>
       <p class="note">Corrija ou exclua uma análise feita errada usando ✏️.</p>
       {% for r in rows %}
-      <div class="analise-row">
+      <div class="analise-row {{ 'fora-laudo' if not r.incluida else '' }}">
         <div class="analise-head">
-          <span>{{ r.created_at[8:10] }}/{{ r.created_at[5:7] }}/{{ r.created_at[0:4] }}</span>
+          <span>{{ r.created_at[8:10] }}/{{ r.created_at[5:7] }}/{{ r.created_at[0:4] }}
+            {% if not r.incluida %}<span class="fora-badge">fora do laudo</span>{% endif %}</span>
           <span>média {{ "%.0f"|format(r.mean_kmh) }} · <b>pico {{ "%.0f"|format(r.peak_kmh) }} km/h</b></span>
           <details class="analise-edit">
             <summary>✏️</summary>
+            <a class="back" href="{{ url_for('relatorio_analise', analysis_id=r.id) }}" download>📄 Baixar relatório desta análise (PDF)</a><br>
             {% if r.tem_percurso %}<a class="back" href="{{ url_for('analise_percurso', analysis_id=r.id) }}" target="_blank">🎯 Ver percurso da bola ↗</a>{% endif %}
+            <form action="{{ url_for('incluir_analise', analysis_id=r.id) }}" method="post" style="margin-top:8px">
+              <input type="hidden" name="athlete" value="{{ athlete }}">
+              <input type="hidden" name="incluir" value="{{ '0' if r.incluida else '1' }}">
+              {% if r.incluida %}
+              <button type="submit" class="ghost" style="width:100%">🚫 Tirar do laudo e das estatísticas</button>
+              {% else %}
+              <button type="submit" style="width:100%; margin-top:0">✅ Voltar a incluir no laudo</button>
+              {% endif %}
+            </form>
+            <p class="note" style="margin-top:6px">Análises fora do laudo continuam guardadas,
+              mas não entram nas estatísticas, gráficos nem no laudo consolidado — útil quando
+              a captura ficou ruim e derrubaria a confiabilidade.</p>
             <form action="{{ url_for('editar_analise', analysis_id=r.id) }}" method="post" class="edit-form">
               <input type="hidden" name="athlete" value="{{ athlete }}">
               <div class="grid">

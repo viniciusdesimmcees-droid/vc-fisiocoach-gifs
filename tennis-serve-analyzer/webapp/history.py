@@ -97,6 +97,9 @@ def init_db() -> None:
             c.execute("ALTER TABLE analyses ADD COLUMN traj_blob BLOB")
         if "biomech" not in existing:
             c.execute("ALTER TABLE analyses ADD COLUMN biomech TEXT")
+        # incluir=0 tira a análise dos laudos/estatísticas (ex.: captura ruim)
+        if "incluir" not in existing:
+            c.execute("ALTER TABLE analyses ADD COLUMN incluir INTEGER DEFAULT 1")
         c.execute(
             """CREATE TABLE IF NOT EXISTS athletes (
                 name TEXT PRIMARY KEY,
@@ -432,7 +435,8 @@ def list_athletes() -> list[dict]:
         serve = {r["athlete"]: dict(r) for r in c.execute(
             """SELECT athlete, COUNT(*) AS n, MAX(peak_kmh) AS best,
                       AVG(peak_kmh) AS avg, MAX(created_at) AS last
-               FROM analyses GROUP BY athlete""")}
+               FROM analyses WHERE COALESCE(incluir, 1) = 1
+               GROUP BY athlete""")}
         post = {r["athlete"]: r["n"] for r in c.execute(
             "SELECT athlete, COUNT(*) AS n FROM posture_assessments GROUP BY athlete")}
         profs = {r["name"] for r in c.execute("SELECT name FROM athletes")}
@@ -465,18 +469,46 @@ def export_data(athlete: str) -> dict:
     }
 
 
-def get_history(athlete: str) -> list[dict]:
+def get_history(athlete: str, only_included: bool = True) -> list[dict]:
+    """Análises do atleta. `only_included=True` (padrão) filtra as marcadas
+    para não entrar nos laudos/estatísticas."""
+    q = "SELECT * FROM analyses WHERE athlete = ?"
+    if only_included:
+        q += " AND COALESCE(incluir, 1) = 1"
+    q += " ORDER BY created_at"
     with _conn() as c:
-        rows = c.execute(
-            "SELECT * FROM analyses WHERE athlete = ? ORDER BY created_at",
-            (athlete,),
-        ).fetchall()
+        rows = c.execute(q, (athlete,)).fetchall()
     out = []
     for r in rows:
         d = dict(r)
         d["tem_percurso"] = d.pop("traj_blob", None) is not None
+        d["incluida"] = (d.get("incluir") is None) or bool(d.get("incluir"))
         out.append(d)
     return out
+
+
+def set_analysis_included(analysis_id: int, included: bool) -> None:
+    with _conn() as c:
+        c.execute("UPDATE analyses SET incluir = ? WHERE id = ?",
+                  (1 if included else 0, analysis_id))
+    _sync()
+
+
+def get_analysis(analysis_id: int) -> dict | None:
+    """Uma análise completa, com golpe/plano/biomecânica já decodificados."""
+    with _conn() as c:
+        row = c.execute("SELECT * FROM analyses WHERE id = ?",
+                        (analysis_id,)).fetchone()
+    if not row:
+        return None
+    d = dict(row)
+    d["tem_percurso"] = d.pop("traj_blob", None) is not None
+    for campo in ("stroke", "intel", "biomech"):
+        try:
+            d[campo] = json.loads(d[campo]) if d.get(campo) else None
+        except (ValueError, TypeError):
+            d[campo] = None
+    return d
 
 
 def athlete_stats(athlete: str) -> dict:

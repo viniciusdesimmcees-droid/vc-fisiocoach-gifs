@@ -362,6 +362,25 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
 .s3d-controls input[type=range] { flex: 1; accent-color: var(--green-2); }
 .s3d-fases { display: block; }
 
+/* análise fora do laudo */
+.analise-row.fora-laudo { opacity: 0.6; }
+.fora-badge { font-size: 10.5px; font-weight: 800; color: #b45309;
+  background: rgba(217,119,6,.12); border: 1px solid #d97706;
+  border-radius: 999px; padding: 2px 8px; margin-left: 6px; }
+
+/* modo apresentação (tela cheia na quadra) */
+.b3d-wrap.fsmode { position: fixed; inset: 0; z-index: 1000; border-radius: 0; }
+.b3d-wrap.fsmode .s3d-phase { top: 18px; left: 18px; right: 18px; }
+.b3d-wrap.fsmode .s3d-phase b { font-size: 26px; }
+.b3d-wrap.fsmode .s3d-phase span { font-size: 16px; }
+.s3d-fsbar { display: none; position: absolute; left: 14px; right: 14px; bottom: 16px;
+  gap: 10px; align-items: center; }
+.b3d-wrap.fsmode .s3d-fsbar { display: flex; }
+.s3d-fsbar button { width: auto; margin: 0; padding: 10px 16px; font-size: 17px;
+  border-radius: 12px; border: 0; background: rgba(255,255,255,.16); color: #fff;
+  box-shadow: none; cursor: pointer; }
+.s3d-fsbar input[type=range] { flex: 1; accent-color: #22c55e; }
+
 /* comparativo 3D */
 .cmp-labels { display: flex; justify-content: space-around; margin: 6px 0; }
 .cmp-labels span { font-size: 13px; font-weight: 800; color: var(--green-dark); }
