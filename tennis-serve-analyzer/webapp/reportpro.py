@@ -632,6 +632,78 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             plt.close(fig4)
 
 
+def write_manual_pdf(path: str, secoes: list, versao: str = "1.0") -> None:
+    """Manual do Operador em PDF: capa + seções com paginação automática."""
+    import re
+    import textwrap
+    from datetime import date
+
+    # remove emojis (a fonte do PDF não os tem; a versão web mantém)
+    _emoji = re.compile("[\U0001F000-\U0001FAFF☀-➿⬀-⯿️]")
+
+    def _limpo(s):
+        return _emoji.sub("", s).replace("  ", " ").strip()
+
+    with PdfPages(path) as pdf:
+        # ---- capa ----
+        fig = plt.figure(figsize=(8.27, 11.69))
+        fig.patch.set_facecolor("white")
+        logo = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "static", "logo.png")
+        if os.path.exists(logo):
+            import matplotlib.image as mpimg
+            ax_l = fig.add_axes([0.38, 0.66, 0.24, 0.17]); ax_l.axis("off")
+            ax_l.imshow(mpimg.imread(logo))
+        fig.text(0.5, 0.58, "VF Tênis Scanner", fontsize=30, fontweight="bold",
+                 color="#15803d", ha="center")
+        fig.text(0.5, 0.535, "Manual do Operador", fontsize=18,
+                 color="#334155", ha="center")
+        fig.text(0.5, 0.49, f"Versão {versao} · {date.today().strftime('%d/%m/%Y')}",
+                 fontsize=11, color="#64748b", ha="center")
+        fig.text(0.5, 0.42, "Guia completo de uso para professores e avaliadores:",
+                 fontsize=10.5, color="#334155", ha="center")
+        fig.text(0.5, 0.395, "captura, análise do saque, postura, boneco 3D, "
+                 "laudos, exportação e confiabilidade.",
+                 fontsize=10.5, color="#334155", ha="center")
+        _signature(fig)
+        pdf.savefig(fig)
+        plt.close(fig)
+
+        # ---- seções com fluxo/paginção ----
+        def nova_pagina():
+            f = plt.figure(figsize=(8.27, 11.69))
+            _page_header(f, "Manual do Operador", "VF Tênis Scanner — guia de uso")
+            return f, 0.885
+
+        fig, y = nova_pagina()
+        for sec in secoes:
+            # quebra de página se o título não couber com pelo menos 2 linhas
+            if y < 0.20:
+                _signature(fig); pdf.savefig(fig); plt.close(fig)
+                fig, y = nova_pagina()
+            fig.text(0.06, y, sec["titulo"], fontsize=12.5, fontweight="bold",
+                     color="#15803d")
+            y -= 0.026
+            for item in sec["itens"]:
+                linhas = textwrap.wrap(_limpo(item), width=98)
+                alt = 0.0165 * len(linhas) + 0.007
+                if y - alt < 0.13:
+                    _signature(fig); pdf.savefig(fig); plt.close(fig)
+                    fig, y = nova_pagina()
+                    fig.text(0.06, y, sec["titulo"] + " (cont.)", fontsize=11,
+                             fontweight="bold", color="#15803d")
+                    y -= 0.024
+                fig.text(0.065, y, "•", fontsize=10, color="#15803d")
+                for li, ln in enumerate(linhas):
+                    fig.text(0.085, y - li * 0.0155, ln, fontsize=9,
+                             color="#334155")
+                y -= alt
+            y -= 0.014
+        _signature(fig)
+        pdf.savefig(fig)
+        plt.close(fig)
+
+
 def write_analysis_pdf(path: str, row: dict, percurso_png: bytes | None = None) -> None:
     """Relatório completo de UMA análise já feita, reconstruído do banco:
     velocidade + golpe + percurso + plano inteligente + biomecânica."""

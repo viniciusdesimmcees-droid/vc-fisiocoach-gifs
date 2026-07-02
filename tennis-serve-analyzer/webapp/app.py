@@ -53,6 +53,7 @@ import ballpath  # noqa: E402
 import storage  # noqa: E402
 import avatar  # noqa: E402
 import bodymap  # noqa: E402
+import manual  # noqa: E402
 
 history.init_db()
 
@@ -694,6 +695,33 @@ def postura_analisar():
             os.remove(in_path)
         except OSError:
             pass
+
+
+@app.route("/manual")
+def manual_page():
+    return render_template("manual.html", secoes=manual.SECOES, versao=manual.VERSAO)
+
+
+@app.route("/manual.pdf")
+def manual_pdf():
+    import tempfile
+
+    fd, tmp = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        reportpro.write_manual_pdf(tmp, manual.SECOES, manual.VERSAO)
+        with open(tmp, "rb") as f:
+            data = f.read()
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition":
+                 'attachment; filename="manual_operador_vf_tenis_scanner.pdf"'},
+    )
 
 
 @app.route("/protocolo")

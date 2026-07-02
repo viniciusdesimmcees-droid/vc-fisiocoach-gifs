@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manual do Operador — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Manual do Operador</h1>
+      <span>Guia completo de uso — versão {{ versao }}</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('index') }}">← Voltar</a>
+
+    <div class="pdf-actions">
+      <a class="pdf-btn" href="{{ url_for('manual_pdf') }}" download>⬇️ Baixar manual completo (PDF)</a>
+      <button type="button" class="pdf-btn share-btn share-pdf"
+              data-url="{{ url_for('manual_pdf') }}"
+              data-title="Manual do Operador — VF Tênis Scanner">📤 Enviar a um professor</button>
+    </div>
+
+    {% for s in secoes %}
+    <div class="card">
+      <details {{ 'open' if loop.first else '' }}>
+        <summary class="man-sum">{{ s.icone }} <b>{{ s.titulo }}</b></summary>
+        <ul class="man-list">
+          {% for item in s.itens %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+      </details>
+    </div>
+    {% endfor %}
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+  <script src="{{ url_for('static', filename='share.js') }}"></script>
+</body>
+</html>
