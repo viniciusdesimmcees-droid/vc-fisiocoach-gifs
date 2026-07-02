@@ -29,6 +29,7 @@
               data-title="Laudo completo — {{ athlete }}">📤 Enviar ao aluno (WhatsApp, e-mail…)</button>
     </div>
     <a class="pdf-btn export-btn" href="{{ url_for('exportar_atleta', athlete=athlete) }}" download>📦 Exportar livro de dados completo (ZIP: PDF + fotos + percursos da bola + JSON)</a>
+    <a class="pdf-btn boneco-btn" href="{{ url_for('boneco_atleta', athlete=athlete) }}">🧍‍♂️ Ver boneco 3D do aluno (pontos positivos e a trabalhar)</a>
 
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">

@@ -51,6 +51,7 @@ import benchmark  # noqa: E402
 import metrics  # noqa: E402
 import ballpath  # noqa: E402
 import storage  # noqa: E402
+import avatar  # noqa: E402
 
 history.init_db()
 
@@ -172,6 +173,17 @@ def excluir_postura(assessment_id):
     history.delete_posture(assessment_id)
     return redirect(url_for("historico_atleta", athlete=athlete)
                     if athlete else url_for("historico"))
+
+
+@app.route("/atleta/<athlete>/boneco")
+def boneco_atleta(athlete):
+    profile = history.get_profile(athlete)
+    posturas = history.get_posture_history(athlete)
+    _golpe, intel = history.latest_extras(athlete)
+    if not profile and not posturas and not intel:
+        abort(404)
+    pontos, risco = avatar.build(profile, posturas, intel)
+    return render_template("boneco.html", athlete=athlete, pontos=pontos, risco=risco)
 
 
 @app.route("/atleta/<athlete>/renomear", methods=["POST"])

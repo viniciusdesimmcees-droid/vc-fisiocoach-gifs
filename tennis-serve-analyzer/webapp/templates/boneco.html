@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boneco 3D — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Boneco 3D — {{ athlete }}</h1>
+      <span>Gire o corpo e toque nos pontos da avaliação</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('historico_atleta', athlete=athlete) }}">← Voltar ao aluno</a>
+
+    <div class="card">
+      <div class="b3d-top">
+        {% if risco %}
+        <span class="b3d-risco" style="background: {{ risco.cor }}">Risco de lesão: {{ risco.nivel }}</span>
+        {% endif %}
+        <span class="b3d-legend"><i style="background:#22c55e"></i> positivo</span>
+        <span class="b3d-legend"><i style="background:#f59e0b"></i> atenção / trabalhar</span>
+        <span class="b3d-legend"><i style="background:#ef4444"></i> atenção maior</span>
+      </div>
+
+      <div id="b3d-wrap" class="b3d-wrap">
+        <canvas id="b3d"></canvas>
+        {% if not pontos %}
+        <div class="b3d-empty">Sem avaliações ainda — faça uma avaliação postural e uma
+          análise de saque para os pontos aparecerem no corpo.</div>
+        {% endif %}
+      </div>
+      <p class="note">🖐️ Arraste para girar · role/aproxime para zoom · toque num ponto
+        para ver a explicação. O boneco é um avatar ilustrativo — os pontos e textos vêm
+        das avaliações reais do aluno.</p>
+
+      <div id="b3d-info" class="b3d-info" style="display:none">
+        <span id="b3d-info-badge" class="b3d-badge"></span>
+        <b id="b3d-info-titulo"></b>
+        <p id="b3d-info-texto"></p>
+        <span id="b3d-info-origem" class="hint"></span>
+      </div>
+    </div>
+
+    {% if pontos %}
+    <div class="card">
+      <h2>Pontos da avaliação ({{ pontos|length }})</h2>
+      <div class="b3d-list">
+        {% for p in pontos %}
+        <button type="button" class="b3d-item" data-idx="{{ loop.index0 }}">
+          <i style="background: {{ p.cor }}"></i>
+          <span class="b3d-item-t">{{ p.titulo }}</span>
+          <span class="b3d-item-s" style="color: {{ p.cor }}">{{ p.rotulo }}</span>
+        </button>
+        {% endfor %}
+      </div>
+      <p class="note">Toque num item: o boneco gira até o ponto e mostra a explicação.</p>
+    </div>
+    {% endif %}
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='three.min.js') }}"></script>
+  <script>
+    const PONTOS = {{ pontos | tojson }};
+    // posições 3D de cada região (lado direito do atleta = x negativo, de frente)
+    const REG = {
+      cabeca:[[0,1.62,0.10]],
+      trapezio:[[0.12,1.46,-0.05],[-0.12,1.46,-0.05]],
+      ombros:[[0.26,1.38,0.02],[-0.26,1.38,0.02]],
+      ombro_dir:[[-0.26,1.38,0.02]], ombro_esq:[[0.26,1.38,0.02]],
+      peito:[[0,1.27,0.15]],
+      costas:[[0,1.24,-0.15]],
+      abdomen:[[0,1.04,0.14]],
+      lombar:[[0,1.00,-0.14]],
+      tronco:[[0,1.15,0.16]],
+      braco_dir:[[-0.33,1.14,0.04]], braco_esq:[[0.33,1.14,0.04]],
+      antebraco_dir:[[-0.40,0.90,0.06]], antebraco_esq:[[0.40,0.90,0.06]],
+      pelvis:[[0,0.94,0.13]],
+      gluteos:[[0.10,0.90,-0.13],[-0.10,0.90,-0.13]],
+      coxas:[[0.12,0.64,0.11],[-0.12,0.64,0.11]],
+      joelhos:[[0.12,0.46,0.09],[-0.12,0.46,0.09]],
+      panturrilhas:[[0.12,0.26,-0.09],[-0.12,0.26,-0.09]],
+    };
+
+    const canvas = document.getElementById('b3d');
+    const wrap = document.getElementById('b3d-wrap');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+    camera.position.set(0, 1.15, 3.1);
+    camera.lookAt(0, 1.0, 0);
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x3c5546, 1.05));
+    const dir = new THREE.DirectionalLight(0xffffff, 0.7);
+    dir.position.set(2, 3, 2); scene.add(dir);
+
+    const body = new THREE.Group(); scene.add(body);
+    const mat = new THREE.MeshStandardMaterial({color:0xdfe8e2, roughness:0.55, metalness:0.05});
+    const V = (a)=>new THREE.Vector3(a[0],a[1],a[2]);
+
+    function limb(a, b, r){
+      a=V(a); b=V(b);
+      const d = new THREE.Vector3().subVectors(b, a), len = d.length();
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r*0.85, len, 16), mat);
+      m.position.copy(a).addScaledVector(d, 0.5);
+      m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), d.clone().normalize());
+      body.add(m); return m;
+    }
+    function ball(p, r, sy, sz){
+      const m = new THREE.Mesh(new THREE.SphereGeometry(r, 22, 18), mat);
+      m.position.copy(V(p)); m.scale.set(1, sy||1, sz||1); body.add(m); return m;
+    }
+    // cabeça, pescoço, tronco, pélvis
+    ball([0,1.62,0], 0.115, 1.08, 0.95);
+    limb([0,1.46,0],[0,1.54,0],0.05);
+    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.17,0.135,0.50,20), mat);
+    torso.position.set(0,1.22,0); torso.scale.z=0.72; body.add(torso);
+    ball([0,0.94,0],0.15,0.72,0.72);
+    // braços
+    [[1,'esq'],[-1,'dir']].forEach(([s])=>{
+      ball([s*0.23,1.39,0],0.062);
+      limb([s*0.23,1.39,0],[s*0.32,1.10,0.02],0.052);
+      ball([s*0.32,1.10,0.02],0.052);
+      limb([s*0.32,1.10,0.02],[s*0.39,0.85,0.06],0.045);
+      ball([s*0.40,0.82,0.07],0.052);
+    });
+    // pernas
+    [1,-1].forEach((s)=>{
+      limb([s*0.11,0.92,0],[s*0.12,0.50,0.02],0.075);
+      ball([s*0.12,0.49,0.02],0.062);
+      limb([s*0.12,0.49,0.02],[s*0.13,0.10,0],0.055);
+      const foot = new THREE.Mesh(new THREE.BoxGeometry(0.10,0.06,0.20), mat);
+      foot.position.set(s*0.13,0.045,0.05); body.add(foot);
+    });
+    // base
+    const ground = new THREE.Mesh(new THREE.CircleGeometry(0.75, 40),
+      new THREE.MeshBasicMaterial({color:0x1a5c33, transparent:true, opacity:0.25}));
+    ground.rotation.x = -Math.PI/2; ground.position.y = 0.005; body.add(ground);
+
+    // marcadores dos pontos da avaliação
+    const markers = [];   // meshes p/ raycast
+    const regCount = {};
+    PONTOS.forEach((p, idx)=>{
+      const positions = REG[p.regiao]; if (!positions) return;
+      const n = regCount[p.regiao] = (regCount[p.regiao]||0) + 1;
+      positions.forEach((pos)=>{
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.048, 18, 14),
+          new THREE.MeshBasicMaterial({color:p.cor}));
+        m.position.set(pos[0], pos[1] + (n-1)*0.075, pos[2]);
+        m.userData = {idx, phase: Math.random()*6};
+        const halo = new THREE.Mesh(new THREE.SphereGeometry(0.075, 18, 14),
+          new THREE.MeshBasicMaterial({color:p.cor, transparent:true, opacity:0.28}));
+        m.add(halo);
+        body.add(m); markers.push(m);
+      });
+    });
+
+    // interação: girar, zoom, tocar
+    let rotY = 0.35, rotX = 0.06, targetRotY = null, idleSpin = true, lastTouch = 0;
+    let drag = null;
+    canvas.addEventListener('pointerdown', (e)=>{ drag = {x:e.clientX, y:e.clientY, moved:0}; });
+    window.addEventListener('pointermove', (e)=>{
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      drag.moved += Math.abs(dx) + Math.abs(dy);
+      rotY += dx * 0.011; rotX = Math.max(-0.35, Math.min(0.4, rotX + dy*0.004));
+      drag.x = e.clientX; drag.y = e.clientY;
+      targetRotY = null; idleSpin = false; lastTouch = performance.now();
+    });
+    window.addEventListener('pointerup', (e)=>{
+      if (drag && drag.moved < 8) tap(e);
+      drag = null; lastTouch = performance.now();
+    });
+    canvas.addEventListener('wheel', (e)=>{
+      e.preventDefault();
+      camera.position.z = Math.max(1.7, Math.min(4.6, camera.position.z + e.deltaY*0.002));
+      lastTouch = performance.now(); idleSpin = false;
+    }, {passive:false});
+
+    const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+    function tap(e){
+      const r = canvas.getBoundingClientRect();
+      ndc.x = ((e.clientX - r.left)/r.width)*2 - 1;
+      ndc.y = -((e.clientY - r.top)/r.height)*2 + 1;
+      ray.setFromCamera(ndc, camera);
+      const hit = ray.intersectObjects(markers, true)[0];
+      if (hit){
+        const obj = hit.object.userData.idx !== undefined ? hit.object : hit.object.parent;
+        select(obj.userData.idx, false);
+      }
+    }
+
+    function select(idx, girar){
+      const p = PONTOS[idx]; if (!p) return;
+      const info = document.getElementById('b3d-info');
+      info.style.display = 'block';
+      const badge = document.getElementById('b3d-info-badge');
+      badge.textContent = p.rotulo; badge.style.background = p.cor;
+      document.getElementById('b3d-info-titulo').textContent = p.titulo;
+      document.getElementById('b3d-info-texto').textContent = p.texto;
+      document.getElementById('b3d-info-origem').textContent = p.origem;
+      markers.forEach(m=>{ m.scale.setScalar(m.userData.idx===idx ? 1.45 : 1); });
+      if (girar){
+        const pos = (REG[p.regiao]||[[0,0,1]])[0];
+        targetRotY = Math.atan2(pos[0], pos[2]) * -1;  // gira até o ponto olhar p/ câmera
+        idleSpin = false; lastTouch = performance.now();
+      }
+      info.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+    document.querySelectorAll('.b3d-item').forEach(b=>{
+      b.addEventListener('click', ()=>select(parseInt(b.dataset.idx), true));
+    });
+
+    function resize(){
+      const w = wrap.clientWidth, h = Math.min(Math.round(w*1.15), 540);
+      wrap.style.height = h + 'px';
+      renderer.setSize(w, h, false);
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize); resize();
+
+    (function loop(t){
+      requestAnimationFrame(loop);
+      if (targetRotY !== null){
+        let d = targetRotY - (rotY % (Math.PI*2));
+        while (d >  Math.PI) d -= Math.PI*2;
+        while (d < -Math.PI) d += Math.PI*2;
+        rotY += d * 0.08;
+        if (Math.abs(d) < 0.01) targetRotY = null;
+      } else if (idleSpin || performance.now() - lastTouch > 6000){
+        rotY += 0.004; idleSpin = true;
+      }
+      body.rotation.y = rotY; body.rotation.x = rotX;
+      const tt = (t||0)/1000;
+      markers.forEach(m=>{
+        const s = (m.scale.x > 1.2 ? 1.45 : 1) + 0.16*Math.sin(tt*4 + m.userData.phase);
+        m.scale.setScalar(s);
+      });
+      renderer.render(scene, camera);
+    })();
+  </script>
+</body>
+</html>
