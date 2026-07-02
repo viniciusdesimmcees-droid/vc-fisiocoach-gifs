@@ -87,12 +87,14 @@ def init_db() -> None:
                 detector TEXT
             )"""
         )
-        # migração: colunas do golpe + plano inteligente (bancos antigos)
+        # migração: colunas do golpe + plano inteligente + percurso da bola
         existing = {r["name"] for r in c.execute("PRAGMA table_info(analyses)")}
         if "stroke" not in existing:
             c.execute("ALTER TABLE analyses ADD COLUMN stroke TEXT")
         if "intel" not in existing:
             c.execute("ALTER TABLE analyses ADD COLUMN intel TEXT")
+        if "traj_blob" not in existing:
+            c.execute("ALTER TABLE analyses ADD COLUMN traj_blob BLOB")
         c.execute(
             """CREATE TABLE IF NOT EXISTS athletes (
                 name TEXT PRIMARY KEY,
@@ -249,12 +251,12 @@ def set_excluded_metrics(keys) -> None:
 
 
 def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
-                    stroke=None, intel=None) -> None:
+                    stroke=None, intel=None, traj_bytes=None) -> int:
     with _conn() as c:
-        c.execute(
+        cur = c.execute(
             "INSERT INTO analyses "
-            "(athlete, created_at, peak_kmh, mean_kmh, fps, detector, stroke, intel) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            "(athlete, created_at, peak_kmh, mean_kmh, fps, detector, stroke, intel, traj_blob) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 athlete.strip() or "Atleta",
                 datetime.now(timezone.utc).isoformat(),
@@ -264,9 +266,21 @@ def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
                 detector,
                 json.dumps(stroke, ensure_ascii=False) if stroke else None,
                 json.dumps(intel, ensure_ascii=False) if intel else None,
+                sqlite3.Binary(traj_bytes) if traj_bytes else None,
             ),
         )
+        new_id = cur.lastrowid
     _sync()
+    return new_id
+
+
+def get_analysis_traj(analysis_id: int) -> bytes | None:
+    with _conn() as c:
+        row = c.execute("SELECT traj_blob FROM analyses WHERE id = ?",
+                        (analysis_id,)).fetchone()
+    if row and row["traj_blob"] is not None:
+        return bytes(row["traj_blob"])
+    return None
 
 
 def latest_extras(athlete: str) -> tuple[dict | None, dict | None]:
@@ -397,13 +411,42 @@ def posture_evolution_png(athlete: str) -> bytes:
 
 
 def list_athletes() -> list[dict]:
+    """Todos os atletas — inclui quem só tem ficha ou só avaliação postural."""
     with _conn() as c:
-        rows = c.execute(
+        serve = {r["athlete"]: dict(r) for r in c.execute(
             """SELECT athlete, COUNT(*) AS n, MAX(peak_kmh) AS best,
                       AVG(peak_kmh) AS avg, MAX(created_at) AS last
-               FROM analyses GROUP BY athlete ORDER BY best DESC"""
-        ).fetchall()
-    return [dict(r) for r in rows]
+               FROM analyses GROUP BY athlete""")}
+        post = {r["athlete"]: r["n"] for r in c.execute(
+            "SELECT athlete, COUNT(*) AS n FROM posture_assessments GROUP BY athlete")}
+        profs = {r["name"] for r in c.execute("SELECT name FROM athletes")}
+    names = set(serve) | set(post) | profs
+    out = []
+    for name in names:
+        s = serve.get(name)
+        out.append({
+            "athlete": name,
+            "n": s["n"] if s else 0,
+            "best": s["best"] if s else None,
+            "avg": round(s["avg"], 1) if s and s["avg"] is not None else None,
+            "last": s["last"] if s else None,
+            "n_posturas": post.get(name, 0),
+            "tem_ficha": name in profs,
+        })
+    out.sort(key=lambda a: (-(a["best"] or 0), a["athlete"].lower()))
+    return out
+
+
+def export_data(athlete: str) -> dict:
+    """Todos os dados do atleta em dict (para o 'livro de dados' / JSON)."""
+    return {
+        "atleta": athlete,
+        "gerado_em": datetime.now(timezone.utc).isoformat(),
+        "ficha": get_profile(athlete),
+        "estatisticas_saque": athlete_stats(athlete),
+        "analises_saque": get_history(athlete),
+        "avaliacoes_posturais": get_posture_history(athlete),
+    }
 
 
 def get_history(athlete: str) -> list[dict]:
@@ -412,7 +455,12 @@ def get_history(athlete: str) -> list[dict]:
             "SELECT * FROM analyses WHERE athlete = ? ORDER BY created_at",
             (athlete,),
         ).fetchall()
-    return [dict(r) for r in rows]
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["tem_percurso"] = d.pop("traj_blob", None) is not None
+        out.append(d)
+    return out
 
 
 def athlete_stats(athlete: str) -> dict:

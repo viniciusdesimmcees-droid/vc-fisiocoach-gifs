@@ -22,6 +22,12 @@
   <div class="wrap">
     <a class="back" href="{{ url_for('index') }}">← Nova análise</a>
 
+    {% if persist %}
+    <a class="persist-status {{ 'on' if persist.ativo else 'off' }}" href="{{ url_for('persistencia') }}">
+      {{ '✅ Armazenamento permanente ativo' if persist.ativo else '⚠️ Dados podem se perder — toque para ativar o armazenamento permanente' }}
+    </a>
+    {% endif %}
+
     {% if athletes %}
     <div class="card">
       <h2>Comparação entre atletas</h2>
@@ -29,26 +35,27 @@
     </div>
 
     <div class="card">
-      <h2>Atletas ({{ athletes|length }})</h2>
-      <table class="angles">
-        <tr>
-          <td><strong>Atleta</strong></td>
-          <td style="text-align:center"><strong>Análises</strong></td>
-          <td style="text-align:right"><strong>Recorde</strong></td>
-        </tr>
+      <h2>Alunos ({{ athletes|length }})</h2>
+      <p class="note">Toque no nome para ver tudo do aluno: ficha, análises, avaliações e fotos.</p>
+      <div class="athlete-list">
         {% for a in athletes %}
-        <tr>
-          <td><a class="back" href="{{ url_for('historico_atleta', athlete=a.athlete) }}">{{ a.athlete }}</a></td>
-          <td style="text-align:center">{{ a.n }}</td>
-          <td>{{ "%.0f"|format(a.best) }} km/h</td>
-        </tr>
+        <a class="athlete-row" href="{{ url_for('historico_atleta', athlete=a.athlete) }}">
+          <span class="ath-name">{{ a.athlete }}</span>
+          <span class="ath-tags">
+            {% if a.n %}<span class="ath-tag">🎾 {{ a.n }} saque{{ 's' if a.n != 1 }}{% if a.best %} · {{ "%.0f"|format(a.best) }} km/h{% endif %}</span>{% endif %}
+            {% if a.n_posturas %}<span class="ath-tag">🧍 {{ a.n_posturas }} postural{{ 'is' if a.n_posturas != 1 }}</span>{% endif %}
+            {% if a.tem_ficha %}<span class="ath-tag">📋 ficha</span>{% endif %}
+          </span>
+          <span class="ath-arrow">→</span>
+        </a>
         {% endfor %}
-      </table>
+      </div>
     </div>
     {% else %}
     <div class="card">
-      <h2>Ainda não há histórico</h2>
-      <p class="note">Faça uma análise de saque para começar a registrar a evolução do atleta.</p>
+      <h2>Ainda não há alunos</h2>
+      <p class="note">Faça uma análise de saque ou uma avaliação postural, ou cadastre
+        uma ficha, para começar a registrar os alunos.</p>
     </div>
     {% endif %}
 

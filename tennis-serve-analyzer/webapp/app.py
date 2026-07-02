@@ -49,6 +49,8 @@ import preflight  # noqa: E402
 import validation  # noqa: E402
 import benchmark  # noqa: E402
 import metrics  # noqa: E402
+import ballpath  # noqa: E402
+import storage  # noqa: E402
 
 history.init_db()
 
@@ -95,7 +97,13 @@ STATIC = os.path.join(HERE, "static")
 # ---------- histórico do atleta ----------
 @app.route("/historico")
 def historico():
-    return render_template("historico.html", athletes=history.list_athletes())
+    return render_template("historico.html", athletes=history.list_athletes(),
+                           persist=storage.status())
+
+
+@app.route("/persistencia")
+def persistencia():
+    return render_template("persistencia.html", persist=storage.status())
 
 
 @app.route("/historico/<athlete>")
@@ -215,21 +223,15 @@ def _montar_objetivo(profile, inteligencia):
     return " ".join(partes)
 
 
-@app.route("/historico/<athlete>/laudo.pdf")
-def laudo_atleta(athlete):
-    profile = history.get_profile(athlete)
-    h = history.get_history(athlete)
-    posturas = history.get_posture_history(athlete)
-    if not h and not profile and not posturas:
-        abort(404)
+def _build_dossier_bytes(athlete, profile, h, posturas):
+    """Gera o PDF do laudo consolidado e devolve os bytes."""
+    import tempfile
 
     stats = history.athlete_stats(athlete) if h else {}
     serve_png = history.evolution_png(athlete) if h else None
     posture_png = history.posture_evolution_png(athlete) if posturas else None
     last_post = posturas[-1] if posturas else None
     golpe, inteligencia = history.latest_extras(athlete)
-
-    import tempfile
 
     tmp_imgs = []
 
@@ -246,15 +248,11 @@ def laudo_atleta(athlete):
     com_foto = [p for p in posturas if p.get("tem_imagem")]
     first_img = _img_tmp(com_foto[0]["id"]) if com_foto else None
     last_img = _img_tmp(com_foto[-1]["id"]) if com_foto else None
-
-    # histórico completo de saques (do primeiro ao último) para anexar ao laudo
     all_serves = [
-        {"data": (a.get("created_at") or "")[:10],
-         "peak": a.get("peak_kmh"),
+        {"data": (a.get("created_at") or "")[:10], "peak": a.get("peak_kmh"),
          "nivel": reportpro.classify(a.get("peak_kmh") or 0)["nivel"]}
         for a in h
     ]
-    # objetivo para o atleta (metas da ficha + foco do plano inteligente)
     objetivo = _montar_objetivo(profile, inteligencia)
 
     fd, tmp = tempfile.mkstemp(suffix=".pdf")
@@ -270,16 +268,102 @@ def laudo_atleta(athlete):
             posturas=posturas, objetivo=objetivo,
         )
         with open(tmp, "rb") as f:
-            data = f.read()
+            return f.read()
     finally:
         for p_i in tmp_imgs + [tmp]:
             try:
                 os.remove(p_i)
             except OSError:
                 pass
+
+
+@app.route("/historico/<athlete>/laudo.pdf")
+def laudo_atleta(athlete):
+    profile = history.get_profile(athlete)
+    h = history.get_history(athlete)
+    posturas = history.get_posture_history(athlete)
+    if not h and not profile and not posturas:
+        abort(404)
+    data = _build_dossier_bytes(athlete, profile, h, posturas)
     return Response(
         data, mimetype="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="laudo_{athlete}.pdf"'},
+    )
+
+
+@app.route("/analise/<int:analysis_id>/percurso.png")
+def analise_percurso(analysis_id):
+    data = history.get_analysis_traj(analysis_id)
+    if not data:
+        abort(404)
+    return Response(data, mimetype="image/png",
+                    headers={"Cache-Control": "public, max-age=86400"})
+
+
+@app.route("/historico/<athlete>/exportar.zip")
+def exportar_atleta(athlete):
+    """Livro de dados do atleta: PDF completo + JSON + todas as fotos + percursos."""
+    import io
+    import json as _json
+    import zipfile
+
+    profile = history.get_profile(athlete)
+    h = history.get_history(athlete)
+    posturas = history.get_posture_history(athlete)
+    if not h and not profile and not posturas:
+        abort(404)
+
+    def _safe(s):
+        return "".join(ch if ch.isalnum() or ch in " -_" else "_" for ch in str(s))
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
+        # 1) laudo consolidado (PDF completo)
+        try:
+            z.writestr(f"{_safe(athlete)}/laudo_completo.pdf",
+                       _build_dossier_bytes(athlete, profile, h, posturas))
+        except Exception:
+            traceback.print_exc()
+        # 2) dados brutos (JSON)
+        z.writestr(f"{_safe(athlete)}/dados.json",
+                   _json.dumps(history.export_data(athlete), ensure_ascii=False,
+                               indent=2, default=str))
+        # 3) gráficos de evolução
+        if h:
+            z.writestr(f"{_safe(athlete)}/graficos/evolucao_saque.png",
+                       history.evolution_png(athlete))
+        if posturas:
+            z.writestr(f"{_safe(athlete)}/graficos/evolucao_postural.png",
+                       history.posture_evolution_png(athlete))
+        # 4) fotos das avaliações posturais
+        for p in posturas:
+            img = history.get_posture_image(p["id"]) if p.get("tem_imagem") else None
+            if img:
+                d = (p.get("created_at") or "")[:10]
+                z.writestr(f"{_safe(athlete)}/fotos_avaliacao/{d}_id{p['id']}.png", img)
+        # 5) percursos da bola (print do scanner) de cada saque
+        for a in h:
+            tb = history.get_analysis_traj(a["id"]) if a.get("tem_percurso") else None
+            if tb:
+                d = (a.get("created_at") or "")[:10]
+                z.writestr(f"{_safe(athlete)}/percurso_bola/{d}_id{a['id']}_"
+                           f"{(a.get('peak_kmh') or 0):.0f}kmh.png", tb)
+        # 6) leia-me
+        z.writestr(f"{_safe(athlete)}/LEIA-ME.txt",
+                   "Livro de dados do atleta — VF Tenis Scanner\n"
+                   "Sistema criado e desenvolvido por Vinicius Camargos da Fonseca.\n\n"
+                   "Conteudo:\n"
+                   "- laudo_completo.pdf: relatorio consolidado (ficha, saque, golpe, "
+                   "postura, plano, historico e objetivo)\n"
+                   "- dados.json: todos os dados brutos do atleta\n"
+                   "- graficos/: evolucao do saque e da postura\n"
+                   "- fotos_avaliacao/: fotos anotadas de cada avaliacao postural\n"
+                   "- percurso_bola/: o caminho da bola rastreado pelo scanner em cada saque\n")
+
+    return Response(
+        buf.getvalue(), mimetype="application/zip",
+        headers={"Content-Disposition":
+                 f'attachment; filename="livro_dados_{_safe(athlete)}.zip"'},
     )
 
 
@@ -741,12 +825,19 @@ def analyze():
             except Exception:
                 traceback.print_exc()
 
-        # registra no histórico do atleta (com golpe + plano inteligente do dia)
+        # percurso da bola (o 'print' do caminho rastreado) — guardado no banco
+        try:
+            traj_bytes = ballpath.trajectory_png(trajectory, meta, result)
+        except Exception:
+            traceback.print_exc()
+            traj_bytes = None
+
+        # registra no histórico do atleta (com golpe + plano + percurso do dia)
         if result.peak_kmh > 0:
             try:
                 history.record_analysis(
                     athlete, result.peak_kmh, result.mean_kmh, fps, detector,
-                    stroke=golpe, intel=inteligencia,
+                    stroke=golpe, intel=inteligencia, traj_bytes=traj_bytes,
                 )
             except Exception:
                 traceback.print_exc()  # histórico não pode derrubar o resultado

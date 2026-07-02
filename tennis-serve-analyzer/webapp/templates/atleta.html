@@ -28,6 +28,7 @@
               data-url="{{ url_for('laudo_atleta', athlete=athlete) }}"
               data-title="Laudo completo — {{ athlete }}">📤 Enviar ao aluno (WhatsApp, e-mail…)</button>
     </div>
+    <a class="pdf-btn export-btn" href="{{ url_for('exportar_atleta', athlete=athlete) }}" download>📦 Exportar livro de dados completo (ZIP: PDF + fotos + percursos da bola + JSON)</a>
 
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
@@ -88,6 +89,7 @@
           <span>média {{ "%.0f"|format(r.mean_kmh) }} · <b>pico {{ "%.0f"|format(r.peak_kmh) }} km/h</b></span>
           <details class="analise-edit">
             <summary>✏️</summary>
+            {% if r.tem_percurso %}<a class="back" href="{{ url_for('analise_percurso', analysis_id=r.id) }}" target="_blank">🎯 Ver percurso da bola ↗</a>{% endif %}
             <form action="{{ url_for('editar_analise', analysis_id=r.id) }}" method="post" class="edit-form">
               <input type="hidden" name="athlete" value="{{ athlete }}">
               <div class="grid">

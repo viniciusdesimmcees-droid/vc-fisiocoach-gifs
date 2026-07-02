@@ -26,6 +26,18 @@ def enabled() -> bool:
     return bool(HF_TOKEN)
 
 
+def status() -> dict:
+    """Estado da persistência permanente (para exibir no app)."""
+    if enabled():
+        repo = DATA_REPO or "<seu_usuario>/vf-tenis-data"
+        return {"ativo": True, "repo": repo,
+                "texto": "Armazenamento permanente ATIVO — dados e fotos ficam "
+                         "salvos num Dataset privado do Hugging Face."}
+    return {"ativo": False, "repo": None,
+            "texto": "Armazenamento permanente DESLIGADO — os dados podem ser "
+                     "perdidos quando o Space reinicia. Configure o HF_TOKEN."}
+
+
 def _api_and_repo():
     global _resolved_repo
     from huggingface_hub import HfApi

@@ -325,6 +325,21 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
   border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px;
 }
 
+/* status de armazenamento permanente */
+.persist-status { display: block; text-decoration: none; border-radius: 12px; padding: 11px 14px; margin: 12px 0; font-weight: 700; font-size: 13.5px; }
+.persist-status.on { background: rgba(34,197,94,.12); border: 1px solid var(--green); color: var(--green-dark); }
+.persist-status.off { background: rgba(217,119,6,.10); border: 1px solid #d97706; color: #b45309; }
+
+/* lista de alunos */
+.athlete-list { display: grid; gap: 8px; margin-top: 8px; }
+.athlete-row { display: flex; align-items: center; gap: 10px; text-decoration: none; background: rgba(34,197,94,.04); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.ath-name { font-weight: 800; font-size: 15px; color: var(--ink); }
+.ath-tags { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.ath-tag { font-size: 11.5px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; color: var(--muted); }
+.ath-arrow { color: var(--green-dark); font-weight: 800; }
+
+.export-btn { background: #0ea5e9; margin-top: 0; }
+
 /* ações de PDF (baixar + enviar) */
 .pdf-actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
 .pdf-actions .pdf-btn { flex: 1; min-width: 180px; margin: 0; }

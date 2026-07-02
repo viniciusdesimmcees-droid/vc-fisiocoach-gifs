@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Armazenamento permanente — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Armazenamento permanente</h1>
+      <span>Para nunca perder dados nem as fotos dos alunos</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('historico') }}">← Voltar ao histórico</a>
+
+    <div class="card">
+      <div class="persist-status {{ 'on' if persist.ativo else 'off' }}">
+        {{ '✅' if persist.ativo else '⚠️' }} {{ persist.texto }}
+      </div>
+      {% if persist.ativo %}
+      <p class="note">Cofre: <b>{{ persist.repo }}</b> (Dataset privado). Cada gravação
+        (análise, avaliação, foto, ficha) é sincronizada automaticamente.</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h2>Como ativar (uma vez, grátis)</h2>
+      <ol class="proto-steps">
+        <li>No Hugging Face, abra <b>Settings → Access Tokens</b> e crie um token do
+          tipo <b>Write</b>. Copie o token.</li>
+        <li>No seu Space, vá em <b>Settings → Variables and secrets → New secret</b>.</li>
+        <li>Crie um segredo com nome <b>HF_TOKEN</b> e cole o token no valor. Salve.</li>
+        <li><b>Opcional:</b> crie também <b>DATA_REPO</b> com um nome de Dataset
+          (ex.: <code>seu_usuario/vf-tenis-data</code>). Se não criar, o app usa
+          <code>&lt;seu_usuario&gt;/vf-tenis-data</code> automaticamente.</li>
+        <li><b>Factory rebuild</b> no Space. Pronto: o banco (histórico, fichas,
+          fotos e percursos da bola) passa a ser salvo num Dataset <b>privado</b> e
+          restaurado a cada reinício.</li>
+      </ol>
+      <p class="note">O token fica só nos segredos do seu Space — nunca aparece no
+        código nem nos laudos. Sem ele, o app funciona igual, mas os dados são
+        efêmeros (podem reiniciar quando o Space dorme).</p>
+    </div>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+</body>
+</html>
