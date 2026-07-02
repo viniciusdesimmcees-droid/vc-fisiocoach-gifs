@@ -325,6 +325,18 @@ img.gauge { display: block; width: 86%; max-width: 360px; margin: 6px auto 4px; 
   border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px;
 }
 
+/* guia rápido de 3 passos */
+.steps-strip { display: flex; flex-direction: column; gap: 7px; margin: 12px 0; }
+.step-chip {
+  font-size: 13px; background: rgba(34,197,94,.07); border: 1px solid var(--line);
+  border-radius: 10px; padding: 9px 12px; color: var(--ink);
+}
+.step-chip b {
+  display: inline-block; width: 20px; height: 20px; line-height: 20px;
+  text-align: center; background: var(--green-2); color: #fff;
+  border-radius: 50%; margin-right: 6px; font-size: 12px;
+}
+
 /* status de armazenamento permanente */
 .persist-status { display: block; text-decoration: none; border-radius: 12px; padding: 11px 14px; margin: 12px 0; font-weight: 700; font-size: 13.5px; }
 .persist-status.on { background: rgba(34,197,94,.12); border: 1px solid var(--green); color: var(--green-dark); }

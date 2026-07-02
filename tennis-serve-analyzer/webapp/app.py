@@ -826,8 +826,15 @@ def analyze():
                 traceback.print_exc()
 
         # percurso da bola (o 'print' do caminho rastreado) — guardado no banco
+        # e mostrado no resultado para o operador CONFERIR o que foi medido
+        percurso_url = None
         try:
             traj_bytes = ballpath.trajectory_png(trajectory, meta, result)
+            if traj_bytes:
+                with open(base + "_percurso.png", "wb") as _pf:
+                    _pf.write(traj_bytes)
+                percurso_url = url_for(
+                    "static", filename=f"results/{job}/saque_percurso.png")
         except Exception:
             traceback.print_exc()
             traj_bytes = None
@@ -894,6 +901,7 @@ def analyze():
             "captura": captura,
             "benchmark": bench,
             "radar": radar_url,
+            "percurso": percurso_url,
             "bands": reportpro.BANDS,
             "history_url": url_for("historico_atleta", athlete=athlete),
             "gauge": url_for("static", filename=f"results/{job}/saque_gauge.png"),

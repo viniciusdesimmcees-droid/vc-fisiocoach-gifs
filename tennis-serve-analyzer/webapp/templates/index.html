@@ -33,6 +33,13 @@
       <a class="back" href="{{ url_for('configuracoes') }}">⚙️ Configurações →</a>
     </div>
 
+    <div class="steps-strip">
+      <span class="step-chip"><b>1</b> Filme de LADO, em câmera lenta (120–240 fps)</span>
+      <span class="step-chip"><b>2</b> Calibre: toque 2 pontos na rede (0,914 m)</span>
+      <span class="step-chip"><b>3</b> Analise e confira o percurso da bola</span>
+      <a class="back" href="{{ url_for('protocolo') }}">Ver protocolo completo →</a>
+    </div>
+
     <form class="card" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
       <div class="tabs">
         <button type="button" id="tab-record" class="tab active">📹 Gravar agora</button>

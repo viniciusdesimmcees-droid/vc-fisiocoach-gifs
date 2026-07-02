@@ -163,6 +163,18 @@
       {% endif %}
     </div>
 
+    {% if percurso %}
+    <div class="card">
+      <h2>🎯 Confira o que foi medido <span class="hint">(percurso da bola)</span></h2>
+      <img class="result" src="{{ percurso }}" alt="Percurso da bola rastreado">
+      <p class="note">O ponto <b style="color:#15803d">verde</b> é o início do voo e o
+        <b style="color:#dc2626">X vermelho</b> é o impacto — a velocidade foi medida ali.
+        <b>Confirme que esse caminho é o saque</b> (bola atravessando a tela), e não outro
+        movimento (braço/raquete). Se estiver errado, corte o vídeo para conter só o saque
+        e analise de novo.</p>
+    </div>
+    {% endif %}
+
     {% if didatico %}
     <div class="card aluno-card">
       <h2>📖 Resumo para o aluno <span class="hint">(em palavras simples)</span></h2>
