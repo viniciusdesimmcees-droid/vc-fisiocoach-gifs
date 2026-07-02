@@ -30,6 +30,10 @@
     </div>
     <a class="pdf-btn export-btn" href="{{ url_for('exportar_atleta', athlete=athlete) }}" download>📦 Exportar livro de dados completo (ZIP: PDF + fotos + percursos da bola + JSON)</a>
     <a class="pdf-btn boneco-btn" href="{{ url_for('boneco_atleta', athlete=athlete) }}">🧍‍♂️ Ver boneco 3D do aluno (pontos positivos e a trabalhar)</a>
+    <div class="pdf-actions" style="margin-top:10px">
+      <a class="pdf-btn boneco-btn" style="background:#a21caf" href="{{ url_for('boneco_comparar', athlete=athlete) }}">🆚 Comparativo 3D (antes × agora)</a>
+      <a class="pdf-btn boneco-btn" style="background:#0f766e" href="{{ url_for('saque3d_atleta', athlete=athlete) }}">🎾 Saque em 3D (fases animadas)</a>
+    </div>
 
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">

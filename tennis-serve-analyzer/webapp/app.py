@@ -52,6 +52,7 @@ import metrics  # noqa: E402
 import ballpath  # noqa: E402
 import storage  # noqa: E402
 import avatar  # noqa: E402
+import bodymap  # noqa: E402
 
 history.init_db()
 
@@ -186,6 +187,45 @@ def boneco_atleta(athlete):
     return render_template("boneco.html", athlete=athlete, pontos=pontos, risco=risco)
 
 
+@app.route("/atleta/<athlete>/saque3d")
+def saque3d_atleta(athlete):
+    def _g(d, *keys):
+        for k in keys:
+            if not isinstance(d, dict):
+                return None
+            d = d.get(k)
+        return d
+
+    profile = history.get_profile(athlete)
+    bio, data_iso = history.latest_biomech(athlete)
+    joelho = _g(bio, "angulos_no_loading", "joelho")
+    cotovelo = _g(bio, "angulos_no_contato", "cotovelo")
+    tronco = _g(bio, "angulos_no_contato", "inclinacao_tronco")
+    medido = bio is not None and any(v is not None for v in (joelho, cotovelo, tronco))
+    anim = {
+        "joelho": round(float(joelho), 0) if joelho is not None else 140,
+        "cotovelo": round(float(cotovelo), 0) if cotovelo is not None else 155,
+        "tronco": round(float(tronco), 0) if tronco is not None else 25,
+        "joelho_medido": joelho is not None,
+        "cotovelo_medido": cotovelo is not None,
+        "tronco_medido": tronco is not None,
+        "dom": "esq" if ((profile or {}).get("dominant_hand") or "").lower().startswith("e") else "dir",
+    }
+    data_br = ""
+    if data_iso:
+        d = data_iso[:10]
+        data_br = f"{d[8:10]}/{d[5:7]}/{d[0:4]}"
+    return render_template("saque3d.html", athlete=athlete, anim=anim,
+                           medido=medido, data=data_br)
+
+
+@app.route("/atleta/<athlete>/boneco/comparar")
+def boneco_comparar(athlete):
+    posturas = history.get_posture_history(athlete)
+    comp = avatar.compare(posturas)
+    return render_template("boneco_comparar.html", athlete=athlete, comp=comp)
+
+
 @app.route("/atleta/<athlete>/renomear", methods=["POST"])
 def renomear_atleta(athlete):
     novo = (request.form.get("novo_nome") or "").strip()
@@ -267,6 +307,16 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
     ]
     objetivo = _montar_objetivo(profile, inteligencia)
 
+    # mapa corporal (boneco com os pontos da avaliação)
+    mapa_png = None
+    pontos_corpo = []
+    try:
+        pontos_corpo, risco_av = avatar.build(profile, posturas, inteligencia)
+        if pontos_corpo:
+            mapa_png = bodymap.render_png(pontos_corpo, risco_av)
+    except Exception:
+        traceback.print_exc()
+
     fd, tmp = tempfile.mkstemp(suffix=".pdf")
     os.close(fd)
     try:
@@ -278,6 +328,7 @@ def _build_dossier_bytes(athlete, profile, h, posturas):
             golpe=golpe, inteligencia=inteligencia,
             all_serves=all_serves, posture_first_img=first_img,
             posturas=posturas, objetivo=objetivo,
+            bodymap_png=mapa_png, pontos_corpo=pontos_corpo,
         )
         with open(tmp, "rb") as f:
             return f.read()
@@ -857,6 +908,7 @@ def analyze():
                 history.record_analysis(
                     athlete, result.peak_kmh, result.mean_kmh, fps, detector,
                     stroke=golpe, intel=inteligencia, traj_bytes=traj_bytes,
+                    biomech=bio_summary,
                 )
             except Exception:
                 traceback.print_exc()  # histórico não pode derrubar o resultado

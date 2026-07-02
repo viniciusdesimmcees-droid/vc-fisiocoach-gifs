@@ -110,3 +110,75 @@ def build(profile, posturas, intel) -> tuple[list[dict], dict | None]:
 
     risco = (intel or {}).get("risco") or None
     return pontos, risco
+
+
+def _data_br(iso: str) -> str:
+    d = (iso or "")[:10]
+    return f"{d[8:10]}/{d[5:7]}/{d[0:4]}" if len(d) >= 10 else d
+
+
+def build_from_assessment(assess: dict) -> list[dict]:
+    """Pontos posturais de UMA avaliação específica (para o comparativo)."""
+    pontos = []
+    origem = f"Avaliação postural ({_data_br(assess.get('created_at'))})"
+    for m in assess.get("medidas", []):
+        regiao = POSTURE_REGION.get(m.get("chave"))
+        if not regiao:
+            continue
+        st = _situacao_status(m.get("situacao"))
+        pontos.append({
+            "regiao": regiao, "status": st, "cor": STATUS[st]["cor"],
+            "rotulo": STATUS[st]["rotulo"], "titulo": m.get("nome", ""),
+            "texto": f"{m.get('valor', '')} · {m.get('situacao', '')}",
+            "origem": origem,
+        })
+    return pontos
+
+
+def compare(posturas: list) -> dict | None:
+    """Compara a PRIMEIRA e a ÚLTIMA avaliação postural, medida a medida.
+    Retorna antes/agora (pontos + data) e os deltas com veredito."""
+    if not posturas or len(posturas) < 2:
+        return None
+    antes, agora = posturas[0], posturas[-1]
+
+    def _by_chave(a):
+        return {m.get("chave"): m for m in a.get("medidas", []) if m.get("chave")}
+
+    m_antes, m_agora = _by_chave(antes), _by_chave(agora)
+    deltas = []
+    for chave, ma in m_agora.items():
+        mb = m_antes.get(chave)
+        if not mb or ma.get("graus") is None or mb.get("graus") is None:
+            continue
+        d = abs(float(ma["graus"])) - abs(float(mb["graus"]))
+        if d <= -1.0:
+            verd, ic, cor = f"melhorou {abs(d):.1f}°", "✅", "#15803d"
+        elif d >= 1.0:
+            verd, ic, cor = f"aumentou {d:.1f}°", "⚠️", "#d97706"
+        else:
+            verd, ic, cor = "estável", "➖", "#64748b"
+        deltas.append({
+            "nome": ma.get("nome", chave),
+            "antes": mb.get("valor", ""), "agora": ma.get("valor", ""),
+            "delta": round(d, 1), "verdito": verd, "icone": ic, "cor": cor,
+        })
+    deltas.sort(key=lambda x: x["delta"])  # melhoras primeiro
+
+    n_mel = sum(1 for x in deltas if x["delta"] <= -1.0)
+    n_pio = sum(1 for x in deltas if x["delta"] >= 1.0)
+    if n_mel and not n_pio:
+        resumo = f"Evolução positiva: {n_mel} medida(s) melhoraram desde a primeira avaliação."
+    elif n_mel or n_pio:
+        resumo = f"{n_mel} medida(s) melhoraram e {n_pio} pioraram — ajuste o foco do treino."
+    else:
+        resumo = "Postura estável entre as duas avaliações."
+
+    return {
+        "antes": {"pontos": build_from_assessment(antes),
+                  "data": _data_br(antes.get("created_at"))},
+        "agora": {"pontos": build_from_assessment(agora),
+                  "data": _data_br(agora.get("created_at"))},
+        "deltas": deltas,
+        "resumo": resumo,
+    }

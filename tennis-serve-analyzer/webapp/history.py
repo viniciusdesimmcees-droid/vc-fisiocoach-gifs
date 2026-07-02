@@ -95,6 +95,8 @@ def init_db() -> None:
             c.execute("ALTER TABLE analyses ADD COLUMN intel TEXT")
         if "traj_blob" not in existing:
             c.execute("ALTER TABLE analyses ADD COLUMN traj_blob BLOB")
+        if "biomech" not in existing:
+            c.execute("ALTER TABLE analyses ADD COLUMN biomech TEXT")
         c.execute(
             """CREATE TABLE IF NOT EXISTS athletes (
                 name TEXT PRIMARY KEY,
@@ -251,12 +253,14 @@ def set_excluded_metrics(keys) -> None:
 
 
 def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
-                    stroke=None, intel=None, traj_bytes=None) -> int:
+                    stroke=None, intel=None, traj_bytes=None,
+                    biomech=None) -> int:
     with _conn() as c:
         cur = c.execute(
             "INSERT INTO analyses "
-            "(athlete, created_at, peak_kmh, mean_kmh, fps, detector, stroke, intel, traj_blob) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "(athlete, created_at, peak_kmh, mean_kmh, fps, detector, stroke, "
+            "intel, traj_blob, biomech) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 athlete.strip() or "Atleta",
                 datetime.now(timezone.utc).isoformat(),
@@ -267,11 +271,23 @@ def record_analysis(athlete, peak_kmh, mean_kmh, fps, detector,
                 json.dumps(stroke, ensure_ascii=False) if stroke else None,
                 json.dumps(intel, ensure_ascii=False) if intel else None,
                 sqlite3.Binary(traj_bytes) if traj_bytes else None,
+                json.dumps(biomech, ensure_ascii=False) if biomech else None,
             ),
         )
         new_id = cur.lastrowid
     _sync()
     return new_id
+
+
+def latest_biomech(athlete: str) -> tuple[dict | None, str | None]:
+    """Biomecânica salva mais recente do atleta: (resumo, data_iso)."""
+    for r in reversed(get_history(athlete)):
+        if r.get("biomech"):
+            try:
+                return json.loads(r["biomech"]), r.get("created_at")
+            except (ValueError, TypeError):
+                continue
+    return None, None
 
 
 def get_analysis_traj(analysis_id: int) -> bytes | None:

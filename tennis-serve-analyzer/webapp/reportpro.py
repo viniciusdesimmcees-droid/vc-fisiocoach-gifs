@@ -368,7 +368,8 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
                               last_posture=None, last_posture_img=None,
                               golpe=None, inteligencia=None,
                               all_serves=None, posture_first_img=None,
-                              posturas=None, objetivo=None) -> None:
+                              posturas=None, objetivo=None,
+                              bodymap_png=None, pontos_corpo=None) -> None:
     """Laudo completo do atleta: ficha + saque + golpe + postura (com fotos) +
     plano + histórico completo + objetivo para o atleta."""
     profile = profile or {}
@@ -502,6 +503,34 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
             _signature(fig2)
             pdf.savefig(fig2)
             plt.close(fig2)
+
+        # ---------------- Página: mapa corporal (boneco) ----------------
+        if bodymap_png:
+            figm = plt.figure(figsize=(8.27, 11.69))
+            _page_header(figm, athlete, "Mapa Corporal do Aluno")
+            ax_m = figm.add_axes([0.08, 0.42, 0.84, 0.47]); ax_m.axis("off")
+            ax_m.imshow(_png_bytes_to_img(bodymap_png))
+
+            y = 0.395
+            figm.text(0.06, y, "Pontos marcados no corpo", fontsize=12,
+                      fontweight="bold", color="#15803d")
+            y -= 0.024
+            for p in (pontos_corpo or [])[:12]:
+                figm.text(0.07, y, "•", fontsize=11, fontweight="bold",
+                          color=p.get("cor", "#334155"))
+                figm.text(0.09, y, f"{p.get('titulo', '')} — {p.get('texto', '')}"[:105],
+                          fontsize=8.6, color="#334155")
+                y -= 0.019
+
+            ax_n = figm.add_axes([0.06, 0.09, 0.88, 0.04]); ax_n.axis("off")
+            ax_n.text(0, 1, "O boneco é um esquema ilustrativo do corpo; os pontos e "
+                      "textos vem das avaliacoes reais do aluno (postura e plano "
+                      "inteligente). Versao interativa 3D disponivel no aplicativo.",
+                      fontsize=8, color="#94a3b8", va="top",
+                      transform=ax_n.transAxes, wrap=True, linespacing=1.4)
+            _signature(figm)
+            pdf.savefig(figm)
+            plt.close(figm)
 
         # ---------------- Página 3: plano inteligente ----------------
         if inteligencia:

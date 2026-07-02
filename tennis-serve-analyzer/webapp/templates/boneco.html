@@ -70,27 +70,10 @@
   </div>
 
   <script src="{{ url_for('static', filename='three.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='boneco3d.js') }}"></script>
   <script>
     const PONTOS = {{ pontos | tojson }};
-    // posições 3D de cada região (lado direito do atleta = x negativo, de frente)
-    const REG = {
-      cabeca:[[0,1.62,0.10]],
-      trapezio:[[0.12,1.46,-0.05],[-0.12,1.46,-0.05]],
-      ombros:[[0.26,1.38,0.02],[-0.26,1.38,0.02]],
-      ombro_dir:[[-0.26,1.38,0.02]], ombro_esq:[[0.26,1.38,0.02]],
-      peito:[[0,1.27,0.15]],
-      costas:[[0,1.24,-0.15]],
-      abdomen:[[0,1.04,0.14]],
-      lombar:[[0,1.00,-0.14]],
-      tronco:[[0,1.15,0.16]],
-      braco_dir:[[-0.33,1.14,0.04]], braco_esq:[[0.33,1.14,0.04]],
-      antebraco_dir:[[-0.40,0.90,0.06]], antebraco_esq:[[0.40,0.90,0.06]],
-      pelvis:[[0,0.94,0.13]],
-      gluteos:[[0.10,0.90,-0.13],[-0.10,0.90,-0.13]],
-      coxas:[[0.12,0.64,0.11],[-0.12,0.64,0.11]],
-      joelhos:[[0.12,0.46,0.09],[-0.12,0.46,0.09]],
-      panturrilhas:[[0.12,0.26,-0.09],[-0.12,0.26,-0.09]],
-    };
+    const REG = VFBoneco.REG;
 
     const canvas = document.getElementById('b3d');
     const wrap = document.getElementById('b3d-wrap');
@@ -106,65 +89,9 @@
     dir.position.set(2, 3, 2); scene.add(dir);
 
     const body = new THREE.Group(); scene.add(body);
-    const mat = new THREE.MeshStandardMaterial({color:0xdfe8e2, roughness:0.55, metalness:0.05});
-    const V = (a)=>new THREE.Vector3(a[0],a[1],a[2]);
-
-    function limb(a, b, r){
-      a=V(a); b=V(b);
-      const d = new THREE.Vector3().subVectors(b, a), len = d.length();
-      const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r*0.85, len, 16), mat);
-      m.position.copy(a).addScaledVector(d, 0.5);
-      m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), d.clone().normalize());
-      body.add(m); return m;
-    }
-    function ball(p, r, sy, sz){
-      const m = new THREE.Mesh(new THREE.SphereGeometry(r, 22, 18), mat);
-      m.position.copy(V(p)); m.scale.set(1, sy||1, sz||1); body.add(m); return m;
-    }
-    // cabeça, pescoço, tronco, pélvis
-    ball([0,1.62,0], 0.115, 1.08, 0.95);
-    limb([0,1.46,0],[0,1.54,0],0.05);
-    const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.17,0.135,0.50,20), mat);
-    torso.position.set(0,1.22,0); torso.scale.z=0.72; body.add(torso);
-    ball([0,0.94,0],0.15,0.72,0.72);
-    // braços
-    [[1,'esq'],[-1,'dir']].forEach(([s])=>{
-      ball([s*0.23,1.39,0],0.062);
-      limb([s*0.23,1.39,0],[s*0.32,1.10,0.02],0.052);
-      ball([s*0.32,1.10,0.02],0.052);
-      limb([s*0.32,1.10,0.02],[s*0.39,0.85,0.06],0.045);
-      ball([s*0.40,0.82,0.07],0.052);
-    });
-    // pernas
-    [1,-1].forEach((s)=>{
-      limb([s*0.11,0.92,0],[s*0.12,0.50,0.02],0.075);
-      ball([s*0.12,0.49,0.02],0.062);
-      limb([s*0.12,0.49,0.02],[s*0.13,0.10,0],0.055);
-      const foot = new THREE.Mesh(new THREE.BoxGeometry(0.10,0.06,0.20), mat);
-      foot.position.set(s*0.13,0.045,0.05); body.add(foot);
-    });
-    // base
-    const ground = new THREE.Mesh(new THREE.CircleGeometry(0.75, 40),
-      new THREE.MeshBasicMaterial({color:0x1a5c33, transparent:true, opacity:0.25}));
-    ground.rotation.x = -Math.PI/2; ground.position.y = 0.005; body.add(ground);
-
-    // marcadores dos pontos da avaliação
-    const markers = [];   // meshes p/ raycast
-    const regCount = {};
-    PONTOS.forEach((p, idx)=>{
-      const positions = REG[p.regiao]; if (!positions) return;
-      const n = regCount[p.regiao] = (regCount[p.regiao]||0) + 1;
-      positions.forEach((pos)=>{
-        const m = new THREE.Mesh(new THREE.SphereGeometry(0.048, 18, 14),
-          new THREE.MeshBasicMaterial({color:p.cor}));
-        m.position.set(pos[0], pos[1] + (n-1)*0.075, pos[2]);
-        m.userData = {idx, phase: Math.random()*6};
-        const halo = new THREE.Mesh(new THREE.SphereGeometry(0.075, 18, 14),
-          new THREE.MeshBasicMaterial({color:p.cor, transparent:true, opacity:0.28}));
-        m.add(halo);
-        body.add(m); markers.push(m);
-      });
-    });
+    VFBoneco.buildMannequin(body);
+    const markers = VFBoneco.addMarkers(body, PONTOS);
+    let selectedIdx = -1;
 
     // interação: girar, zoom, tocar
     let rotY = 0.35, rotX = 0.06, targetRotY = null, idleSpin = true, lastTouch = 0;
@@ -210,7 +137,7 @@
       document.getElementById('b3d-info-titulo').textContent = p.titulo;
       document.getElementById('b3d-info-texto').textContent = p.texto;
       document.getElementById('b3d-info-origem').textContent = p.origem;
-      markers.forEach(m=>{ m.scale.setScalar(m.userData.idx===idx ? 1.45 : 1); });
+      selectedIdx = idx;
       if (girar){
         const pos = (REG[p.regiao]||[[0,0,1]])[0];
         targetRotY = Math.atan2(pos[0], pos[2]) * -1;  // gira até o ponto olhar p/ câmera
@@ -242,11 +169,7 @@
         rotY += 0.004; idleSpin = true;
       }
       body.rotation.y = rotY; body.rotation.x = rotX;
-      const tt = (t||0)/1000;
-      markers.forEach(m=>{
-        const s = (m.scale.x > 1.2 ? 1.45 : 1) + 0.16*Math.sin(tt*4 + m.userData.phase);
-        m.scale.setScalar(s);
-      });
+      VFBoneco.pulse(markers, (t||0)/1000, selectedIdx);
       renderer.render(scene, camera);
     })();
   </script>

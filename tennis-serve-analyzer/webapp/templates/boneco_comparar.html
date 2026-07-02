@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparativo 3D — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Comparativo 3D — {{ athlete }}</h1>
+      <span>Primeira × última avaliação postural</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('historico_atleta', athlete=athlete) }}">← Voltar ao aluno</a>
+      <a class="back" href="{{ url_for('boneco_atleta', athlete=athlete) }}">Boneco atual →</a>
+    </div>
+
+    {% if not comp %}
+    <div class="card">
+      <h2>Ainda não dá para comparar</h2>
+      <p class="note">São necessárias pelo menos <b>2 avaliações posturais</b> para o
+        comparativo. Faça uma nova avaliação para acompanhar a evolução.</p>
+      <a class="pdf-btn" href="{{ url_for('postura') }}">🧍 Fazer avaliação postural →</a>
+    </div>
+    {% else %}
+
+    <div class="card">
+      <div class="b3d-top">
+        <span class="b3d-legend"><i style="background:#22c55e"></i> positivo</span>
+        <span class="b3d-legend"><i style="background:#f59e0b"></i> leve</span>
+        <span class="b3d-legend"><i style="background:#ef4444"></i> maior</span>
+      </div>
+      <div class="cmp-labels">
+        <span>Antes · {{ comp.antes.data }}</span>
+        <span>Agora · {{ comp.agora.data }}</span>
+      </div>
+      <div id="b3d-wrap" class="b3d-wrap">
+        <canvas id="b3d"></canvas>
+      </div>
+      <p class="note">🖐️ Arraste para girar os dois bonecos juntos · role para zoom.</p>
+    </div>
+
+    <div class="card">
+      <h2>O que mudou</h2>
+      <p class="cmp-resumo">{{ comp.resumo }}</p>
+      {% for d in comp.deltas %}
+      <div class="cmp-row">
+        <div class="cmp-top">
+          <span class="cmp-nome">{{ d.nome }}</span>
+          <span class="cmp-verd" style="color: {{ d.cor }}">{{ d.icone }} {{ d.verdito }}</span>
+        </div>
+        <div class="cmp-vals">Antes: <b>{{ d.antes }}</b> → Agora: <b>{{ d.agora }}</b></div>
+      </div>
+      {% endfor %}
+      <p class="note">Comparação medida a medida entre a primeira e a última avaliação.
+        Quanto menor o ângulo de assimetria, melhor.</p>
+    </div>
+    {% endif %}
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+
+  {% if comp %}
+  <script src="{{ url_for('static', filename='three.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='boneco3d.js') }}"></script>
+  <script>
+    const ANTES = {{ comp.antes.pontos | tojson }};
+    const AGORA = {{ comp.agora.pontos | tojson }};
+
+    const canvas = document.getElementById('b3d');
+    const wrap = document.getElementById('b3d-wrap');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+    camera.position.set(0, 1.15, 3.9);
+    camera.lookAt(0, 1.0, 0);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x3c5546, 1.05));
+    const dir = new THREE.DirectionalLight(0xffffff, 0.7);
+    dir.position.set(2, 3, 2); scene.add(dir);
+
+    const world = new THREE.Group(); scene.add(world);
+    const gA = new THREE.Group(); gA.position.x = -0.62; world.add(gA);
+    const gB = new THREE.Group(); gB.position.x =  0.62; world.add(gB);
+    VFBoneco.buildMannequin(gA);
+    VFBoneco.buildMannequin(gB);
+    const mA = VFBoneco.addMarkers(gA, ANTES);
+    const mB = VFBoneco.addMarkers(gB, AGORA);
+
+    let rotY = 0.25, rotX = 0.05, drag = null, lastTouch = 0;
+    canvas.addEventListener('pointerdown', (e)=>{ drag = {x:e.clientX, y:e.clientY}; });
+    window.addEventListener('pointermove', (e)=>{
+      if (!drag) return;
+      rotY += (e.clientX - drag.x) * 0.011;
+      rotX = Math.max(-0.35, Math.min(0.4, rotX + (e.clientY - drag.y)*0.004));
+      drag.x = e.clientX; drag.y = e.clientY; lastTouch = performance.now();
+    });
+    window.addEventListener('pointerup', ()=>{ drag = null; lastTouch = performance.now(); });
+    canvas.addEventListener('wheel', (e)=>{
+      e.preventDefault();
+      camera.position.z = Math.max(2.2, Math.min(5.5, camera.position.z + e.deltaY*0.002));
+    }, {passive:false});
+
+    function resize(){
+      const w = wrap.clientWidth, h = Math.min(Math.round(w*0.95), 480);
+      wrap.style.height = h + 'px';
+      renderer.setSize(w, h, false);
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize); resize();
+
+    (function loop(t){
+      requestAnimationFrame(loop);
+      if (performance.now() - lastTouch > 5000) rotY += 0.003;
+      gA.rotation.y = rotY; gA.rotation.x = rotX;
+      gB.rotation.y = rotY; gB.rotation.x = rotX;
+      const tt = (t||0)/1000;
+      VFBoneco.pulse(mA, tt, -1); VFBoneco.pulse(mB, tt, -1);
+      renderer.render(scene, camera);
+    })();
+  </script>
+  {% endif %}
+</body>
+</html>

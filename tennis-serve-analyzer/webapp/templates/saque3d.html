@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saque 3D — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Saque 3D — {{ athlete }}</h1>
+      <span>Fases do saque com os ângulos medidos</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <a class="back" href="{{ url_for('historico_atleta', athlete=athlete) }}">← Voltar ao aluno</a>
+
+    {% if medido %}
+    <p class="note">✓ Usando os ângulos <b>medidos</b> na análise biomecânica{% if data %} de {{ data }}{% endif %}:
+      joelho {{ anim.joelho|int }}°{{ '' if anim.joelho_medido else ' (referência)' }} ·
+      cotovelo {{ anim.cotovelo|int }}°{{ '' if anim.cotovelo_medido else ' (referência)' }} ·
+      tronco {{ anim.tronco|int }}°{{ '' if anim.tronco_medido else ' (referência)' }}.</p>
+    {% else %}
+    <div class="aviso-box">
+      <b>⚠️ Sem biomecânica salva ainda</b>
+      <p>A animação abaixo usa ângulos de referência. Rode uma análise de saque com a
+        opção de <b>biomecânica</b> ligada para o boneco reproduzir os ângulos reais do aluno.</p>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <div id="b3d-wrap" class="b3d-wrap">
+        <canvas id="b3d"></canvas>
+        <div class="s3d-phase">
+          <b id="s3d-nome">Preparação</b>
+          <span id="s3d-info"></span>
+        </div>
+      </div>
+
+      <div class="s3d-controls">
+        <button type="button" id="s3d-play" class="ghost s3d-btn">⏸️ Pausar</button>
+        <input type="range" id="s3d-scrub" min="0" max="1000" value="0">
+        <button type="button" id="s3d-speed" class="ghost s3d-btn">1×</button>
+      </div>
+      <p class="note">🖐️ Arraste para girar em volta do atleta · use a barra para avançar
+        quadro a quadro. Animação <b>ilustrativa guiada pelos ângulos medidos</b> — não é
+        captura de movimento do aluno.</p>
+    </div>
+
+    <div class="card">
+      <h2>As fases e os ângulos do aluno</h2>
+      <div class="s3d-fases" id="s3d-fases"></div>
+    </div>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='three.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='boneco3d.js') }}"></script>
+  <script>
+    const A = {{ anim | tojson }};
+    const D2R = Math.PI / 180;
+
+    // ângulos medidos -> parâmetros da animação
+    const flexJoelho = Math.max(5, 180 - A.joelho);          // quanto dobra
+    const flexCotovelo = Math.max(2, 180 - A.cotovelo);      // dobra no contato
+    const troncoContato = Math.min(45, Math.max(5, A.tronco));
+
+    // keyframes das fases (rotações em graus; +x = para trás, -x = para frente)
+    const KF = [
+      {t:0.00, nome:'Preparação',
+       info:'Posição inicial, peso equilibrado.',
+       v:{trunk:2, shD:10, elD:-10, shE:-15, elE:-10, hip:-3, knee:5, py:0}},
+      {t:0.24, nome:'Carregamento',
+       info:`Joelhos dobram até ${A.joelho}°${A.joelho_medido?' (medido)':' (referência)'} para carregar a impulsão.`,
+       v:{trunk:9, shD:45, elD:-25, shE:-165, elE:-8, hip:-flexJoelho*0.62,
+          knee:flexJoelho, py:-flexJoelho*0.0042}},
+      {t:0.46, nome:'Armada (troféu)',
+       info:'Raquete armada atrás, corpo em arco — energia elástica acumulada.',
+       v:{trunk:14, shD:150, elD:-95, shE:-120, elE:-12, hip:-flexJoelho*0.62,
+          knee:flexJoelho, py:-flexJoelho*0.0042}},
+      {t:0.64, nome:'Aceleração',
+       info:'Pernas empurram, tronco gira e o braço dispara — efeito chicote.',
+       v:{trunk:2, shD:172, elD:-45, shE:-60, elE:-15, hip:-flexJoelho*0.18,
+          knee:flexJoelho*0.3, py:0.012}},
+      {t:0.72, nome:'Contato',
+       info:`Braço estendido (cotovelo ${A.cotovelo}°${A.cotovelo_medido?' medido':''}) e tronco inclinado ${A.tronco}°${A.tronco_medido?' (medido)':''}.`,
+       v:{trunk:-troncoContato*0.55, shD:184, elD:-flexCotovelo, shE:-25, elE:-20,
+          hip:2, knee:2, py:0.045}},
+      {t:1.00, nome:'Finalização',
+       info:'A raquete cruza o corpo e o atleta entra na quadra.',
+       v:{trunk:-22, shD:292, elD:-55, shE:-15, elE:-25, hip:-14, knee:18, py:-0.01}},
+    ];
+
+    const canvas = document.getElementById('b3d');
+    const wrap = document.getElementById('b3d-wrap');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+    camera.position.set(0, 1.25, 3.4);
+    camera.lookAt(0, 1.05, 0);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x3c5546, 1.05));
+    const dl = new THREE.DirectionalLight(0xffffff, 0.7);
+    dl.position.set(2, 3, 2); scene.add(dl);
+
+    const world = new THREE.Group(); scene.add(world);
+    const rig = VFBoneco.buildRig(world, {dom: A.dom});
+    const domArm = rig.arms[A.dom];
+    const tossArm = rig.arms[A.dom === 'dir' ? 'esq' : 'dir'];
+
+    // vista lateral inicial (mostra o plano do movimento); arraste para orbitar
+    let rotY = (A.dom === 'dir' ? -1 : 1) * Math.PI / 2, rotX = 0.04, drag = null;
+    canvas.addEventListener('pointerdown', (e)=>{ drag = {x:e.clientX, y:e.clientY}; });
+    window.addEventListener('pointermove', (e)=>{
+      if (!drag) return;
+      rotY += (e.clientX - drag.x) * 0.011;
+      rotX = Math.max(-0.3, Math.min(0.4, rotX + (e.clientY - drag.y)*0.004));
+      drag.x = e.clientX; drag.y = e.clientY;
+    });
+    window.addEventListener('pointerup', ()=>{ drag = null; });
+    canvas.addEventListener('wheel', (e)=>{
+      e.preventDefault();
+      camera.position.z = Math.max(2.0, Math.min(5.0, camera.position.z + e.deltaY*0.002));
+    }, {passive:false});
+
+    // interpolação suave entre keyframes
+    const smooth = (u)=>u*u*(3-2*u);
+    function poseAt(t){
+      let a = KF[0], b = KF[KF.length-1];
+      for (let i=0;i<KF.length-1;i++){
+        if (t >= KF[i].t && t <= KF[i+1].t){ a = KF[i]; b = KF[i+1]; break; }
+      }
+      const u = smooth((t - a.t) / Math.max(1e-6, b.t - a.t));
+      const v = {};
+      for (const k in a.v) v[k] = a.v[k] + (b.v[k] - a.v[k]) * u;
+      return {v, fase: (t - a.t < b.t - t) ? a : b};
+    }
+    function apply(p){
+      rig.torso.rotation.x = p.trunk * D2R;
+      domArm.shoulder.rotation.x = p.shD * D2R;
+      domArm.elbow.rotation.x = p.elD * D2R;
+      tossArm.shoulder.rotation.x = p.shE * D2R;
+      tossArm.elbow.rotation.x = p.elE * D2R;
+      ['dir','esq'].forEach(l=>{
+        rig.legs[l].hip.rotation.x = p.hip * D2R;
+        rig.legs[l].knee.rotation.x = p.knee * D2R;
+      });
+      rig.pelvis.position.y = 0.94 + p.py;
+    }
+
+    // controles
+    let playing = true, t = 0, speed = 1;
+    const DUR = 3800; // ms por ciclo
+    const scrub = document.getElementById('s3d-scrub');
+    const btnPlay = document.getElementById('s3d-play');
+    const btnSpeed = document.getElementById('s3d-speed');
+    btnPlay.addEventListener('click', ()=>{
+      playing = !playing;
+      btnPlay.textContent = playing ? '⏸️ Pausar' : '▶️ Reproduzir';
+    });
+    btnSpeed.addEventListener('click', ()=>{
+      speed = speed === 1 ? 0.4 : 1;
+      btnSpeed.textContent = speed === 1 ? '1×' : '0.4× (câmera lenta)';
+    });
+    scrub.addEventListener('input', ()=>{
+      playing = false; btnPlay.textContent = '▶️ Reproduzir';
+      t = parseInt(scrub.value) / 1000;
+    });
+
+    // lista de fases
+    const fasesDiv = document.getElementById('s3d-fases');
+    KF.forEach((k)=>{
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'b3d-item';
+      b.innerHTML = `<i style="background:#15803d"></i>
+        <span class="b3d-item-t">${k.nome}</span>`;
+      b.addEventListener('click', ()=>{
+        t = Math.min(0.999, k.t + 0.001);
+        playing = false; btnPlay.textContent = '▶️ Reproduzir';
+        scrub.value = Math.round(t*1000);
+      });
+      fasesDiv.appendChild(b);
+      const p = document.createElement('p');
+      p.className = 'note'; p.style.margin = '2px 0 10px 22px';
+      p.textContent = k.info;
+      fasesDiv.appendChild(p);
+    });
+
+    function resize(){
+      const w = wrap.clientWidth, h = Math.min(Math.round(w*1.05), 520);
+      wrap.style.height = h + 'px';
+      renderer.setSize(w, h, false);
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize); resize();
+
+    let lastT = performance.now();
+    (function loop(now){
+      requestAnimationFrame(loop);
+      const dt = (now - lastT); lastT = now;
+      if (playing){
+        t += (dt / DUR) * speed;
+        if (t > 1.18) t = 0;               // pequena pausa no fim do ciclo
+        scrub.value = Math.round(Math.min(1, t) * 1000);
+      }
+      const tt = Math.min(1, t);
+      const {v, fase} = poseAt(tt);
+      apply(v);
+      document.getElementById('s3d-nome').textContent = fase.nome;
+      document.getElementById('s3d-info').textContent = fase.info;
+      world.rotation.y = rotY; world.rotation.x = rotX;
+      renderer.render(scene, camera);
+    })(performance.now());
+  </script>
+</body>
+</html>
