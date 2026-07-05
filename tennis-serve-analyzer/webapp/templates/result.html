@@ -25,6 +25,19 @@
       {% if history_url %}<a class="back" href="{{ history_url }}">Ver histórico do atleta →</a>{% endif %}
     </div>
 
+    <div class="result-hero">
+      <span class="rh-label">Velocidade de pico · {{ athlete }}</span>
+      <div class="rh-num">{{ "%.0f"|format(summary.resultado.velocidade_pico_kmh) }}<span>km/h</span></div>
+      {% if confianca %}
+      <div class="rh-margin">± {{ confianca.margem_kmh }} km/h · Confiança {{ confianca.nivel }}</div>
+      {% endif %}
+      <div class="rh-chips">
+        {% if cls %}<span class="rh-chip">{{ cls.nivel }}</span>{% endif %}
+        {% if golpe %}<span class="rh-chip">{{ golpe.icone }} {{ golpe.nome }}</span>{% endif %}
+        {% if captura %}<span class="rh-chip">🎬 Captura {{ captura.nivel }}</span>{% endif %}
+      </div>
+    </div>
+
     {% if avisos %}
     <div class="aviso-box">
       <b>⚠️ Atenção à confiabilidade da medição</b>

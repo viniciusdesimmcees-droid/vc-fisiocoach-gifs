@@ -14,6 +14,22 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+  <div id="splash" aria-hidden="true">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="">
+    <b>VF Tênis Scanner</b>
+    <span>por Vinícius Camargos da Fonseca</span>
+  </div>
+  <script>
+    (function () {
+      var s = document.getElementById('splash');
+      if (sessionStorage.getItem('vf_splash')) { s.remove(); return; }
+      sessionStorage.setItem('vf_splash', '1');
+      setTimeout(function () {
+        s.classList.add('out');
+        setTimeout(function () { s.remove(); }, 500);
+      }, 900);
+    })();
+  </script>
   <header>
     <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
     <div>
@@ -74,6 +90,24 @@
         <span class="hub-d">Como a análise é feita</span>
       </a>
     </div>
+
+    {% if atividades %}
+    <div class="card feed-card">
+      <h2>🕒 Últimas atividades</h2>
+      <div class="feed">
+        {% for a in atividades %}
+        <a class="feed-row" href="{{ url_for('historico_atleta', athlete=a.athlete) }}">
+          <span class="feed-ico">{{ a.icone }}</span>
+          <span class="feed-txt">
+            <b>{{ a.athlete }}</b>
+            <span>{{ a.texto }}</span>
+          </span>
+          <span class="feed-data">{{ a.data }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
 
     <div class="steps-strip" id="analisar">
       <span class="step-chip"><b>1</b> Filme de LADO, em câmera lenta (120–240 fps)</span>

@@ -648,7 +648,12 @@ def index():
         resumo["recorde"] = max(melhores) if melhores else None
     except Exception:
         pass
-    return render_template("index.html", dl_available=DL_AVAILABLE, resumo=resumo)
+    try:
+        atividades = history.recent_activity(6)
+    except Exception:
+        atividades = []
+    return render_template("index.html", dl_available=DL_AVAILABLE,
+                           resumo=resumo, atividades=atividades)
 
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}

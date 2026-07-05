@@ -488,6 +488,36 @@ def list_athletes() -> list[dict]:
     return out
 
 
+def recent_activity(limit: int = 8) -> list[dict]:
+    """Últimas atividades de todos os alunos (análises + posturais)."""
+    with _conn() as c:
+        rows = c.execute(
+            """SELECT 'saque' AS tipo, athlete, created_at, peak_kmh AS valor,
+                      NULL AS view
+                 FROM analyses
+               UNION ALL
+               SELECT 'postura', athlete, created_at, NULL, view
+                 FROM posture_assessments
+               ORDER BY created_at DESC LIMIT ?""",
+            (limit,),
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        iso = d.get("created_at") or ""
+        d["data"] = f"{iso[8:10]}/{iso[5:7]}/{iso[0:4]}" if len(iso) >= 10 else iso
+        if d["tipo"] == "saque":
+            d["icone"] = "🎾"
+            d["texto"] = f"Saque analisado — pico {d.get('valor') or 0:.0f} km/h"
+        else:
+            vista = {"frente": "frontal", "costas": "posterior",
+                     "lado": "lateral", "lateral": "lateral"}.get(d.get("view"), "")
+            d["icone"] = "🧍"
+            d["texto"] = f"Avaliação postural {vista}".strip()
+        out.append(d)
+    return out
+
+
 def export_data(athlete: str) -> dict:
     """Todos os dados do atleta em dict (para o 'livro de dados' / JSON)."""
     return {
