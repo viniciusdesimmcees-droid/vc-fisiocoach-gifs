@@ -40,6 +40,7 @@
     {% endfor %}
 
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+    {% with nav_ativo='manual' %}{% include '_nav.html' %}{% endwith %}
   </div>
   <script src="{{ url_for('static', filename='share.js') }}"></script>
 </body>

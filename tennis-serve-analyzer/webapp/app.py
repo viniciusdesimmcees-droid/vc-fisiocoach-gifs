@@ -638,7 +638,17 @@ def server_error(_e):
 
 @app.route("/")
 def index():
-    return render_template("index.html", dl_available=DL_AVAILABLE)
+    # visão geral rápida para o painel da home
+    resumo = {"alunos": 0, "analises": 0, "recorde": None}
+    try:
+        atletas = history.list_athletes()
+        resumo["alunos"] = len(atletas)
+        resumo["analises"] = sum(a.get("n") or 0 for a in atletas)
+        melhores = [a["best"] for a in atletas if a.get("best")]
+        resumo["recorde"] = max(melhores) if melhores else None
+    except Exception:
+        pass
+    return render_template("index.html", dl_available=DL_AVAILABLE, resumo=resumo)
 
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}

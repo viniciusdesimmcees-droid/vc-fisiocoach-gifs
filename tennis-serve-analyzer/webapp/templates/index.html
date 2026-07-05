@@ -25,16 +25,57 @@
   <div class="wrap">
     {% if error %}<div class="error">{{ error }}</div>{% endif %}
 
-    <div style="display:flex; gap:10px; flex-wrap:wrap">
-      <a class="back" href="{{ url_for('historico') }}">📊 Ver histórico dos atletas →</a>
-      <a class="back" href="{{ url_for('postura') }}">🧍 Avaliação postural →</a>
-      <a class="back" href="{{ url_for('protocolo') }}">📋 Protocolo de captura →</a>
-      <a class="back" href="{{ url_for('validacao') }}">🔬 Validação & acurácia →</a>
-      <a class="back" href="{{ url_for('configuracoes') }}">⚙️ Configurações →</a>
-      <a class="back" href="{{ url_for('manual_page') }}">📖 Manual do operador →</a>
+    {% if resumo and (resumo.alunos or resumo.analises) %}
+    <div class="stat-strip">
+      <div class="stat-tile">
+        <span class="st-num">{{ resumo.alunos }}</span>
+        <span class="st-lbl">aluno{{ 's' if resumo.alunos != 1 }}</span>
+      </div>
+      <div class="stat-tile">
+        <span class="st-num">{{ resumo.analises }}</span>
+        <span class="st-lbl">análise{{ 's' if resumo.analises != 1 }}</span>
+      </div>
+      <div class="stat-tile">
+        <span class="st-num">{{ "%.0f"|format(resumo.recorde) if resumo.recorde else '—' }}</span>
+        <span class="st-lbl">recorde km/h</span>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="hub-grid">
+      <a class="hub-card hub-primary" href="#analisar">
+        <span class="hub-ico">⚡</span>
+        <span class="hub-t">Analisar saque</span>
+        <span class="hub-d">Velocidade com selo de confiança, biomecânica e golpe</span>
+      </a>
+      <a class="hub-card" href="{{ url_for('postura') }}">
+        <span class="hub-ico">🧍</span>
+        <span class="hub-t">Avaliação postural</span>
+        <span class="hub-d">Assimetrias com fotos e evolução</span>
+      </a>
+      <a class="hub-card" href="{{ url_for('historico') }}">
+        <span class="hub-ico">👥</span>
+        <span class="hub-t">Alunos & histórico</span>
+        <span class="hub-d">Fichas, laudos, boneco 3D e exportação</span>
+      </a>
+      <a class="hub-card" href="{{ url_for('protocolo') }}">
+        <span class="hub-ico">📋</span>
+        <span class="hub-t">Protocolo</span>
+        <span class="hub-d">Como filmar para precisão pericial</span>
+      </a>
+      <a class="hub-card" href="{{ url_for('validacao') }}">
+        <span class="hub-ico">🔬</span>
+        <span class="hub-t">Validação</span>
+        <span class="hub-d">Acurácia e autoteste por física</span>
+      </a>
+      <a class="hub-card" href="{{ url_for('configuracoes') }}">
+        <span class="hub-ico">⚙️</span>
+        <span class="hub-t">Configurações</span>
+        <span class="hub-d">Como a análise é feita</span>
+      </a>
     </div>
 
-    <div class="steps-strip">
+    <div class="steps-strip" id="analisar">
       <span class="step-chip"><b>1</b> Filme de LADO, em câmera lenta (120–240 fps)</span>
       <span class="step-chip"><b>2</b> Calibre: toque 2 pontos na rede (0,914 m)</span>
       <span class="step-chip"><b>3</b> Analise e confira o percurso da bola</span>
@@ -172,6 +213,7 @@
     </form>
 
     <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+    {% with nav_ativo='inicio' %}{% include '_nav.html' %}{% endwith %}
   </div>
 
   <script src="{{ url_for('static', filename='camera.js') }}"></script>

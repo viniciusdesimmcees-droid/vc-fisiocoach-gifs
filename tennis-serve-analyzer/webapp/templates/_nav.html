@@ -1,0 +1,17 @@
+<nav class="bottomnav">
+  <a href="{{ url_for('index') }}" class="{{ 'on' if nav_ativo == 'inicio' else '' }}">
+    <span class="bn-ico">🎾</span><span>Início</span>
+  </a>
+  <a href="{{ url_for('historico') }}" class="{{ 'on' if nav_ativo == 'alunos' else '' }}">
+    <span class="bn-ico">👥</span><span>Alunos</span>
+  </a>
+  <a href="{{ url_for('index') }}#analisar" class="bn-cta">
+    <span class="bn-ico">⚡</span><span>Analisar</span>
+  </a>
+  <a href="{{ url_for('postura') }}" class="{{ 'on' if nav_ativo == 'postura' else '' }}">
+    <span class="bn-ico">🧍</span><span>Postura</span>
+  </a>
+  <a href="{{ url_for('manual_page') }}" class="{{ 'on' if nav_ativo == 'manual' else '' }}">
+    <span class="bn-ico">📖</span><span>Manual</span>
+  </a>
+</nav>
