@@ -47,9 +47,9 @@ SECOES = [
      ]},
     {"icone": "🔍", "titulo": "4. Entendendo o resultado",
      "itens": [
-         "Selo de confiança: ex. '184 ± 9 km/h · Confiança Alta'. A margem junta "
-         "fps + calibração + qualidade do rastreio. Toque em 'Como calculamos' "
-         "para ver a contribuição de cada fator.",
+         "Selo de confiança (± margem de erro): ferramenta INTERNA do operador e "
+         "vem DESLIGADO — o atleta vê só a velocidade. Ligue em Configurações "
+         "quando quiser conferir a margem e os fatores (fps, calibração, rastreio).",
          "Qualidade da captura (pré-voo): checa câmera lateral, fps × velocidade, "
          "bola visível, calibração plausível e desfoque — cada problema vem com "
          "'como melhorar'.",
@@ -144,8 +144,9 @@ SECOES = [
          "altura H, a física diz a velocidade (v = √(2gH)) — compare com o app.",
          "É medição 2D por vídeo — não é radar Doppler. Ângulos e faixas têm margem; "
          "biomecânica e postura são estimativas educativas.",
-         "Confiança Baixa ou captura Ruim = refilme seguindo o protocolo antes de "
-         "registrar o resultado no histórico (ou tire a análise do laudo).",
+         "Captura Ruim no pré-voo (ou confiança baixa, se o selo estiver ligado) = "
+         "refilme seguindo o protocolo antes de registrar o resultado no histórico "
+         "(ou tire a análise do laudo).",
          "Nada aqui substitui avaliação presencial nem diagnóstico médico.",
      ]},
 ]

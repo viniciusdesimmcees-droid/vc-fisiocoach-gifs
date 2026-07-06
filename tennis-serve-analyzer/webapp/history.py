@@ -260,6 +260,9 @@ DEFAULT_ANALYSIS_PREFS = {
     "ball_diameter_cm": 6.7,   # diâmetro padrão da bola (foam/junior variam)
     "usar_bola": True,         # verificação/calibração automática pela bola
     "previoo": True,           # checagem da qualidade da captura
+    "confianca": False,        # selo de confiança (± margem) — DESLIGADO por
+                               # padrão: é ferramenta interna do operador e
+                               # pode confundir/desacreditar diante do atleta
     "didatico": True,          # resumo em palavras simples
     "glossario": True,         # glossário de termos
     "referencias": True,       # comparação com referências científicas

@@ -265,6 +265,9 @@ PREF_LABELS = [
      "Usa a bola (diâmetro conhecido) como régua independente para confirmar a calibração."),
     ("previoo", "Pré-voo: checagem da qualidade da captura",
      "Avisa sobre câmera não-lateral, fps baixo, bola pouco visível, desfoque."),
+    ("confianca", "Selo de confiança com margem de erro (± km/h)",
+     "Ferramenta interna do operador. Desligado, o resultado mostra só a "
+     "velocidade — recomendado ao apresentar para atletas."),
     ("didatico", "Resumo didático (em palavras simples para o aluno)", ""),
     ("glossario", "Glossário de termos", ""),
     ("referencias", "Comparação com referências científicas", ""),
@@ -1084,8 +1087,10 @@ def analyze():
                 "o enquadramento (câmera lateral, bola visível)."
             )
 
-        # selo de confiança da medição (fps + calibração cruzada + rastreio)
-        conf = confidence.evaluate(result, meta, fps, file_fps, calibracao)
+        # selo de confiança da medição — ferramenta INTERNA do operador;
+        # desligado por padrão para o resultado ficar limpo diante do atleta
+        conf = (confidence.evaluate(result, meta, fps, file_fps, calibracao)
+                if prefs.get("confianca", False) else None)
         # pré-voo: qualidade da captura (lixo entra, lixo sai)
         captura = (preflight.check(trajectory, meta, result, calib, calibracao)
                    if prefs.get("previoo", True) else None)
