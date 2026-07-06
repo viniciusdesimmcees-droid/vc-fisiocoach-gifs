@@ -77,14 +77,29 @@ MAKE_MP4 = os.environ.get("MAKE_MP4", "0") == "1"
 POSE_MAX_WIDTH = int(os.environ.get("POSE_MAX_WIDTH", "640"))
 POSE_MAX_FRAMES = min(int(os.environ.get("POSE_MAX_FRAMES", "150")), 240)
 
-# Deep learning (detector YOLOv8 + biomecânica) só está disponível se torch e
-# ultralytics estiverem instalados — não estão no plano grátis. Detectamos uma
-# vez para esconder as opções na tela e cair no clássico automaticamente.
+# Deep learning (detector YOLOv8 + biomecânica): além de conferir se torch e
+# ultralytics estão instalados, TESTA de verdade o torchvision (um par
+# torch/torchvision incompatível quebra com "operator torchvision::nms does
+# not exist"). Se o teste falhar, o app esconde as opções de DL e segue
+# medindo velocidade com o detector clássico — nunca derruba a análise.
 import importlib.util as _ilu
 
-DL_AVAILABLE = (
-    _ilu.find_spec("torch") is not None and _ilu.find_spec("ultralytics") is not None
-)
+
+def _dl_available() -> bool:
+    if _ilu.find_spec("torch") is None or _ilu.find_spec("ultralytics") is None:
+        return False
+    try:
+        import torch
+        from torchvision.ops import nms
+
+        nms(torch.tensor([[0.0, 0.0, 1.0, 1.0]]), torch.tensor([0.9]), 0.5)
+        return True
+    except Exception as e:  # ex.: torchvision::nms does not exist
+        print(f"[dl] deep learning DESATIVADO (torch/torchvision quebrados): {e}")
+        return False
+
+
+DL_AVAILABLE = _dl_available()
 
 
 def _f(name: str, default: float) -> float:
@@ -948,21 +963,37 @@ def analyze():
 
     try:
         # ---- rastreio da bola ----
+        aviso_dl = None
+        trajectory = meta = None
         if detector == "dl":
-            from detector_dl import DLBallDetector
+            # Se o deep learning falhar em execução (ex.: torch/torchvision
+            # incompatíveis), cai no detector clássico em vez de perder a análise.
+            try:
+                from detector_dl import DLBallDetector
 
-            ball_class = int(_f("ball_class", 32))
-            tracker = DLBallDetector(
-                model_path=request.form.get("model", "yolov8n.pt") or "yolov8n.pt",
-                conf=_f("conf", 0.10),
-                classes=(ball_class,),
-            )
-        else:
+                ball_class = int(_f("ball_class", 32))
+                tracker = DLBallDetector(
+                    model_path=request.form.get("model", "yolov8n.pt") or "yolov8n.pt",
+                    conf=_f("conf", 0.10),
+                    classes=(ball_class,),
+                )
+                trajectory, meta = tracker.track(
+                    in_path, max_width=PROC_MAX_WIDTH, max_frames=PROC_MAX_FRAMES
+                )
+            except Exception as e:
+                traceback.print_exc()
+                detector = "classic"
+                trajectory = meta = None
+                aviso_dl = (
+                    "O detector por deep learning falhou nesta análise "
+                    f"({str(e)[:80]}). Usado o detector clássico no lugar."
+                )
+        if trajectory is None:
             tracker = BallTracker()
-        # Reduz vídeos grandes no servidor (memória/tempo em planos pequenos).
-        trajectory, meta = tracker.track(
-            in_path, max_width=PROC_MAX_WIDTH, max_frames=PROC_MAX_FRAMES
-        )
+            # Reduz vídeos grandes no servidor (memória/tempo em planos pequenos).
+            trajectory, meta = tracker.track(
+                in_path, max_width=PROC_MAX_WIDTH, max_frames=PROC_MAX_FRAMES
+            )
         scale = meta.get("scale", 1.0)
 
         fps = fps_override if fps_override > 0 else meta["fps"]
@@ -1017,6 +1048,8 @@ def analyze():
 
         # ---- avisos automáticos de confiabilidade ----
         avisos = []
+        if aviso_dl:
+            avisos.append(aviso_dl)
         if calib_mode == "ball":
             avisos.append(
                 f"Calibração automática pela bola ({calibracao['ball_diameter_cm']:.1f} cm). "

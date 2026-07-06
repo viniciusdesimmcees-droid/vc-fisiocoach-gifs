@@ -18,8 +18,16 @@ RUN git clone --depth 1 --filter=blob:none --sparse \
 WORKDIR /app/tennis-serve-analyzer
 RUN pip install --no-cache-dir -r requirements.txt
 # Biomecânica: torch (CPU) + ultralytics. Wheel CPU é bem menor que a versão GPU.
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
-    && pip install --no-cache-dir ultralytics
+# IMPORTANTE: torch e torchvision precisam ser um PAR COMPATÍVEL, instalados
+# JUNTOS e do MESMO índice — senão o torchvision não registra seus operadores e
+# o deep learning falha com "operator torchvision::nms does not exist".
+# Par testado (CPU): torch 2.4.1 + torchvision 0.19.1.
+RUN pip install --no-cache-dir torch==2.4.1 torchvision==0.19.1 \
+      --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir "ultralytics>=8.3,<9" \
+    && python -c "import torch, torchvision; from torchvision.ops import nms; \
+nms(torch.tensor([[0.,0.,1.,1.]]), torch.tensor([0.9]), 0.5); \
+print('torch', torch.__version__, '+ torchvision', torchvision.__version__, 'OK')"
 
 # Pré-baixa os modelos (bola e pose) para não baixar a cada requisição.
 RUN cd webapp && python -c "from ultralytics import YOLO; YOLO('yolov8n.pt'); YOLO('yolov8n-pose.pt')"
