@@ -478,7 +478,9 @@ def write_athlete_dossier_pdf(path, athlete, profile, age, imc, stats,
 
             if last_posture:
                 view_lbl = {"frente": "frontal", "costas": "posterior",
-                            "lado": "lateral", "lateral": "lateral"}.get(
+                            "lado": "lateral", "lateral": "lateral",
+                            "lado_dir": "perfil direito",
+                            "lado_esq": "perfil esquerdo"}.get(
                     last_posture.get("view"), "")
                 data = (last_posture.get("created_at") or "")[:10]
                 fig2.text(0.06, 0.58, f"Última avaliação ({view_lbl} · {data})",
@@ -852,7 +854,8 @@ def write_posture_pdf(path: str, athlete: str, resultado: dict, annot_png: str) 
     import matplotlib.image as mpimg
 
     view_lbl = {"frente": "Vista frontal", "costas": "Vista posterior",
-                "lado": "Vista lateral", "lateral": "Vista lateral"}.get(
+                "lado": "Vista lateral", "lateral": "Vista lateral",
+                "lado_dir": "Perfil direito", "lado_esq": "Perfil esquerdo"}.get(
         resultado.get("view"), "Avaliação")
     fig = plt.figure(figsize=(8.27, 11.69))
     _page_header(fig, athlete, f"Avaliação Postural — {view_lbl}")

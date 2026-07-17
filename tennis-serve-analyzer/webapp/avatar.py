@@ -136,7 +136,9 @@ def build_from_assessment(assess: dict) -> list[dict]:
 
 
 VIEW_LABEL = {"frente": "Frontal", "costas": "Posterior",
-              "lado": "Lateral", "lateral": "Lateral"}
+              "lado": "Lateral", "lateral": "Lateral",
+              "lado_dir": "Perfil direito", "lado_esq": "Perfil esquerdo"}
+_ORDEM_VISTAS = {"frente": 0, "costas": 1, "lado_dir": 2, "lado_esq": 3, "lateral": 4}
 
 
 def _view(a) -> str:
@@ -164,8 +166,7 @@ def photo_pairs(posturas: list) -> list[dict]:
                 "mesmo_dia": (lst[0].get("created_at") or "")[:10]
                              == (lst[-1].get("created_at") or "")[:10],
             })
-    ordem = {"frente": 0, "costas": 1, "lateral": 2}
-    pares.sort(key=lambda x: ordem.get(x["view"], 9))
+    pares.sort(key=lambda x: _ORDEM_VISTAS.get(x["view"], 9))
     return pares
 
 
@@ -214,8 +215,7 @@ def compare(posturas: list) -> dict | None:
     deltas.sort(key=lambda x: x["delta"])  # melhoras primeiro
 
     # vista principal para os bonecos 3D / mapa: frontal, senão a primeira com par
-    ordem = {"frente": 0, "costas": 1, "lateral": 2}
-    vp = sorted(com_par, key=lambda v: ordem.get(v, 9))[0]
+    vp = sorted(com_par, key=lambda v: _ORDEM_VISTAS.get(v, 9))[0]
     antes_p, agora_p = com_par[vp][0], com_par[vp][-1]
 
     n_mel = sum(1 for x in deltas if x["delta"] <= -1.0)

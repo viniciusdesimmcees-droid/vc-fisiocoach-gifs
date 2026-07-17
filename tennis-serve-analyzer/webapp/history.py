@@ -126,6 +126,17 @@ def init_db() -> None:
         pcols = {r["name"] for r in c.execute("PRAGMA table_info(posture_assessments)")}
         if "image_blob" not in pcols:
             c.execute("ALTER TABLE posture_assessments ADD COLUMN image_blob BLOB")
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS movement_tests (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                athlete TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                teste TEXT, nome TEXT,
+                alertas INTEGER, graves INTEGER,
+                medidas TEXT, deficits TEXT, exercicios TEXT,
+                image_blob BLOB
+            )"""
+        )
         # configurações do operador (ex.: métricas excluídas da leitura)
         c.execute(
             """CREATE TABLE IF NOT EXISTS settings (
@@ -212,6 +223,7 @@ def rename_athlete(old: str, new: str) -> None:
     with _conn() as c:
         c.execute("UPDATE analyses SET athlete = ? WHERE athlete = ?", (new, old))
         c.execute("UPDATE posture_assessments SET athlete = ? WHERE athlete = ?", (new, old))
+        c.execute("UPDATE movement_tests SET athlete = ? WHERE athlete = ?", (new, old))
         c.execute("UPDATE OR REPLACE athletes SET name = ? WHERE name = ?", (new, old))
     _sync()
 
@@ -221,6 +233,7 @@ def delete_athlete(name: str) -> None:
     with _conn() as c:
         c.execute("DELETE FROM analyses WHERE athlete = ?", (name,))
         c.execute("DELETE FROM posture_assessments WHERE athlete = ?", (name,))
+        c.execute("DELETE FROM movement_tests WHERE athlete = ?", (name,))
         c.execute("DELETE FROM athletes WHERE name = ?", (name,))
     _sync()
 
@@ -358,7 +371,8 @@ def latest_extras(athlete: str) -> tuple[dict | None, dict | None]:
 # ----------------------- avaliação postural (histórico) -----------------------
 
 VIEW_LABEL = {"frente": "Frontal", "costas": "Posterior",
-              "lado": "Lateral", "lateral": "Lateral"}
+              "lado": "Lateral", "lateral": "Lateral",
+              "lado_dir": "Perfil direito", "lado_esq": "Perfil esquerdo"}
 
 
 def record_posture(athlete, view, resultado: dict, image_url=None,
@@ -463,6 +477,65 @@ def posture_evolution_png(athlete: str) -> bytes:
     return _fig_to_png(fig)
 
 
+# ------------------------ testes de movimento -------------------------
+
+def record_movement_test(athlete, resultado: dict, exercicios: list,
+                         image_bytes: bytes | None = None) -> int:
+    with _conn() as c:
+        cur = c.execute(
+            "INSERT INTO movement_tests (athlete, created_at, teste, nome, "
+            "alertas, graves, medidas, deficits, exercicios, image_blob) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                (athlete or "Atleta").strip() or "Atleta",
+                datetime.now(timezone.utc).isoformat(),
+                resultado.get("teste"), resultado.get("nome"),
+                int(resultado.get("alertas", 0)), int(resultado.get("graves", 0)),
+                json.dumps(resultado.get("medidas", []), ensure_ascii=False),
+                json.dumps(resultado.get("deficits", []), ensure_ascii=False),
+                json.dumps(exercicios or [], ensure_ascii=False),
+                sqlite3.Binary(image_bytes) if image_bytes else None,
+            ),
+        )
+        new_id = cur.lastrowid
+    _sync()
+    return new_id
+
+
+def get_movement_tests(athlete: str) -> list[dict]:
+    with _conn() as c:
+        rows = c.execute(
+            "SELECT * FROM movement_tests WHERE athlete = ? ORDER BY created_at",
+            (athlete,),
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["tem_imagem"] = d.pop("image_blob", None) is not None
+        for campo in ("medidas", "deficits", "exercicios"):
+            try:
+                d[campo] = json.loads(d.get(campo) or "[]")
+            except (ValueError, TypeError):
+                d[campo] = []
+        out.append(d)
+    return out
+
+
+def get_movement_image(test_id: int) -> bytes | None:
+    with _conn() as c:
+        row = c.execute("SELECT image_blob FROM movement_tests WHERE id = ?",
+                        (test_id,)).fetchone()
+    if row and row["image_blob"] is not None:
+        return bytes(row["image_blob"])
+    return None
+
+
+def delete_movement_test(test_id: int) -> None:
+    with _conn() as c:
+        c.execute("DELETE FROM movement_tests WHERE id = ?", (test_id,))
+    _sync()
+
+
 def list_athletes() -> list[dict]:
     """Todos os atletas — inclui quem só tem ficha ou só avaliação postural."""
     with _conn() as c:
@@ -501,6 +574,9 @@ def recent_activity(limit: int = 8) -> list[dict]:
                UNION ALL
                SELECT 'postura', athlete, created_at, NULL, view
                  FROM posture_assessments
+               UNION ALL
+               SELECT 'teste', athlete, created_at, NULL, nome
+                 FROM movement_tests
                ORDER BY created_at DESC LIMIT ?""",
             (limit,),
         ).fetchall()
@@ -512,6 +588,9 @@ def recent_activity(limit: int = 8) -> list[dict]:
         if d["tipo"] == "saque":
             d["icone"] = "🎾"
             d["texto"] = f"Saque analisado — pico {d.get('valor') or 0:.0f} km/h"
+        elif d["tipo"] == "teste":
+            d["icone"] = "🏋️"
+            d["texto"] = f"Teste de movimento — {d.get('view') or ''}"
         else:
             vista = {"frente": "frontal", "costas": "posterior",
                      "lado": "lateral", "lateral": "lateral"}.get(d.get("view"), "")
@@ -530,6 +609,7 @@ def export_data(athlete: str) -> dict:
         "estatisticas_saque": athlete_stats(athlete),
         "analises_saque": get_history(athlete),
         "avaliacoes_posturais": get_posture_history(athlete),
+        "testes_movimento": get_movement_tests(athlete),
     }
 
 

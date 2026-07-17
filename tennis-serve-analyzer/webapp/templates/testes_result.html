@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teste — {{ athlete }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>{{ resultado.nome }}</h1>
+      <span>{{ athlete }} — teste de movimento</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px">
+      <a class="back" href="{{ url_for('testes') }}">← Fazer outro teste</a>
+      {% if history_url %}<a class="back" href="{{ history_url }}">Página do aluno →</a>{% endif %}
+    </div>
+
+    <p class="note">✓ Teste salvo no histórico de <b>{{ athlete }}</b>.</p>
+
+    <div class="postura-grid">
+      {% if imagem %}
+      <div class="card postura-img-card">
+        <img class="postura-img" src="{{ imagem }}" alt="Quadro mais fundo do movimento">
+        <p class="note">Quadro-chave: o ponto mais fundo do movimento, com o esqueleto
+          detectado — as medidas foram feitas aqui.</p>
+      </div>
+      {% endif %}
+      <div class="card postura-resumo-card">
+        <h2>Resumo</h2>
+        <div class="resumo-flags">
+          <span class="flag" style="background:{{ '#dc2626' if resultado.graves else ('#d97706' if resultado.alertas else '#15803d') }}">
+            {{ '🔺' if resultado.graves else ('⚠️' if resultado.alertas else '✅') }}
+            {{ resultado.alertas }} ponto(s) de atenção
+          </span>
+        </div>
+        <p class="resumo-txt">{{ resultado.resumo }}</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Medidas do movimento</h2>
+      {% for m in resultado.medidas %}
+      <div class="post-row">
+        <div class="post-top">
+          <span class="post-nome">{{ m.nome }}</span>
+          <span class="post-sit" style="color: {{ m.cor }}">{{ m.icone }} {{ m.valor }} · {{ m.situacao }}</span>
+        </div>
+        <div class="post-detalhe">{{ m.detalhe }}</div>
+        <div class="post-expl">{{ m.explicacao }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if resultado.deficits %}
+    <div class="card engine-card">
+      <h2>💪 Músculos-foco detectados <span class="hint">— não deixe de trabalhar</span></h2>
+      <div class="musc-grid">
+        {% for d in resultado.deficits %}
+        <div class="musc-item">
+          <span class="musc-grupo">{{ d.grupo|replace("_"," ")|title }}</span>
+          <span class="musc-motivo">{{ d.motivo }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if exercicios %}
+      <h3 class="engine-sub">Exercícios encaminhados (biblioteca VC Fisiocoach)</h3>
+      <div class="ex-grid">
+        {% for e in exercicios %}
+        <figure class="ex-card">
+          {% if e.gif_url %}<img src="{{ e.gif_url }}" alt="{{ e.nome }}" loading="lazy">{% endif %}
+          <figcaption>
+            <span class="ex-nome">{{ e.nome }}</span>
+            <span class="ex-grupo">{{ e.grupo|replace("_"," ")|title }}</span>
+          </figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% else %}
+    <div class="card">
+      <h2>💪 Nenhum déficit detectado</h2>
+      <p class="note">O padrão de movimento ficou dentro do esperado neste teste.</p>
+    </div>
+    {% endif %}
+
+    <p class="note">Triagem por vídeo 2D inspirada nos screenings funcionais — aponta
+      padrões compatíveis com déficits; a confirmação é do profissional. Não substitui
+      avaliação presencial nem diagnóstico médico.</p>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+    {% with nav_ativo='postura' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+</body>
+</html>

@@ -6,7 +6,7 @@ escritos para o professor/operador, não para programador).
 
 from __future__ import annotations
 
-VERSAO = "1.1"
+VERSAO = "1.3"
 
 SECOES = [
     {"icone": "🎾", "titulo": "1. O que é o VF Tênis Scanner",
@@ -65,11 +65,18 @@ SECOES = [
      "itens": [
          "Menu 'Avaliação postural': envie foto ou vídeo do aluno de frente, costas "
          "ou lado — corpo inteiro, ereto, boa luz, fundo limpo.",
+         "São 4 posições: de frente, de costas, PERFIL DIREITO e PERFIL ESQUERDO — "
+         "o comparativo de evolução só compara a mesma posição entre si.",
          "O app mede ombros, cabeça, pélvis, tronco e joelhos (frente/costas) e "
-         "cabeça anteriorizada + inclinação do tronco (perfil).",
+         "cabeça anteriorizada + inclinação do tronco (nos perfis).",
          "A foto anotada fica salva no banco (permanente) e alimenta o comparativo "
          "primeira × última avaliação, no app e no PDF.",
          "É triagem 2D: apoio à avaliação do profissional, não diagnóstico médico.",
+         "TESTES DE MOVIMENTO (menu próprio): screening funcional por vídeo no padrão "
+         "dos grandes protocolos — agachamento profundo com braços elevados (perfil) e "
+         "agachamento unilateral D/E (frente). O app mede o gesto, aponta os MÚSCULOS "
+         "com déficit provável (glúteo médio, core, tornozelo, ombros…) e já encaminha "
+         "os exercícios da biblioteca VC Fisiocoach.",
      ]},
     {"icone": "👥", "titulo": "6. Alunos: ficha, histórico e edição",
      "itens": [

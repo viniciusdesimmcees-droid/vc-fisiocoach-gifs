@@ -54,6 +54,7 @@ import storage  # noqa: E402
 import avatar  # noqa: E402
 import bodymap  # noqa: E402
 import manual  # noqa: E402
+import movetests  # noqa: E402
 
 history.init_db()
 
@@ -140,6 +141,7 @@ def historico_atleta(athlete):
         posturas=list(reversed(posturas)),
         sessoes=avatar.sessions(posturas),
         pares_foto=avatar.photo_pairs(posturas),
+        testes_mov=list(reversed(history.get_movement_tests(athlete))),
         profile=profile,
         age=history.age_from_birthdate(profile.get("birthdate")) if profile else None,
         imc=history.bmi(profile.get("height_cm"), profile.get("weight_kg")) if profile else None,
@@ -191,6 +193,125 @@ def postura_imagem(assessment_id):
 def excluir_postura(assessment_id):
     athlete = request.form.get("athlete", "")
     history.delete_posture(assessment_id)
+    return redirect(url_for("historico_atleta", athlete=athlete)
+                    if athlete else url_for("historico"))
+
+
+def _frame_at(path: str, idx: int, max_width: int):
+    """Lê o quadro `idx` do vídeo (na mesma escala usada na pose)."""
+    import cv2
+
+    cap = cv2.VideoCapture(path)
+    if not cap.isOpened():
+        return None
+    cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+    ok, frame = cap.read()
+    cap.release()
+    if not ok:
+        return None
+    return _downscale_bgr(frame, max_width)
+
+
+@app.route("/testes")
+def testes():
+    return render_template("testes.html", testes=movetests.TESTES,
+                           dl_available=DL_AVAILABLE)
+
+
+@app.route("/testes/analisar", methods=["POST"])
+def testes_analisar():
+    if not DL_AVAILABLE:
+        return render_template(
+            "testes.html", testes=movetests.TESTES, dl_available=False,
+            error="Os testes de movimento usam detecção de pose (deep learning), "
+            "indisponível neste ambiente.",
+        ), 400
+    media = request.files.get("media")
+    teste = request.form.get("teste", "agachamento")
+    if not media or media.filename == "":
+        return render_template(
+            "testes.html", testes=movetests.TESTES, dl_available=True,
+            error="Envie o vídeo do teste (corpo inteiro, 2–3 repetições).",
+        ), 400
+    if teste not in movetests.TESTES:
+        abort(400)
+    athlete = request.form.get("athlete", "Atleta").strip() or "Atleta"
+
+    job = uuid.uuid4().hex[:10]
+    in_path = os.path.join(UPLOADS_DIR, f"teste_{job}_{media.filename}")
+    media.save(in_path)
+    try:
+        import cv2
+        from pose_estimator import PoseEstimator
+
+        pose = PoseEstimator(model_path="yolov8n-pose.pt")
+        frames, _meta = pose.estimate_video(
+            in_path, max_width=POSE_MAX_WIDTH, max_frames=POSE_MAX_FRAMES
+        )
+        resultado = movetests.analyze(teste, frames)
+        if not resultado:
+            return render_template(
+                "testes.html", testes=movetests.TESTES, dl_available=True,
+                error="Não consegui medir o movimento. Garanta corpo inteiro no "
+                "quadro, boa luz e a vista certa (veja as instruções do teste).",
+            ), 400
+
+        # músculos com déficit -> exercícios da biblioteca VC Fisiocoach
+        exercicios = []
+        for d in resultado["deficits"]:
+            exercicios.extend(engine._pick(d["grupo"], n=2))
+
+        # quadro-chave anotado (o fundo do movimento)
+        img_bytes = None
+        img = _frame_at(in_path, resultado["frame_idx"], POSE_MAX_WIDTH)
+        kp = frames[resultado["frame_idx"]]
+        if img is not None and kp is not None:
+            vista = "lado" if teste == "agachamento" else "frente"
+            ann = posture.annotate(img, kp, vista)
+            ok_enc, buf = cv2.imencode(".png", ann)
+            img_bytes = buf.tobytes() if ok_enc else None
+
+        test_id = None
+        try:
+            test_id = history.record_movement_test(
+                athlete, resultado, exercicios, img_bytes
+            )
+        except Exception:
+            traceback.print_exc()
+
+        return render_template(
+            "testes_result.html", athlete=athlete, resultado=resultado,
+            exercicios=exercicios, test_id=test_id,
+            imagem=(url_for("teste_imagem", test_id=test_id)
+                    if (test_id and img_bytes) else None),
+            history_url=url_for("historico_atleta", athlete=athlete),
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return render_template(
+            "testes.html", testes=movetests.TESTES, dl_available=True,
+            error=f"Falha no teste de movimento: {e}",
+        ), 500
+    finally:
+        try:
+            os.remove(in_path)
+        except OSError:
+            pass
+
+
+@app.route("/teste/<int:test_id>/imagem.png")
+def teste_imagem(test_id):
+    data = history.get_movement_image(test_id)
+    if not data:
+        abort(404)
+    return Response(data, mimetype="image/png",
+                    headers={"Cache-Control": "public, max-age=86400"})
+
+
+@app.route("/teste/<int:test_id>/excluir", methods=["POST"])
+def excluir_teste(test_id):
+    athlete = request.form.get("athlete", "")
+    history.delete_movement_test(test_id)
     return redirect(url_for("historico_atleta", athlete=athlete)
                     if athlete else url_for("historico"))
 
@@ -813,7 +934,9 @@ def postura_analisar():
             athlete=athlete,
             resultado=resultado,
             view_label={"frente": "de frente", "costas": "de costas",
-                        "lado": "de lado", "lateral": "de lado"}.get(view, view),
+                        "lado": "de lado", "lateral": "de lado",
+                        "lado_dir": "de perfil direito",
+                        "lado_esq": "de perfil esquerdo"}.get(view, view),
             imagem=img_url,
             pdf=url_for("static", filename=f"results/{job}/postura_laudo.pdf") if pdf_ok else None,
             history_url=url_for("historico_atleta", athlete=athlete),

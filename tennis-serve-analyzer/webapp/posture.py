@@ -90,8 +90,8 @@ def analyze(kp, view: str = "frente") -> dict | None:
     view = (view or "frente").lower()
 
     medidas: list[dict] = []
-    if view in ("lado", "lateral"):
-        medidas = _analyze_side(kp)
+    if view in ("lado", "lateral", "lado_dir", "lado_esq"):
+        medidas = _analyze_side(kp, view)
     else:
         medidas = _analyze_front(kp, view)
 
@@ -185,9 +185,10 @@ def _analyze_front(kp, view: str) -> list[dict]:
     return medidas
 
 
-def _analyze_side(kp) -> list[dict]:
-    """Vista lateral: escolhe o lado mais visível e mede cabeça anteriorizada
-    e inclinação sagital do tronco."""
+def _analyze_side(kp, view: str = "lado") -> list[dict]:
+    """Vista de perfil: mede cabeça anteriorizada e inclinação sagital do
+    tronco. Em `lado_dir`/`lado_esq` usa o lado DECLARADO pelo operador;
+    no legado `lado` escolhe o mais visível."""
     def side_conf(idxs):
         s = 0.0
         for i in idxs:
@@ -195,9 +196,15 @@ def _analyze_side(kp) -> list[dict]:
                 s += float(kp[i][2])
         return s
 
-    left = side_conf([L_EAR, L_SH, L_HIP, L_KNEE, L_ANK])
-    right = side_conf([R_EAR, R_SH, R_HIP, R_KNEE, R_ANK])
-    if right >= left:
+    if view == "lado_dir":
+        usar_direito = True
+    elif view == "lado_esq":
+        usar_direito = False
+    else:
+        left = side_conf([L_EAR, L_SH, L_HIP, L_KNEE, L_ANK])
+        right = side_conf([R_EAR, R_SH, R_HIP, R_KNEE, R_ANK])
+        usar_direito = right >= left
+    if usar_direito:
         ear, sh, hip = _p(kp, R_EAR), _p(kp, R_SH), _p(kp, R_HIP)
     else:
         ear, sh, hip = _p(kp, L_EAR), _p(kp, L_SH), _p(kp, L_HIP)
@@ -282,9 +289,12 @@ def annotate(img, kp, view: str = "frente"):
             col = green if abs(g) <= _OK else amber
             cv2.line(out, pa, pb, col, thick, cv2.LINE_AA)
 
-    if view in ("lado", "lateral"):
-        # prumo a partir do ombro mais visível
-        for sh_i, hip_i in ((R_SH, R_HIP), (L_SH, L_HIP)):
+    if view in ("lado", "lateral", "lado_dir", "lado_esq"):
+        # prumo a partir do ombro do lado declarado (ou do mais visível)
+        ordem = ((R_SH, R_HIP), (L_SH, L_HIP))
+        if view == "lado_esq":
+            ordem = ((L_SH, L_HIP), (R_SH, R_HIP))
+        for sh_i, hip_i in ordem:
             ps, ph = pt(sh_i), pt(hip_i)
             if ps and ph:
                 cv2.line(out, (ps[0], 0), (ps[0], h), (200, 160, 60), 1, cv2.LINE_AA)

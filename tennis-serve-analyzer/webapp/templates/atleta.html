@@ -197,6 +197,46 @@
     </div>
 
     <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap">
+        <h2 style="margin:0">🏋️ Testes de movimento</h2>
+        <a class="back" href="{{ url_for('testes') }}">Novo teste →</a>
+      </div>
+      {% if testes_mov %}
+      {% for t in testes_mov %}
+      <div class="postura-hist-row">
+        <div class="phist-head">
+          {% if t.tem_imagem %}<a href="{{ url_for('teste_imagem', test_id=t.id) }}" target="_blank"><img class="phist-thumb" src="{{ url_for('teste_imagem', test_id=t.id) }}" alt="quadro"></a>{% endif %}
+          <span><b>{{ t.created_at[8:10] }}/{{ t.created_at[5:7] }}/{{ t.created_at[0:4] }}</b> · {{ t.nome }}</span>
+          <span class="phist-flag" style="background: {{ '#dc2626' if t.graves else ('#d97706' if t.alertas else '#15803d') }}">
+            {{ '🔺' if t.graves else ('⚠️' if t.alertas else '✅') }} {{ t.alertas }} atenção
+          </span>
+          <details class="analise-edit">
+            <summary>⋯</summary>
+            {% if t.tem_imagem %}<a class="back" href="{{ url_for('teste_imagem', test_id=t.id) }}" target="_blank">Ver quadro-chave ↗</a>{% endif %}
+            <form action="{{ url_for('excluir_teste', test_id=t.id) }}" method="post"
+                  onsubmit="return confirm('Excluir este teste de movimento?');">
+              <input type="hidden" name="athlete" value="{{ athlete }}">
+              <button type="submit" class="rec-btn" style="margin-top:8px">🗑️ Excluir</button>
+            </form>
+          </details>
+        </div>
+        <div class="phist-medidas">
+          {% for d in t.deficits %}
+          <span class="phist-chip" title="{{ d.motivo }}">💪 {{ d.grupo|replace("_"," ")|title }}</span>
+          {% endfor %}
+          {% for m in t.medidas %}
+          <span class="phist-chip" title="{{ m.detalhe }}">{{ m.icone }} {{ m.nome[:24] }}: {{ m.valor }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="note">Sem testes ainda. O screening de movimento (agachamento profundo e
+        unilateral) revela déficits musculares e já encaminha os exercícios da biblioteca.</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
       <details>
         <summary><b>⚙️ Gerenciar atleta</b> <span class="hint">— renomear ou excluir</span></summary>
         <form action="{{ url_for('renomear_atleta', athlete=athlete) }}" method="post" style="margin-top:12px">

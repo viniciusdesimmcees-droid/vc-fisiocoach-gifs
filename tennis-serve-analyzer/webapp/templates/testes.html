@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Testes de Movimento — VF Tênis Scanner</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VF Tênis Scanner">
+    <div>
+      <h1>Testes de Movimento</h1>
+      <span>Screening funcional por vídeo — déficits musculares</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <a class="back" href="{{ url_for('index') }}">← Voltar</a>
+
+    {% if not dl_available %}
+    <div class="aviso-box">
+      <b>⚠️ Indisponível neste ambiente</b>
+      <p>Os testes de movimento usam detecção de pose (deep learning).</p>
+    </div>
+    {% endif %}
+
+    <form class="card" action="{{ url_for('testes_analisar') }}" method="post" enctype="multipart/form-data">
+      <h2>Dados do teste</h2>
+      <label>Nome do aluno</label>
+      <input type="text" name="athlete" placeholder="Ex.: João Silva" value="Atleta">
+
+      <label>Teste</label>
+      <select name="teste" id="sel-teste">
+        {% for chave, t in testes.items() %}
+        <option value="{{ chave }}">{{ t.icone }} {{ t.nome }}</option>
+        {% endfor %}
+      </select>
+
+      {% for chave, t in testes.items() %}
+      <div class="protocolo teste-inst" id="inst-{{ chave }}" {{ 'style=display:none' if not loop.first }}>
+        <b>📋 Como executar — filme {{ t.vista }}</b>
+        <ul>
+          {% for i in t.instrucoes %}<li>{{ i }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+
+      <label>Vídeo do teste</label>
+      <input type="file" name="media" accept="video/*" capture="environment">
+
+      <button type="submit">Analisar movimento</button>
+      <p class="note">Triagem por vídeo 2D: aponta padrões compatíveis com déficits
+        musculares — a confirmação é do profissional. Não é diagnóstico médico.</p>
+    </form>
+
+    <footer class="credit">Sistema criado e desenvolvido por <strong>Vinícius Camargos da Fonseca</strong>.</footer>
+    {% with nav_ativo='postura' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+
+  <script>
+    const sel = document.getElementById('sel-teste');
+    sel.addEventListener('change', () => {
+      document.querySelectorAll('.teste-inst').forEach(d => d.style.display = 'none');
+      const alvo = document.getElementById('inst-' + sel.value);
+      if (alvo) alvo.style.display = '';
+    });
+  </script>
+</body>
+</html>
