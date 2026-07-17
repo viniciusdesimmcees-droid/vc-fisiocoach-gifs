@@ -433,6 +433,14 @@
           <figcaption>
             <span class="ex-nome">{{ e.nome }}</span>
             <span class="ex-grupo">{{ e.grupo|replace("_"," ")|title }}</span>
+            {% if e.passos %}
+            <details class="ex-como">
+              <summary>Como executar</summary>
+              <ol>{% for p in e.passos %}<li>{{ p }}</li>{% endfor %}</ol>
+              {% if e.beneficio %}<p class="ex-benef">✅ {{ e.beneficio }}</p>{% endif %}
+              {% if e.evitar %}<p class="ex-evitar">⚠️ Evite: {{ e.evitar }}</p>{% endif %}
+            </details>
+            {% endif %}
           </figcaption>
         </figure>
         {% endfor %}

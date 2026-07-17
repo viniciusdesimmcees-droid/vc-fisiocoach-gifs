@@ -848,3 +848,11 @@ details summary { cursor: pointer; padding: 6px 0; }
   .ok-box { background: rgba(34, 197, 94, .14); }
   .ex-card, .compare-photos figure { background: #0e1712; }
 }
+
+/* instruções profissionais nos cartões de exercício (seed v2) */
+.ex-como { margin-top: 4px; }
+.ex-como summary { font-size: 11px; font-weight: 700; color: var(--green-dark); cursor: pointer; }
+.ex-como ol { margin: 6px 0 4px; padding-left: 16px; font-size: 11px; color: var(--ink); }
+.ex-como li { margin: 3px 0; line-height: 1.35; }
+.ex-benef { font-size: 10.5px; color: var(--green-dark); margin: 4px 0 0; }
+.ex-evitar { font-size: 10.5px; color: #b45309; margin: 3px 0 0; }

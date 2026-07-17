@@ -52,7 +52,9 @@ def _pick(grupo: str, n: int = 2, max_dif: int = 3) -> list[dict]:
                        e.get("equipamento") not in pref_eq,
                        e.get("dificuldade", 3)),
     )
-    return [{"nome": e["nome"], "grupo": grupo, "gif_url": e.get("gif_url")}
+    return [{"nome": e["nome"], "grupo": grupo, "gif_url": e.get("gif_url"),
+             "passos": e.get("passos") or [], "beneficio": e.get("beneficio"),
+             "evitar": e.get("evitar")}
             for e in ranked[:n]]
 
 
