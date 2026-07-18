@@ -42,6 +42,22 @@
       conduzida ou supervisionada por profissional.</p>
     </div>
 
+    {% if pacientes %}
+    <div class="card">
+      <h2>👥 Pacientes em acompanhamento</h2>
+      {% for p in pacientes %}
+      <a class="athlete-row" href="{{ url_for('neuro_paciente', patient=p.patient) }}">
+        <span class="bn-ico">🧠</span>
+        <div style="flex:1">
+          <b>{{ p.patient }}</b>
+          <span class="ath-tag">{{ p.n }} sessõe{{ 's' if p.n != 1 else '' }}</span>
+        </div>
+        <span>→</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
     <form class="card" action="{{ url_for('neuro_prescrever') }}" method="post">
       <h2>1 · Avaliação do paciente</h2>
       <label>Nome do paciente (opcional)</label>
@@ -66,7 +82,22 @@
       {% endif %}
       {% endfor %}
 
-      <h2 style="margin-top:22px">2 · Triagem de segurança</h2>
+      <h2 style="margin-top:22px">2 · Reavaliação objetiva de hoje <span class="hint">(opcional)</span></h2>
+      <div class="hint">Preencha o que tiver medido. Estes valores alimentam a
+      <b>curva de evolução</b> e a <b>progressão automática</b> do paciente.</div>
+      <div class="escala-grid">
+        {% for chave, meta in escalas_num.items() %}
+        <div>
+          <label>{{ meta[0] }} <span class="hint">({{ meta[1] }}–{{ meta[2] }})</span></label>
+          <input type="number" step="any" name="esc_{{ chave }}"
+                 min="{{ meta[1] }}" max="{{ meta[2] }}" placeholder="—">
+        </div>
+        {% endfor %}
+      </div>
+      <label style="margin-top:12px">Observações da sessão</label>
+      <input type="text" name="obs" placeholder="Ex.: boa tolerância, 30 reps de abertura">
+
+      <h2 style="margin-top:22px">3 · Triagem de segurança</h2>
       <div class="hint">Marque tudo que se aplica. Itens em vermelho <b>bloqueiam</b> a
       estimulação na região (ou exigem liberação médica).</div>
 

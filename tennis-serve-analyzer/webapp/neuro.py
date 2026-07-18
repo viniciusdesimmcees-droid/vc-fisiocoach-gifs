@@ -511,6 +511,151 @@ ESCALAS = [
 
 CRONOGRAMA_REAVALIACAO = "Registrar antes de iniciar e a cada 2–4 semanas."
 
+# Escalas NUMÉRICAS acompanhadas na curva de evolução.
+# chave -> (rótulo, min, max, direção)  direção: "up" = maior é melhor.
+ESCALAS_NUM = {
+    "fma_ue": ("FMA-UE", 0, 66, "up", "Comprometimento motor do MS (0–66)"),
+    "arat": ("ARAT", 0, 57, "up", "Alcance / preensão / pinça (0–57)"),
+    "bbt": ("Box and Block", 0, 150, "up", "Destreza grosseira (blocos/min)"),
+    "mas": ("MAS", 0, 4, "down", "Espasticidade — Ashworth modificada (0–4)"),
+    "eva": ("EVA", 0, 10, "down", "Dor (0–10)"),
+    "reps": ("Repetições", 0, 500, "up", "Repetições funcionais de qualidade"),
+}
+
+# Diferença mínima clinicamente relevante (aprox., para leitura de tendência).
+_MCID = {"fma_ue": 4.0, "arat": 5.5, "bbt": 5.5, "mas": 1.0, "eva": 2.0, "reps": 5.0}
+
+
+# ---------------------------------------------------------------------------
+# 7. PROGRESSÃO AUTOMÁTICA (marcador evolutivo)
+# ---------------------------------------------------------------------------
+
+_NIVEL_MOV = {"ausente": 0, "minima": 1, "parcial": 2, "moderada": 3}
+
+
+def modalidade_recomendada(av):
+    """Topo do ranking para uma avaliação — a modalidade indicada naquele estado."""
+    r = _ranquear(av)
+    return r[0]["chave"] if r else "fes_tarefa"
+
+
+def _tendencia_escala(chave, valores):
+    """valores: lista ordenada (mais antigo -> mais novo) de floats/None.
+    Retorna (tendencia, delta) comparando o 1º e o último válidos."""
+    pts = [v for v in valores if v is not None]
+    if len(pts) < 2:
+        return ("insuficiente", None)
+    _rot, _mn, _mx, direcao, _d = ESCALAS_NUM[chave]
+    delta = pts[-1] - pts[0]
+    mcid = _MCID.get(chave, 0.0)
+    ganho = delta if direcao == "up" else -delta  # positivo = melhora clínica
+    if ganho >= mcid:
+        return ("melhora", delta)
+    if ganho <= -mcid:
+        return ("piora", delta)
+    return ("plateau", delta)
+
+
+def progressao(sessoes):
+    """Analisa o histórico longitudinal e recomenda o próximo passo.
+
+    sessoes: lista de dicts ordenada (mais antiga -> mais nova), cada uma com:
+        - "av": dict da avaliação daquela sessão
+        - "modalidade": chave da modalidade aplicada
+        - "escalas": dict {chave_num: valor|None}
+    Retorna dict com tendência global, deltas por escala, mudança de nível
+    motor e a modalidade recomendada para a próxima fase.
+    """
+    if not sessoes:
+        return {"status": "sem_dados"}
+
+    primeira, ultima = sessoes[0], sessoes[-1]
+
+    # tendência por escala
+    escalas_tend = {}
+    for chave in ESCALAS_NUM:
+        serie = [s.get("escalas", {}).get(chave) for s in sessoes]
+        tend, delta = _tendencia_escala(chave, serie)
+        if tend != "insuficiente":
+            rot = ESCALAS_NUM[chave][0]
+            escalas_tend[chave] = {"rotulo": rot, "tendencia": tend, "delta": delta}
+
+    # nível de movimento
+    nv0 = _NIVEL_MOV.get(primeira.get("av", {}).get("movimento"), None)
+    nv1 = _NIVEL_MOV.get(ultima.get("av", {}).get("movimento"), None)
+    subiu_nivel = (nv0 is not None and nv1 is not None and nv1 > nv0)
+    caiu_nivel = (nv0 is not None and nv1 is not None and nv1 < nv0)
+
+    # síntese da tendência global (voto das escalas + nível motor)
+    votos = [t["tendencia"] for t in escalas_tend.values()]
+    n_mel = votos.count("melhora")
+    n_pio = votos.count("piora")
+    if subiu_nivel:
+        n_mel += 1
+    if caiu_nivel:
+        n_pio += 1
+    if n_mel and n_mel >= n_pio + 1:
+        global_tend = "melhora"
+    elif n_pio and n_pio >= n_mel + 1:
+        global_tend = "piora"
+    elif votos or subiu_nivel or caiu_nivel:
+        global_tend = "plateau"
+    else:
+        global_tend = "insuficiente"
+
+    # modalidade indicada agora vs. a que vinha sendo aplicada
+    mod_atual = ultima.get("modalidade")
+    mod_reco = modalidade_recomendada(ultima.get("av", {}))
+    avancar = (mod_atual is not None and mod_reco != mod_atual)
+
+    mensagens = []
+    if subiu_nivel:
+        mensagens.append(
+            "⬆️ Ganho de movimento voluntário desde a 1ª sessão "
+            f"({primeira['av'].get('movimento')} → {ultima['av'].get('movimento')}). "
+            "Progrida para a modalidade que exige mais participação ativa."
+        )
+    if caiu_nivel:
+        mensagens.append(
+            "⚠️ Redução do movimento voluntário registrado — revise fadiga, dor, "
+            "tônus e a adesão antes de progredir."
+        )
+    for chave, t in escalas_tend.items():
+        seta = {"melhora": "✅", "piora": "🔻", "plateau": "➖"}[t["tendencia"]]
+        sinal = f"{t['delta']:+.1f}" if t["delta"] is not None else "—"
+        mensagens.append(f"{seta} {t['rotulo']}: {t['tendencia']} ({sinal}).")
+
+    if global_tend == "melhora":
+        conduta = ("Manter e progredir: aumentar a dificuldade da tarefa, o número "
+                   "de repetições funcionais e reduzir o tempo OFF conforme tolerância.")
+    elif global_tend == "piora":
+        conduta = ("Reavaliar o plano: checar dor, espasticidade, fadiga, "
+                   "posicionamento e parâmetros; considerar recuar de intensidade "
+                   "e reforçar segurança antes de progredir.")
+    elif global_tend == "plateau":
+        conduta = ("Platô: variar o estímulo — mudar tarefa, migrar para modalidade "
+                   "com mais participação ativa (EMG-triggered/FES na tarefa), "
+                   "aumentar dose ou associar TEAS/terapia do espelho.")
+    else:
+        conduta = ("Ainda sem reavaliações suficientes para tendência — registre "
+                   "FMA-UE/ARAT/MAS em pelo menos duas sessões.")
+
+    return {
+        "status": "ok",
+        "n_sessoes": len(sessoes),
+        "tendencia": global_tend,
+        "escalas": escalas_tend,
+        "subiu_nivel": subiu_nivel,
+        "caiu_nivel": caiu_nivel,
+        "modalidade_atual": mod_atual,
+        "modalidade_recomendada": mod_reco,
+        "avancar": avancar,
+        "mensagens": mensagens,
+        "conduta": conduta,
+        "mod_atual_info": MODALIDADES.get(mod_atual),
+        "mod_reco_info": MODALIDADES.get(mod_reco),
+    }
+
 
 # ---------------------------------------------------------------------------
 # 6. MOTOR DE DECISÃO

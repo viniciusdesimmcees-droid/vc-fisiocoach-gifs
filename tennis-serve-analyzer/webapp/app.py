@@ -995,8 +995,25 @@ def neuro_page():
         absolutas=neuro.CONTRAINDICACOES_ABSOLUTAS,
         relativas=neuro.CONTRAINDICACOES_RELATIVAS,
         modalidades=neuro.MODALIDADES,
+        escalas_num=neuro.ESCALAS_NUM,
+        pacientes=history.neuro_patients(),
         paciente="",
     )
+
+
+def _neuro_escalas_do_form():
+    """Lê as escalas numéricas enviadas no formulário (vazias -> None)."""
+    esc = {}
+    for chave in neuro.ESCALAS_NUM:
+        raw = (request.form.get("esc_" + chave) or "").strip().replace(",", ".")
+        if raw == "":
+            esc[chave] = None
+            continue
+        try:
+            esc[chave] = float(raw)
+        except ValueError:
+            esc[chave] = None
+    return esc
 
 
 @app.route("/neuro/prescrever", methods=["POST"])
@@ -1010,7 +1027,51 @@ def neuro_prescrever():
     flags_contra = request.form.getlist("contra")
     paciente = (request.form.get("paciente") or "").strip()
     resultado = neuro.prescrever(av, flags_contra)
-    return render_template("neuro_result.html", r=resultado, paciente=paciente)
+
+    escalas = _neuro_escalas_do_form()
+    obs = (request.form.get("obs") or "").strip()
+    session_id = None
+    prog = None
+    if paciente:
+        try:
+            session_id = history.record_neuro_session(
+                paciente, av, resultado, escalas, obs)
+            prog = neuro.progressao(history.get_neuro_sessions(paciente))
+        except Exception:
+            traceback.print_exc()
+
+    return render_template(
+        "neuro_result.html", r=resultado, paciente=paciente,
+        session_id=session_id, progressao=prog,
+        paciente_url=(url_for("neuro_paciente", patient=paciente) if paciente else None),
+    )
+
+
+@app.route("/neuro/paciente/<path:patient>")
+def neuro_paciente(patient):
+    sessoes = history.get_neuro_sessions(patient)
+    prog = neuro.progressao(sessoes) if sessoes else None
+    return render_template(
+        "neuro_paciente.html", patient=patient, sessoes=sessoes,
+        progressao=prog, modalidades=neuro.MODALIDADES,
+        escalas_num=neuro.ESCALAS_NUM,
+        chart_url=url_for("neuro_evolucao_png", patient=patient),
+    )
+
+
+@app.route("/neuro/evolucao/<path:patient>.png")
+def neuro_evolucao_png(patient):
+    png = history.neuro_evolution_png(patient)
+    return Response(png, mimetype="image/png")
+
+
+@app.route("/neuro/sessao/<int:session_id>/excluir", methods=["POST"])
+def neuro_excluir_sessao(session_id):
+    patient = (request.form.get("patient") or "").strip()
+    history.delete_neuro_session(session_id)
+    if patient:
+        return redirect(url_for("neuro_paciente", patient=patient))
+    return redirect(url_for("neuro"))
 
 
 @app.route("/validacao")

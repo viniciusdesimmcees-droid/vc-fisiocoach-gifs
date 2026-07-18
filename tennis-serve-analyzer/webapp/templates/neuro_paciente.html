@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NeuroFES — {{ patient }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VC Fisiocoach">
+    <div>
+      <h1>{{ patient }}</h1>
+      <span>NeuroFES — evolução da recuperação motora</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('neuro') }}">← NeuroFES</a>
+      <a class="back" href="javascript:window.print()">🖨️ Imprimir / PDF</a>
+    </div>
+
+    {% if not sessoes %}
+    <div class="card"><p class="note">Ainda sem sessões registradas para este paciente.</p></div>
+    {% else %}
+
+    <!-- PROGRESSÃO -->
+    {% if progressao and progressao.status == 'ok' %}
+    {% set pr = progressao %}
+    <div class="{{ 'proto-dont' if pr.tendencia == 'piora' else 'proto-do' }}"
+         style="{{ 'background:rgba(234,179,8,.10)' if pr.tendencia in ['plateau','insuficiente'] }}">
+      <h3>📈 Progressão automática — tendência:
+        {{ {'melhora':'melhora ✅','piora':'piora 🔻','plateau':'platô ➖','insuficiente':'dados insuficientes'}[pr.tendencia] }}</h3>
+      {% if pr.avancar and pr.mod_reco_info %}
+      <p><b>⬆️ Sugestão de avanço:</b>
+        {{ pr.mod_atual_info.sigla if pr.mod_atual_info }} →
+        <b>{{ pr.mod_reco_info.icone }} {{ pr.mod_reco_info.sigla }}</b>
+        ({{ pr.mod_reco_info.nome }}).</p>
+      {% elif pr.mod_reco_info %}
+      <p><b>Modalidade indicada agora:</b> {{ pr.mod_reco_info.icone }}
+        {{ pr.mod_reco_info.sigla }} — mantida.</p>
+      {% endif %}
+      {% if pr.mensagens %}<ul>{% for m in pr.mensagens %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
+      <p><b>Conduta:</b> {{ pr.conduta }}</p>
+    </div>
+    {% endif %}
+
+    <!-- GRÁFICO -->
+    <div class="card">
+      <h2>📊 Curva de evolução</h2>
+      <img class="result" src="{{ chart_url }}" alt="Evolução das escalas de {{ patient }}">
+      <p class="hint" style="margin-top:8px">Escalas normalizadas para % da faixa —
+      MAS e EVA são invertidas, então <b>subir sempre significa melhora clínica</b>.</p>
+    </div>
+
+    <!-- LINHA DO TEMPO -->
+    <div class="card">
+      <h2>🗓️ Sessões ({{ sessoes|length }})</h2>
+      {% for s in sessoes|reverse %}
+      <div class="analise-row">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap">
+          <b>#{{ sessoes|length - loop.index0 }} · {{ s.created_at[:10] }}</b>
+          {% set m = modalidades.get(s.modalidade) %}
+          <span class="ath-tag">{{ m.icone if m }} {{ m.sigla if m else s.modalidade }}</span>
+        </div>
+        <div class="hint" style="margin-top:2px">
+          Movimento: {{ s.movimento }} · Objetivo: {{ s.objetivo }}
+          {% if s.seguranca and s.seguranca != 'liberado' %} · ⚠️ {{ s.seguranca }}{% endif %}
+        </div>
+        {% set vals = [] %}
+        {% for chave, meta in escalas_num.items() %}
+          {% if s.escalas.get(chave) is not none %}
+            {% set _ = vals.append(meta[0] ~ ' ' ~ s.escalas.get(chave)) %}
+          {% endif %}
+        {% endfor %}
+        {% if vals %}<div style="font-size:13px; margin-top:4px">{{ vals|join(' · ') }}</div>{% endif %}
+        {% if s.obs %}<div class="hint" style="margin-top:2px">📝 {{ s.obs }}</div>{% endif %}
+        <form action="{{ url_for('neuro_excluir_sessao', session_id=s.id) }}" method="post"
+              onsubmit="return confirm('Excluir esta sessão?')" style="margin-top:6px">
+          <input type="hidden" name="patient" value="{{ patient }}">
+          <button type="submit" class="ghost" style="width:auto; padding:6px 12px; font-size:12px">Excluir</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% with nav_ativo='neuro' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+</body>
+</html>

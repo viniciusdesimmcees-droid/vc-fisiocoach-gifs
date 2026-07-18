@@ -888,3 +888,8 @@ table.param-tbl th { width: 42%; color: var(--green-dark); font-weight: 700; }
   .pill { background: #1b2820; }
   table.param-tbl th { color: var(--neon); }
 }
+
+.escala-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin-top: 8px; }
+@media (min-width: 560px) { .escala-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.escala-grid label { font-size: 12.5px; }
+.escala-grid input { padding: 10px 12px; }

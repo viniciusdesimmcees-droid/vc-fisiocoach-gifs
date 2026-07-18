@@ -22,8 +22,31 @@
   <div class="wrap">
     <div style="display:flex; gap:10px; flex-wrap:wrap">
       <a class="back" href="{{ url_for('neuro') }}">← Nova avaliação</a>
+      {% if paciente_url %}<a class="back" href="{{ paciente_url }}">📈 Histórico de {{ paciente }} →</a>{% endif %}
       <a class="back" href="javascript:window.print()">🖨️ Imprimir / PDF</a>
     </div>
+
+    {% if session_id %}
+    <p class="note">✓ Sessão registrada no histórico de <b>{{ paciente }}</b>.</p>
+    {% endif %}
+
+    {% if progressao and progressao.status == 'ok' and progressao.n_sessoes > 1 %}
+    {% set pr = progressao %}
+    {% set tone = {'melhora':'proto-do','piora':'proto-dont','plateau':'proto-do','insuficiente':'proto-do'} %}
+    <div class="{{ tone.get(pr.tendencia, 'proto-do') }}"
+         style="{{ 'background:rgba(234,179,8,.10)' if pr.tendencia in ['plateau','insuficiente'] }}">
+      <h3>📈 Progressão automática — {{ pr.n_sessoes }} sessões · tendência:
+        {{ {'melhora':'melhora ✅','piora':'piora 🔻','plateau':'platô ➖','insuficiente':'dados insuficientes'}[pr.tendencia] }}</h3>
+      {% if pr.avancar and pr.mod_reco_info %}
+      <p><b>⬆️ Sugestão de avanço de modalidade:</b>
+        {{ pr.mod_atual_info.sigla if pr.mod_atual_info }} →
+        <b>{{ pr.mod_reco_info.icone }} {{ pr.mod_reco_info.sigla }}</b>
+        ({{ pr.mod_reco_info.nome }}).</p>
+      {% endif %}
+      {% if pr.mensagens %}<ul>{% for m in pr.mensagens %}<li>{{ m }}</li>{% endfor %}</ul>{% endif %}
+      <p><b>Conduta:</b> {{ pr.conduta }}</p>
+    </div>
+    {% endif %}
 
     <!-- SEGURANÇA -->
     {% set seg = r.seguranca %}
