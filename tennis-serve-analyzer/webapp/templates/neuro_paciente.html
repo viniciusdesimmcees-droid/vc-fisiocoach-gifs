@@ -21,9 +21,27 @@
 
   <div class="wrap">
     <div style="display:flex; gap:10px; flex-wrap:wrap">
-      <a class="back" href="{{ url_for('neuro') }}">← NeuroFES</a>
+      <a class="back" href="{{ url_for('pacientes') }}">← Pacientes</a>
+      <a class="back" href="{{ url_for('paciente_ficha', patient=patient) }}">✏️ Editar ficha</a>
       {% if sessoes %}<a class="back" href="{{ url_for('neuro_laudo_pdf', patient=patient) }}">📄 Laudo PDF</a>{% endif %}
       <a class="back" href="javascript:window.print()">🖨️ Imprimir</a>
+    </div>
+
+    <div class="card">
+      <h2>👤 Ficha do paciente</h2>
+      {% if ficha %}
+      <table class="param-tbl">
+        {% if ficha.diagnostico %}<tr><th>Diagnóstico</th><td>{{ ficha.diagnostico }}</td></tr>{% endif %}
+        {% if ficha.lado_afetado %}<tr><th>Lado afetado</th><td>{{ ficha.lado_afetado }}</td></tr>{% endif %}
+        {% if ficha.nascimento %}<tr><th>Nascimento</th><td>{{ ficha.nascimento }}</td></tr>{% endif %}
+        {% if ficha.inicio_quadro %}<tr><th>Início do quadro</th><td>{{ ficha.inicio_quadro }}</td></tr>{% endif %}
+        {% if ficha.responsavel %}<tr><th>Responsável</th><td>{{ ficha.responsavel }}</td></tr>{% endif %}
+        {% if ficha.contato %}<tr><th>Contato</th><td>{{ ficha.contato }}</td></tr>{% endif %}
+        {% if ficha.notas %}<tr><th>Notas</th><td>{{ ficha.notas }}</td></tr>{% endif %}
+      </table>
+      {% else %}
+      <p class="note">Sem ficha ainda. <a href="{{ url_for('paciente_ficha', patient=patient) }}">Cadastrar dados clínicos →</a></p>
+      {% endif %}
     </div>
 
     {% if not sessoes %}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pacientes — NeuroFES</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VC Fisiocoach">
+    <div>
+      <h1>Pacientes</h1>
+      <span>Neurorreabilitação — cadastro separado dos alunos (esporte)</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('neuro') }}">← NeuroFES</a>
+      <a class="back" href="{{ url_for('index') }}">🏠 Início</a>
+    </div>
+
+    <a class="hub-card hub-primary" href="{{ url_for('paciente_novo') }}" style="text-decoration:none">
+      <span class="hub-ico">➕</span>
+      <span class="hub-t">Novo paciente</span>
+      <span class="hub-d">Cadastrar ficha: diagnóstico, lado afetado, início do quadro</span>
+    </a>
+
+    <div class="card">
+      <h2>👤 Pacientes cadastrados ({{ pacientes|length }})</h2>
+      {% if not pacientes %}
+      <p class="note">Nenhum paciente ainda. Toque em <b>Novo paciente</b> para começar,
+      ou gere uma prescrição no <a href="{{ url_for('neuro') }}">NeuroFES</a> informando o nome.</p>
+      {% else %}
+      {% for p in pacientes %}
+      <a class="athlete-row" href="{{ url_for('neuro_paciente', patient=p.patient) }}">
+        <span class="bn-ico">🧠</span>
+        <div style="flex:1">
+          <b>{{ p.patient }}</b>
+          {% if p.lado_afetado %}<span class="ath-tag">{{ p.lado_afetado }}</span>{% endif %}
+          {% if p.diagnostico %}<span class="ath-tag">{{ p.diagnostico }}</span>{% endif %}
+          <div class="hint">
+            {{ p.n }} sessõe{{ 's' if p.n != 1 else '' }}
+            {%- if not p.tem_ficha %} · sem ficha{% endif %}
+          </div>
+        </div>
+        <span>→</span>
+      </a>
+      {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="aviso-box">
+      <b>🔒 Por que separado dos Alunos?</b>
+      <p>Pacientes de recuperação neurológica têm dados clínicos e objetivos de
+      tratamento distintos do treino esportivo. Mantê-los em cadastros separados
+      evita misturar contextos e protege a informação de saúde.</p>
+    </div>
+
+    {% with nav_ativo='pacientes' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+</body>
+</html>

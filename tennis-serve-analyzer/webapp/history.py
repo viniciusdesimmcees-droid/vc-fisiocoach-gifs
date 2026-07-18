@@ -149,6 +149,15 @@ def init_db() -> None:
                 avaliacao TEXT, escalas TEXT, obs TEXT
             )"""
         )
+        # cadastro (ficha) do PACIENTE de neurorreabilitação — separado de alunos
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS neuro_profiles (
+                patient TEXT PRIMARY KEY,
+                diagnostico TEXT, lado_afetado TEXT, nascimento TEXT,
+                inicio_quadro TEXT, contato TEXT, responsavel TEXT,
+                notas TEXT, created_at TEXT, updated_at TEXT
+            )"""
+        )
         # configurações do operador (ex.: métricas excluídas da leitura)
         c.execute(
             """CREATE TABLE IF NOT EXISTS settings (
@@ -597,14 +606,89 @@ def get_neuro_sessions(patient: str) -> list[dict]:
     return out
 
 
+_NEURO_PROFILE_FIELDS = (
+    "diagnostico", "lado_afetado", "nascimento", "inicio_quadro",
+    "contato", "responsavel", "notas",
+)
+
+
 def neuro_patients() -> list[dict]:
-    """Lista de pacientes com sessões NeuroFES (nome, nº sessões, última data)."""
+    """Registro de PACIENTES (neuro) — une quem tem ficha e/ou sessões.
+
+    Retorna nome, nº de sessões, última data e os campos da ficha (se houver).
+    Separado dos alunos (esporte)."""
     with _conn() as c:
-        rows = c.execute(
+        sess = {r["patient"]: dict(r) for r in c.execute(
             "SELECT patient, COUNT(*) AS n, MAX(created_at) AS last "
-            "FROM neuro_sessions GROUP BY patient ORDER BY last DESC"
-        ).fetchall()
-    return [dict(r) for r in rows]
+            "FROM neuro_sessions GROUP BY patient")}
+        profs = {r["patient"]: dict(r) for r in c.execute(
+            "SELECT * FROM neuro_profiles")}
+    nomes = set(sess) | set(profs)
+    out = []
+    for nome in nomes:
+        s = sess.get(nome, {})
+        p = profs.get(nome, {})
+        out.append({
+            "patient": nome,
+            "n": s.get("n", 0),
+            "last": s.get("last"),
+            "diagnostico": p.get("diagnostico"),
+            "lado_afetado": p.get("lado_afetado"),
+            "tem_ficha": nome in profs,
+        })
+    # ordena: mais recentes primeiro; sem sessão vão ao fim por nome
+    out.sort(key=lambda d: (d["last"] or "", ), reverse=True)
+    return out
+
+
+def get_neuro_profile(patient: str) -> dict | None:
+    with _conn() as c:
+        row = c.execute("SELECT * FROM neuro_profiles WHERE patient = ?",
+                        (patient,)).fetchone()
+    return dict(row) if row else None
+
+
+def save_neuro_profile(patient: str, data: dict) -> None:
+    patient = (patient or "").strip()
+    if not patient:
+        return
+    now = datetime.now(timezone.utc).isoformat()
+    vals = {k: (data.get(k) or "").strip() for k in _NEURO_PROFILE_FIELDS}
+    with _conn() as c:
+        exists = c.execute("SELECT 1 FROM neuro_profiles WHERE patient = ?",
+                           (patient,)).fetchone()
+        if exists:
+            sets = ", ".join(f"{k} = ?" for k in _NEURO_PROFILE_FIELDS)
+            c.execute(
+                f"UPDATE neuro_profiles SET {sets}, updated_at = ? WHERE patient = ?",
+                (*[vals[k] for k in _NEURO_PROFILE_FIELDS], now, patient))
+        else:
+            cols = ", ".join(_NEURO_PROFILE_FIELDS)
+            ph = ", ".join("?" for _ in _NEURO_PROFILE_FIELDS)
+            c.execute(
+                f"INSERT INTO neuro_profiles (patient, {cols}, created_at, updated_at) "
+                f"VALUES (?, {ph}, ?, ?)",
+                (patient, *[vals[k] for k in _NEURO_PROFILE_FIELDS], now, now))
+    _sync()
+
+
+def rename_neuro_patient(old: str, new: str) -> None:
+    old, new = (old or "").strip(), (new or "").strip()
+    if not old or not new or old == new:
+        return
+    with _conn() as c:
+        c.execute("UPDATE neuro_sessions SET patient = ? WHERE patient = ?", (new, old))
+        c.execute("UPDATE OR REPLACE neuro_profiles SET patient = ? WHERE patient = ?",
+                  (new, old))
+    _sync()
+
+
+def delete_neuro_patient(patient: str) -> None:
+    """Remove o paciente inteiro: ficha + todas as sessões."""
+    with _conn() as c:
+        c.execute("DELETE FROM neuro_sessions WHERE patient = ?", (patient,))
+        c.execute("DELETE FROM neuro_profiles WHERE patient = ?", (patient,))
+    _sync()
 
 
 def delete_neuro_session(session_id: int) -> None:

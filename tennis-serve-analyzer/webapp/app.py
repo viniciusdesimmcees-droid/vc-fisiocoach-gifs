@@ -1047,12 +1047,51 @@ def neuro_prescrever():
     )
 
 
+@app.route("/pacientes")
+def pacientes():
+    """Registro de PACIENTES de neurorreabilitação — separado de Alunos (esporte)."""
+    return render_template("pacientes.html", pacientes=history.neuro_patients())
+
+
+@app.route("/pacientes/novo", methods=["GET", "POST"])
+def paciente_novo():
+    if request.method == "POST":
+        nome = (request.form.get("patient") or "").strip()
+        if not nome:
+            return render_template("paciente_ficha.html", novo=True, ficha={},
+                                   patient="", error="Informe o nome do paciente."), 400
+        history.save_neuro_profile(nome, request.form)
+        return redirect(url_for("neuro_paciente", patient=nome))
+    return render_template("paciente_ficha.html", novo=True, ficha={}, patient="")
+
+
+@app.route("/neuro/paciente/<path:patient>/ficha", methods=["GET", "POST"])
+def paciente_ficha(patient):
+    if request.method == "POST":
+        novo_nome = (request.form.get("patient") or "").strip()
+        if novo_nome and novo_nome != patient:
+            history.rename_neuro_patient(patient, novo_nome)
+            patient = novo_nome
+        history.save_neuro_profile(patient, request.form)
+        return redirect(url_for("neuro_paciente", patient=patient))
+    ficha = history.get_neuro_profile(patient) or {}
+    return render_template("paciente_ficha.html", novo=False, ficha=ficha,
+                           patient=patient)
+
+
+@app.route("/neuro/paciente/<path:patient>/excluir", methods=["POST"])
+def paciente_excluir(patient):
+    history.delete_neuro_patient(patient)
+    return redirect(url_for("pacientes"))
+
+
 @app.route("/neuro/paciente/<path:patient>")
 def neuro_paciente(patient):
     sessoes = history.get_neuro_sessions(patient)
     prog = neuro.progressao(sessoes) if sessoes else None
     return render_template(
         "neuro_paciente.html", patient=patient, sessoes=sessoes,
+        ficha=history.get_neuro_profile(patient),
         progressao=prog, modalidades=neuro.MODALIDADES,
         escalas_num=neuro.ESCALAS_NUM,
         chart_url=url_for("neuro_evolucao_png", patient=patient),
