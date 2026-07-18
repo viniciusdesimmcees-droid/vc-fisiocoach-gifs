@@ -67,7 +67,15 @@
     <form class="card" action="{{ url_for('neuro_prescrever') }}" method="post">
       <h2>1 · Avaliação do paciente</h2>
       <label>Nome do paciente (opcional)</label>
-      <input type="text" name="paciente" placeholder="Ex.: Maria — MSE" value="{{ paciente or '' }}">
+      <input type="text" name="paciente" placeholder="Ex.: Maria — MSE" value="{{ paciente or '' }}"
+             list="lista-pacientes" autocomplete="off">
+      {% if pacientes %}
+      <datalist id="lista-pacientes">
+        {% for p in pacientes %}<option value="{{ p.patient }}">{% endfor %}
+      </datalist>
+      <div class="hint">Comece a digitar para reaproveitar um paciente já cadastrado
+      (evita duplicar por diferença de digitação).</div>
+      {% endif %}
 
       {% for chave, campo in avaliacao.items() %}
       <label style="margin-top:14px">{{ campo.rotulo }}</label>

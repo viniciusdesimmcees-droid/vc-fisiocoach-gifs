@@ -921,12 +921,13 @@ def _neuro_header(fig, patient: str, subtitulo: str) -> None:
 
 def write_neuro_pdf(path: str, patient: str, sessoes: list, progressao: dict | None,
                     chart_png: bytes | None, modalidades: dict,
-                    escalas_num: dict) -> None:
+                    escalas_num: dict, ficha: dict | None = None) -> None:
     """Laudo clínico NeuroFES: recomendação atual, evolução e histórico de sessões."""
     from datetime import date
 
     ultima = sessoes[-1] if sessoes else {}
     pr = progressao or {}
+    ficha = ficha or {}
 
     # ---------------- Página 1: síntese + evolução ----------------
     fig = plt.figure(figsize=(8.27, 11.69))
@@ -938,6 +939,20 @@ def write_neuro_pdf(path: str, patient: str, sessoes: list, progressao: dict | N
     mod_atual = modalidades.get(ultima.get("modalidade"), {})
     mod_reco = pr.get("mod_reco_info") or {}
 
+    # linha da ficha clínica (diagnóstico · lado · início do quadro), se houver
+    ficha_partes = []
+    if ficha.get("diagnostico"):
+        ficha_partes.append(_sem_emoji(ficha["diagnostico"]))
+    if ficha.get("lado_afetado"):
+        ficha_partes.append("Lado " + _sem_emoji(ficha["lado_afetado"]))
+    if ficha.get("inicio_quadro"):
+        ficha_partes.append("Inicio " + _sem_emoji(ficha["inicio_quadro"])[:10])
+    y_boxes = 0.845
+    if ficha_partes:
+        fig.text(0.06, 0.888, " · ".join(ficha_partes), fontsize=10,
+                 color="#334155")
+        y_boxes = 0.828
+
     _info_boxes(fig, [
         ("Sessoes registradas", n_sess),
         ("Data do laudo", date.today().strftime("%d/%m/%Y")),
@@ -945,7 +960,7 @@ def write_neuro_pdf(path: str, patient: str, sessoes: list, progressao: dict | N
         ("Tendencia", tend_lbl),
         ("Movimento (ultima)", _sem_emoji(ultima.get("movimento", "-"))),
         ("Objetivo (ultima)", _sem_emoji(ultima.get("objetivo", "-"))),
-    ], y0=0.845)
+    ], y0=y_boxes)
 
     # recomendação de conduta / avanço
     y = 0.60
@@ -1019,10 +1034,17 @@ def write_neuro_pdf(path: str, patient: str, sessoes: list, progressao: dict | N
                                        color="#eef2f0", lw=0.8))
             y -= 0.03
 
+        consent_txt = ""
+        if ficha.get("consentimento"):
+            cd = (ficha.get("consentimento_data") or "")[:10]
+            consent_txt = (" Consentimento (LGPD) registrado"
+                           + (f" em {cd}." if cd else "."))
+        elif ficha:
+            consent_txt = " Consentimento (LGPD): pendente de registro."
         ax_n = fig2.add_axes([0.06, 0.06, 0.88, 0.06]); ax_n.axis("off")
         ax_n.text(0, 1, "Ferramenta de apoio a decisao clinica baseada em evidencia. "
                   "Nao e dispositivo medico e nao substitui a avaliacao e a supervisao "
-                  "presencial de fisioterapeuta ou profissional habilitado.",
+                  "presencial de fisioterapeuta ou profissional habilitado." + consent_txt,
                   fontsize=8, color="#94a3b8", va="top", transform=ax_n.transAxes,
                   wrap=True, linespacing=1.4)
         _signature(fig2)

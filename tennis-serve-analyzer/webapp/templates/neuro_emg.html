@@ -99,7 +99,13 @@
       <p class="hint">Registra as repetições e o esforço médio como uma sessão
       NeuroFES do paciente (modalidade EMG-triggered).</p>
       <label>Paciente</label>
-      <input type="text" name="paciente" placeholder="Ex.: Maria — MSE" value="{{ paciente or '' }}" required>
+      <input type="text" name="paciente" placeholder="Ex.: Maria — MSE" value="{{ paciente or '' }}"
+             required list="lista-pacientes-emg" autocomplete="off">
+      {% if nomes_pacientes %}
+      <datalist id="lista-pacientes-emg">
+        {% for nome in nomes_pacientes %}<option value="{{ nome }}">{% endfor %}
+      </datalist>
+      {% endif %}
 
       <div class="proto-grid">
         <div>
