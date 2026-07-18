@@ -1065,6 +1065,38 @@ def neuro_evolucao_png(patient):
     return Response(png, mimetype="image/png")
 
 
+@app.route("/neuro/paciente/<path:patient>/laudo.pdf")
+def neuro_laudo_pdf(patient):
+    sessoes = history.get_neuro_sessions(patient)
+    if not sessoes:
+        abort(404)
+    prog = neuro.progressao(sessoes)
+    try:
+        chart_png = history.neuro_evolution_png(patient)
+    except Exception:
+        chart_png = None
+
+    import tempfile
+    fd, tmp = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        reportpro.write_neuro_pdf(
+            tmp, patient, sessoes, prog, chart_png,
+            neuro.MODALIDADES, neuro.ESCALAS_NUM)
+        with open(tmp, "rb") as f:
+            data = f.read()
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    safe = "".join(ch if ch.isalnum() else "_" for ch in patient) or "paciente"
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="neurofes_{safe}.pdf"'},
+    )
+
+
 @app.route("/neuro/sessao/<int:session_id>/excluir", methods=["POST"])
 def neuro_excluir_sessao(session_id):
     patient = (request.form.get("patient") or "").strip()

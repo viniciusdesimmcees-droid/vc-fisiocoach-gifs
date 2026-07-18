@@ -903,6 +903,132 @@ def write_posture_pdf(path: str, athlete: str, resultado: dict, annot_png: str) 
         plt.close(fig)
 
 
+def _sem_emoji(s: str) -> str:
+    """Remove emojis/símbolos que a fonte do PDF não desenha."""
+    if not s:
+        return ""
+    return "".join(ch for ch in str(s) if ord(ch) < 0x2190).strip()
+
+
+def _neuro_header(fig, patient: str, subtitulo: str) -> None:
+    fig.patch.set_facecolor("white")
+    fig.text(0.06, 0.955, "NeuroFES", fontsize=22, fontweight="bold", color="#15803d")
+    fig.text(0.06, 0.935, subtitulo, fontsize=11.5, color="#334155")
+    fig.text(0.94, 0.955, patient, fontsize=13, fontweight="bold",
+             color="#0f1714", ha="right")
+    fig.add_artist(plt.Line2D([0.06, 0.94], [0.922, 0.922], color="#e6ece8", lw=1))
+
+
+def write_neuro_pdf(path: str, patient: str, sessoes: list, progressao: dict | None,
+                    chart_png: bytes | None, modalidades: dict,
+                    escalas_num: dict) -> None:
+    """Laudo clínico NeuroFES: recomendação atual, evolução e histórico de sessões."""
+    from datetime import date
+
+    ultima = sessoes[-1] if sessoes else {}
+    pr = progressao or {}
+
+    # ---------------- Página 1: síntese + evolução ----------------
+    fig = plt.figure(figsize=(8.27, 11.69))
+    _neuro_header(fig, patient, "Laudo de neurorreabilitacao por eletroterapia")
+
+    tend_lbl = {"melhora": "Melhora", "piora": "Piora", "plateau": "Plato",
+                "insuficiente": "Dados insuficientes"}.get(pr.get("tendencia"), "-")
+    n_sess = len(sessoes)
+    mod_atual = modalidades.get(ultima.get("modalidade"), {})
+    mod_reco = pr.get("mod_reco_info") or {}
+
+    _info_boxes(fig, [
+        ("Sessoes registradas", n_sess),
+        ("Data do laudo", date.today().strftime("%d/%m/%Y")),
+        ("Modalidade atual", _sem_emoji(mod_atual.get("sigla", ultima.get("modalidade", "-")))),
+        ("Tendencia", tend_lbl),
+        ("Movimento (ultima)", _sem_emoji(ultima.get("movimento", "-"))),
+        ("Objetivo (ultima)", _sem_emoji(ultima.get("objetivo", "-"))),
+    ], y0=0.845)
+
+    # recomendação de conduta / avanço
+    y = 0.60
+    fig.text(0.06, y, "Recomendacao clinica", fontsize=13, fontweight="bold",
+             color="#15803d")
+    y -= 0.028
+    if pr.get("avancar") and mod_reco:
+        linha = (f"Avancar de {_sem_emoji(mod_atual.get('sigla',''))} para "
+                 f"{_sem_emoji(mod_reco.get('sigla',''))} - {_sem_emoji(mod_reco.get('nome',''))}.")
+    elif mod_reco:
+        linha = f"Manter {_sem_emoji(mod_reco.get('sigla',''))} - {_sem_emoji(mod_reco.get('nome',''))}."
+    else:
+        linha = "Registre ao menos duas reavaliacoes para orientar a progressao."
+    ax_r = fig.add_axes([0.06, y - 0.04, 0.88, 0.05]); ax_r.axis("off")
+    ax_r.text(0, 1, linha, fontsize=10.5, fontweight="bold", color="#0f1714",
+              va="top", transform=ax_r.transAxes, wrap=True, linespacing=1.4)
+    y -= 0.06
+    if pr.get("conduta"):
+        ax_c = fig.add_axes([0.06, y - 0.05, 0.88, 0.055]); ax_c.axis("off")
+        ax_c.text(0, 1, _sem_emoji(pr.get("conduta")), fontsize=9.5, color="#334155",
+                  va="top", transform=ax_c.transAxes, wrap=True, linespacing=1.45)
+        y -= 0.065
+
+    # gráfico de evolução
+    if chart_png:
+        try:
+            img = _png_bytes_to_img(chart_png)
+            ax_g = fig.add_axes([0.06, 0.10, 0.88, y - 0.14]); ax_g.axis("off")
+            ax_g.imshow(img)
+        except Exception:
+            pass
+
+    _signature(fig)
+
+    with PdfPages(path) as pdf:
+        pdf.savefig(fig); plt.close(fig)
+
+        # ---------------- Página 2: histórico de sessões ----------------
+        fig2 = plt.figure(figsize=(8.27, 11.69))
+        _neuro_header(fig2, patient, "Historico de sessoes e reavaliacoes")
+        y = 0.895
+        cab = [("Data", 0.06), ("Modalidade", 0.24), ("Movim.", 0.44), ("Escalas", 0.60)]
+        for txt, x in cab:
+            fig2.text(x, y, txt, fontsize=8.5, color="#94a3b8")
+        y -= 0.022
+        for i, s in enumerate(sessoes, 1):
+            if y < 0.14:
+                _signature(fig2); pdf.savefig(fig2); plt.close(fig2)
+                fig2 = plt.figure(figsize=(8.27, 11.69))
+                _neuro_header(fig2, patient, "Historico de sessoes (cont.)")
+                y = 0.895
+            m = modalidades.get(s.get("modalidade"), {})
+            escs = []
+            for chave, meta in escalas_num.items():
+                v = s.get("escalas", {}).get(chave)
+                if v is not None:
+                    escs.append(f"{meta[0]} {v:g}")
+            fig2.text(0.06, y, f"#{i} {s.get('created_at','')[:10]}", fontsize=8.8,
+                      color="#0f1714")
+            fig2.text(0.24, y, _sem_emoji(m.get("sigla", s.get("modalidade", "-"))),
+                      fontsize=8.8, fontweight="bold", color="#15803d")
+            fig2.text(0.44, y, _sem_emoji(s.get("movimento", "-")), fontsize=8.5,
+                      color="#334155")
+            fig2.text(0.60, y, " · ".join(escs) if escs else "-", fontsize=8,
+                      color="#334155")
+            if s.get("obs"):
+                fig2.text(0.06, y - 0.014, "Obs: " + _sem_emoji(s.get("obs"))[:90],
+                          fontsize=7.6, color="#64748b")
+                y -= 0.014
+            fig2.add_artist(plt.Line2D([0.06, 0.94], [y - 0.008, y - 0.008],
+                                       color="#eef2f0", lw=0.8))
+            y -= 0.03
+
+        ax_n = fig2.add_axes([0.06, 0.06, 0.88, 0.06]); ax_n.axis("off")
+        ax_n.text(0, 1, "Ferramenta de apoio a decisao clinica baseada em evidencia. "
+                  "Nao e dispositivo medico e nao substitui a avaliacao e a supervisao "
+                  "presencial de fisioterapeuta ou profissional habilitado.",
+                  fontsize=8, color="#94a3b8", va="top", transform=ax_n.transAxes,
+                  wrap=True, linespacing=1.4)
+        _signature(fig2)
+        pdf.savefig(fig2); plt.close(fig2)
+
+
 def _benchmark_page(athlete: str, bench: dict, radar_png: str | None):
     """Página: benchmark vs. profissional (radar + níveis + o que falta)."""
     import matplotlib.image as mpimg

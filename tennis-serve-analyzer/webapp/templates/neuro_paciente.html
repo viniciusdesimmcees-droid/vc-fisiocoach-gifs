@@ -22,7 +22,8 @@
   <div class="wrap">
     <div style="display:flex; gap:10px; flex-wrap:wrap">
       <a class="back" href="{{ url_for('neuro') }}">← NeuroFES</a>
-      <a class="back" href="javascript:window.print()">🖨️ Imprimir / PDF</a>
+      {% if sessoes %}<a class="back" href="{{ url_for('neuro_laudo_pdf', patient=patient) }}">📄 Laudo PDF</a>{% endif %}
+      <a class="back" href="javascript:window.print()">🖨️ Imprimir</a>
     </div>
 
     {% if not sessoes %}
