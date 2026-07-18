@@ -55,6 +55,7 @@ import avatar  # noqa: E402
 import bodymap  # noqa: E402
 import manual  # noqa: E402
 import movetests  # noqa: E402
+import neuro  # noqa: E402
 
 history.init_db()
 
@@ -984,6 +985,160 @@ def manual_pdf():
 @app.route("/protocolo")
 def protocolo():
     return render_template("protocolo.html")
+
+
+@app.route("/neuro", endpoint="neuro")
+def neuro_page():
+    return render_template(
+        "neuro.html",
+        avaliacao=neuro.AVALIACAO,
+        absolutas=neuro.CONTRAINDICACOES_ABSOLUTAS,
+        relativas=neuro.CONTRAINDICACOES_RELATIVAS,
+        modalidades=neuro.MODALIDADES,
+        escalas_num=neuro.ESCALAS_NUM,
+        pacientes=history.neuro_patients(),
+        paciente="",
+    )
+
+
+def _neuro_escalas_do_form():
+    """Lê as escalas numéricas enviadas no formulário (vazias -> None)."""
+    esc = {}
+    for chave in neuro.ESCALAS_NUM:
+        raw = (request.form.get("esc_" + chave) or "").strip().replace(",", ".")
+        if raw == "":
+            esc[chave] = None
+            continue
+        try:
+            esc[chave] = float(raw)
+        except ValueError:
+            esc[chave] = None
+    return esc
+
+
+@app.route("/neuro/prescrever", methods=["POST"])
+def neuro_prescrever():
+    campos = [c for c in neuro.AVALIACAO if not neuro.AVALIACAO[c].get("multiplo")]
+    av = {c: request.form.get(c, "") for c in campos}
+    # campos de múltipla escolha (checkbox)
+    for c, campo in neuro.AVALIACAO.items():
+        if campo.get("multiplo"):
+            av[c] = request.form.getlist(c)
+    flags_contra = request.form.getlist("contra")
+    paciente = (request.form.get("paciente") or "").strip()
+    resultado = neuro.prescrever(av, flags_contra)
+
+    escalas = _neuro_escalas_do_form()
+    obs = (request.form.get("obs") or "").strip()
+    session_id = None
+    prog = None
+    if paciente:
+        try:
+            session_id = history.record_neuro_session(
+                paciente, av, resultado, escalas, obs)
+            prog = neuro.progressao(history.get_neuro_sessions(paciente))
+        except Exception:
+            traceback.print_exc()
+
+    return render_template(
+        "neuro_result.html", r=resultado, paciente=paciente,
+        session_id=session_id, progressao=prog,
+        paciente_url=(url_for("neuro_paciente", patient=paciente) if paciente else None),
+    )
+
+
+@app.route("/neuro/paciente/<path:patient>")
+def neuro_paciente(patient):
+    sessoes = history.get_neuro_sessions(patient)
+    prog = neuro.progressao(sessoes) if sessoes else None
+    return render_template(
+        "neuro_paciente.html", patient=patient, sessoes=sessoes,
+        progressao=prog, modalidades=neuro.MODALIDADES,
+        escalas_num=neuro.ESCALAS_NUM,
+        chart_url=url_for("neuro_evolucao_png", patient=patient),
+    )
+
+
+@app.route("/neuro/evolucao/<path:patient>.png")
+def neuro_evolucao_png(patient):
+    png = history.neuro_evolution_png(patient)
+    return Response(png, mimetype="image/png")
+
+
+@app.route("/neuro/paciente/<path:patient>/laudo.pdf")
+def neuro_laudo_pdf(patient):
+    sessoes = history.get_neuro_sessions(patient)
+    if not sessoes:
+        abort(404)
+    prog = neuro.progressao(sessoes)
+    try:
+        chart_png = history.neuro_evolution_png(patient)
+    except Exception:
+        chart_png = None
+
+    import tempfile
+    fd, tmp = tempfile.mkstemp(suffix=".pdf")
+    os.close(fd)
+    try:
+        reportpro.write_neuro_pdf(
+            tmp, patient, sessoes, prog, chart_png,
+            neuro.MODALIDADES, neuro.ESCALAS_NUM)
+        with open(tmp, "rb") as f:
+            data = f.read()
+    finally:
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+    safe = "".join(ch if ch.isalnum() else "_" for ch in patient) or "paciente"
+    return Response(
+        data, mimetype="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="neurofes_{safe}.pdf"'},
+    )
+
+
+@app.route("/neuro/sessao/<int:session_id>/excluir", methods=["POST"])
+def neuro_excluir_sessao(session_id):
+    patient = (request.form.get("patient") or "").strip()
+    history.delete_neuro_session(session_id)
+    if patient:
+        return redirect(url_for("neuro_paciente", patient=patient))
+    return redirect(url_for("neuro"))
+
+
+@app.route("/neuro/emg")
+def neuro_emg():
+    return render_template(
+        "neuro_emg.html", avaliacao=neuro.AVALIACAO,
+        paciente=(request.args.get("paciente") or ""))
+
+
+@app.route("/neuro/emg/salvar", methods=["POST"])
+def neuro_emg_salvar():
+    paciente = (request.form.get("paciente") or "").strip()
+    if not paciente:
+        return redirect(url_for("neuro_emg"))
+    try:
+        reps = int(float(request.form.get("reps") or 0))
+    except ValueError:
+        reps = 0
+    try:
+        mean = float(request.form.get("mean") or 0)
+    except ValueError:
+        mean = 0.0
+    movimento = request.form.get("movimento", "minima")
+    objetivo = request.form.get("objetivo", "abrir_mao")
+    obs = (request.form.get("obs") or "").strip()
+    obs = (obs + " · " if obs else "") + f"Treino EMG-triggered (esforço médio {mean:g}/100)"
+
+    av = {"movimento": movimento, "objetivo": objetivo}
+    prescricao = {
+        "principal": {"chave": "emg_triggered",
+                      "nome": neuro.MODALIDADES["emg_triggered"]["nome"]},
+        "seguranca": {"nivel": "treino"},
+    }
+    history.record_neuro_session(paciente, av, prescricao, {"reps": reps}, obs)
+    return redirect(url_for("neuro_paciente", patient=paciente))
 
 
 @app.route("/validacao")

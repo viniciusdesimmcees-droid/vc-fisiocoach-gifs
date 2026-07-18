@@ -137,6 +137,18 @@ def init_db() -> None:
                 image_blob BLOB
             )"""
         )
+        # sessões NeuroFES (eletroterapia) — registro longitudinal por paciente
+        c.execute(
+            """CREATE TABLE IF NOT EXISTS neuro_sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                patient TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                movimento TEXT, objetivo TEXT,
+                modalidade TEXT, modalidade_nome TEXT,
+                seguranca TEXT,
+                avaliacao TEXT, escalas TEXT, obs TEXT
+            )"""
+        )
         # configurações do operador (ex.: métricas excluídas da leitura)
         c.execute(
             """CREATE TABLE IF NOT EXISTS settings (
@@ -534,6 +546,112 @@ def delete_movement_test(test_id: int) -> None:
     with _conn() as c:
         c.execute("DELETE FROM movement_tests WHERE id = ?", (test_id,))
     _sync()
+
+
+# --------------------------- sessões NeuroFES ---------------------------
+
+def record_neuro_session(patient: str, av: dict, prescricao: dict,
+                         escalas: dict, obs: str = "") -> int:
+    """Grava uma sessão de eletroterapia (avaliação + prescrição + escalas)."""
+    principal = (prescricao or {}).get("principal") or {}
+    seguranca = ((prescricao or {}).get("seguranca") or {}).get("nivel", "")
+    with _conn() as c:
+        cur = c.execute(
+            "INSERT INTO neuro_sessions (patient, created_at, movimento, objetivo, "
+            "modalidade, modalidade_nome, seguranca, avaliacao, escalas, obs) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                (patient or "Paciente").strip() or "Paciente",
+                datetime.now(timezone.utc).isoformat(),
+                av.get("movimento"), av.get("objetivo"),
+                principal.get("chave"), principal.get("nome"),
+                seguranca,
+                json.dumps(av, ensure_ascii=False),
+                json.dumps(escalas or {}, ensure_ascii=False),
+                (obs or "").strip(),
+            ),
+        )
+        new_id = cur.lastrowid
+    _sync()
+    return new_id
+
+
+def get_neuro_sessions(patient: str) -> list[dict]:
+    with _conn() as c:
+        rows = c.execute(
+            "SELECT * FROM neuro_sessions WHERE patient = ? ORDER BY created_at",
+            (patient,),
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        try:
+            d["av"] = json.loads(d.get("avaliacao") or "{}")
+        except (ValueError, TypeError):
+            d["av"] = {}
+        try:
+            d["escalas"] = json.loads(d.get("escalas") or "{}")
+        except (ValueError, TypeError):
+            d["escalas"] = {}
+        out.append(d)
+    return out
+
+
+def neuro_patients() -> list[dict]:
+    """Lista de pacientes com sessões NeuroFES (nome, nº sessões, última data)."""
+    with _conn() as c:
+        rows = c.execute(
+            "SELECT patient, COUNT(*) AS n, MAX(created_at) AS last "
+            "FROM neuro_sessions GROUP BY patient ORDER BY last DESC"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def delete_neuro_session(session_id: int) -> None:
+    with _conn() as c:
+        c.execute("DELETE FROM neuro_sessions WHERE id = ?", (session_id,))
+    _sync()
+
+
+def neuro_evolution_png(patient: str) -> bytes:
+    """Curva das escalas objetivas ao longo das sessões NeuroFES."""
+    import neuro as _neuro
+    sess = get_neuro_sessions(patient)
+    fig, ax = plt.subplots(figsize=(8.5, 4.4))
+    plotou = False
+    if sess:
+        labels = [_short_date(s["created_at"]) for s in sess]
+        for chave, meta in _neuro.ESCALAS_NUM.items():
+            rot, mn, mx, direcao, _desc = meta
+            xs, ys = [], []
+            for i, s in enumerate(sess):
+                v = s.get("escalas", {}).get(chave)
+                if v is None:
+                    continue
+                xs.append(i + 1)
+                # normaliza 0–100% da faixa; escalas "down" (MAS/EVA) são
+                # invertidas para que SUBIR no gráfico = melhora clínica.
+                frac = (float(v) - mn) / (mx - mn) if mx > mn else 0.0
+                if direcao == "down":
+                    frac = 1.0 - frac
+                ys.append(100.0 * frac)
+            if len(xs) >= 1:
+                sufixo = " (invertida)" if direcao == "down" else ""
+                ax.plot(xs, ys, "-o", lw=2, ms=5, label=rot + sufixo)
+                plotou = True
+        ax.set_xticks(list(range(1, len(sess) + 1)))
+        ax.set_xticklabels(labels, fontsize=8)
+        ax.set_ylim(-2, 102)
+    if plotou:
+        ax.legend(loc="best", fontsize=8, ncol=3)
+    else:
+        ax.text(0.5, 0.5, "Registre escalas (FMA-UE, ARAT, MAS...) em ao menos "
+                "uma sessão", ha="center", va="center", fontsize=9)
+    ax.set_xlabel("Sessões (por data)")
+    ax.set_ylabel("% da faixa — mais alto é melhor")
+    ax.set_title(f"Evolução NeuroFES — {patient}")
+    ax.grid(True, alpha=0.3)
+    return _fig_to_png(fig)
 
 
 def list_athletes() -> list[dict]:
