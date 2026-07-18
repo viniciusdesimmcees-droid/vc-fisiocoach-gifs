@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ 'Novo paciente' if novo else 'Ficha — ' ~ patient }}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VC Fisiocoach">
+    <div>
+      <h1>{{ 'Novo paciente' if novo else 'Editar ficha' }}</h1>
+      <span>Cadastro de neurorreabilitação</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <a class="back" href="{{ url_for('pacientes') if novo else url_for('neuro_paciente', patient=patient) }}">← Voltar</a>
+
+    <form class="card" action="{{ url_for('paciente_novo') if novo else url_for('paciente_ficha', patient=patient) }}" method="post">
+      <h2>Identificação</h2>
+      <label>Nome do paciente *</label>
+      <input type="text" name="patient" required placeholder="Ex.: Maria — MSE"
+             value="{{ patient or '' }}">
+
+      <div class="proto-grid">
+        <div>
+          <label>Lado afetado</label>
+          <select name="lado_afetado">
+            {% set la = ficha.get('lado_afetado') %}
+            <option value="" {{ 'selected' if not la }}>—</option>
+            <option value="MSE" {{ 'selected' if la == 'MSE' }}>MSE (superior esquerdo)</option>
+            <option value="MSD" {{ 'selected' if la == 'MSD' }}>MSD (superior direito)</option>
+            <option value="MIE" {{ 'selected' if la == 'MIE' }}>MIE (inferior esquerdo)</option>
+            <option value="MID" {{ 'selected' if la == 'MID' }}>MID (inferior direito)</option>
+            <option value="Bilateral" {{ 'selected' if la == 'Bilateral' }}>Bilateral</option>
+          </select>
+        </div>
+        <div>
+          <label>Nascimento</label>
+          <input type="date" name="nascimento" value="{{ ficha.get('nascimento') or '' }}">
+        </div>
+      </div>
+
+      <label>Diagnóstico / quadro</label>
+      <input type="text" name="diagnostico" placeholder="Ex.: AVC isquêmico, hemiparesia"
+             value="{{ ficha.get('diagnostico') or '' }}">
+
+      <div class="proto-grid">
+        <div>
+          <label>Início do quadro</label>
+          <input type="date" name="inicio_quadro" value="{{ ficha.get('inicio_quadro') or '' }}">
+        </div>
+        <div>
+          <label>Contato</label>
+          <input type="text" name="contato" placeholder="Telefone / e-mail"
+                 value="{{ ficha.get('contato') or '' }}">
+        </div>
+      </div>
+
+      <label>Responsável / cuidador</label>
+      <input type="text" name="responsavel" placeholder="Nome do responsável (se houver)"
+             value="{{ ficha.get('responsavel') or '' }}">
+
+      <label>Notas clínicas</label>
+      <input type="text" name="notas" placeholder="Ex.: comorbidades, cognição, precauções"
+             value="{{ ficha.get('notas') or '' }}">
+
+      <button type="submit" style="margin-top:16px">{{ '➕ Cadastrar paciente' if novo else '💾 Salvar ficha' }}</button>
+    </form>
+
+    {% if not novo %}
+    <form class="card" action="{{ url_for('paciente_excluir', patient=patient) }}" method="post"
+          onsubmit="return confirm('Excluir o paciente {{ patient }} e TODAS as suas sessões? Esta ação não pode ser desfeita.')">
+      <h2>Zona de risco</h2>
+      <p class="note">Excluir remove a ficha e todo o histórico de sessões deste paciente.</p>
+      <button type="submit" class="ghost" style="width:auto; padding:10px 16px; border-color:#dc2626; color:#dc2626">
+        🗑️ Excluir paciente</button>
+    </form>
+    {% endif %}
+
+    {% with nav_ativo='pacientes' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+</body>
+</html>

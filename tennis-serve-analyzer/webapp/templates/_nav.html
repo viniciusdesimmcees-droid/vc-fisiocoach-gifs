@@ -8,10 +8,10 @@
   <a href="{{ url_for('index') }}#analisar" class="bn-cta">
     <span class="bn-ico">⚡</span><span>Analisar</span>
   </a>
+  <a href="{{ url_for('pacientes') }}" class="{{ 'on' if nav_ativo == 'pacientes' else '' }}">
+    <span class="bn-ico">🧑‍⚕️</span><span>Pacientes</span>
+  </a>
   <a href="{{ url_for('neuro') }}" class="{{ 'on' if nav_ativo == 'neuro' else '' }}">
     <span class="bn-ico">🧠</span><span>NeuroFES</span>
-  </a>
-  <a href="{{ url_for('manual_page') }}" class="{{ 'on' if nav_ativo == 'manual' else '' }}">
-    <span class="bn-ico">📖</span><span>Manual</span>
   </a>
 </nav>
