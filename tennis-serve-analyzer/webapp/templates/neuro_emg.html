@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NeuroFES — Treinador EMG-triggered (biofeedback)</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VC Fisiocoach">
+    <div>
+      <h1>Treinador EMG-triggered</h1>
+      <span>Biofeedback de movimento — dispara o estímulo na tentativa ativa</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('neuro') }}">← NeuroFES</a>
+    </div>
+
+    <div class="aviso-box">
+      <b>ℹ️ O que este modo é (e o que não é)</b>
+      <p>Mede a <b>energia de movimento</b> numa região sobre o membro como
+      <b>proxy da tentativa ativa</b> — não é eletromiografia de superfície.
+      Serve para <b>cuear o disparo</b> da estimulação no momento do esforço,
+      <b>quantificar</b> e <b>contar repetições</b>. Havendo aparelho EMG/FES com
+      gatilho nativo, use o dele; este é o análogo de baixo custo, offline.</p>
+    </div>
+
+    <div class="card">
+      <h2>🎥 Câmera e alvo</h2>
+      <div class="emg-stage">
+        <video id="emg-video" playsinline muted></video>
+        <canvas id="emg-overlay" width="480" height="360"></canvas>
+        <div id="emg-phase" class="emg-phase">Parado</div>
+      </div>
+      <p id="emg-status" class="hint" style="margin-top:8px">
+        Toque em “Ativar câmera”. Depois toque no vídeo para posicionar a ROI sobre a mão/punho.</p>
+      <div class="cam-controls" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+        <button id="btn-emg-start" type="button">▶️ Ativar câmera</button>
+        <button id="btn-emg-stop" type="button" class="ghost" disabled>⏹️ Parar</button>
+        <button id="btn-emg-switch" type="button" class="ghost">🔄 Frontal/traseira</button>
+        <button id="btn-emg-calib" type="button" class="ghost">🎚️ Calibrar repouso</button>
+        <button id="btn-emg-reset" type="button" class="ghost">↺ Zerar reps</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📶 Esforço e disparo</h2>
+      <div class="emg-barwrap">
+        <div id="emg-bar" class="emg-bar"></div>
+        <div id="emg-thline" class="emg-thline"></div>
+      </div>
+      <div class="emg-stats">
+        <div><span class="emg-k">Repetições</span><b id="emg-reps">0</b></div>
+        <div><span class="emg-k">Esforço médio</span><b id="emg-mean">0</b></div>
+        <div><span class="emg-k">Melhor</span><b id="emg-best">0</b></div>
+      </div>
+
+      <label style="margin-top:12px">Limiar de disparo: <b id="thr-val">25</b>%
+        <span class="hint">— nem tão baixo que dispara sozinho, nem tão alto que falha</span></label>
+      <input id="thr" type="range" min="3" max="100" value="25">
+
+      <label>Sensibilidade (ganho): <b id="gain-val">6.0</b></label>
+      <input id="gain" type="range" min="1" max="20" step="0.5" value="6">
+
+      <div class="proto-grid">
+        <div>
+          <label>Tempo ligado (ON): <b id="on-val">6</b>s</label>
+          <input id="on-secs" type="range" min="3" max="15" value="6">
+        </div>
+        <div>
+          <label>Descanso (OFF): <b id="rest-val">12</b>s</label>
+          <input id="rest-secs" type="range" min="5" max="40" value="12">
+        </div>
+      </div>
+    </div>
+
+    <details class="card">
+      <summary style="cursor:pointer; font-weight:700">🎯 Ajuste fino da ROI (região-alvo)</summary>
+      <label>Posição X: <span class="hint">horizontal</span></label>
+      <input id="roi-x" type="range" min="5" max="95" value="50">
+      <label>Posição Y: <span class="hint">vertical</span></label>
+      <input id="roi-y" type="range" min="5" max="95" value="50">
+      <label>Largura</label>
+      <input id="roi-w" type="range" min="10" max="90" value="35">
+      <label>Altura</label>
+      <input id="roi-h" type="range" min="10" max="90" value="45">
+    </details>
+
+    <form class="card" action="{{ url_for('neuro_emg_salvar') }}" method="post">
+      <h2>💾 Salvar treino no histórico</h2>
+      <p class="hint">Registra as repetições e o esforço médio como uma sessão
+      NeuroFES do paciente (modalidade EMG-triggered).</p>
+      <label>Paciente</label>
+      <input type="text" name="paciente" placeholder="Ex.: Maria — MSE" value="{{ paciente or '' }}" required>
+
+      <div class="proto-grid">
+        <div>
+          <label>Movimento voluntário</label>
+          <select name="movimento">
+            {% for val, txt in avaliacao.movimento.opcoes %}
+            <option value="{{ val }}" {{ 'selected' if val == 'minima' }}>{{ txt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Objetivo</label>
+          <select name="objetivo">
+            {% for val, txt in avaliacao.objetivo.opcoes %}
+            <option value="{{ val }}">{{ txt }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <label>Observações</label>
+      <input type="text" name="obs" placeholder="Ex.: treino de abertura da mão com objeto">
+
+      <input id="f-reps" type="hidden" name="reps" value="0">
+      <input id="f-mean" type="hidden" name="mean" value="0">
+      <button type="submit" style="margin-top:14px">Salvar treino</button>
+    </form>
+
+    {% with nav_ativo='neuro' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+
+  <script src="{{ url_for('static', filename='neuro_emg.js') }}"></script>
+</body>
+</html>

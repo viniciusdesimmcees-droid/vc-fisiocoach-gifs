@@ -1106,6 +1106,41 @@ def neuro_excluir_sessao(session_id):
     return redirect(url_for("neuro"))
 
 
+@app.route("/neuro/emg")
+def neuro_emg():
+    return render_template(
+        "neuro_emg.html", avaliacao=neuro.AVALIACAO,
+        paciente=(request.args.get("paciente") or ""))
+
+
+@app.route("/neuro/emg/salvar", methods=["POST"])
+def neuro_emg_salvar():
+    paciente = (request.form.get("paciente") or "").strip()
+    if not paciente:
+        return redirect(url_for("neuro_emg"))
+    try:
+        reps = int(float(request.form.get("reps") or 0))
+    except ValueError:
+        reps = 0
+    try:
+        mean = float(request.form.get("mean") or 0)
+    except ValueError:
+        mean = 0.0
+    movimento = request.form.get("movimento", "minima")
+    objetivo = request.form.get("objetivo", "abrir_mao")
+    obs = (request.form.get("obs") or "").strip()
+    obs = (obs + " · " if obs else "") + f"Treino EMG-triggered (esforço médio {mean:g}/100)"
+
+    av = {"movimento": movimento, "objetivo": objetivo}
+    prescricao = {
+        "principal": {"chave": "emg_triggered",
+                      "nome": neuro.MODALIDADES["emg_triggered"]["nome"]},
+        "seguranca": {"nivel": "treino"},
+    }
+    history.record_neuro_session(paciente, av, prescricao, {"reps": reps}, obs)
+    return redirect(url_for("neuro_paciente", patient=paciente))
+
+
 @app.route("/validacao")
 def validacao():
     return render_template(
