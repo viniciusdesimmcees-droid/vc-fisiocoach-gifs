@@ -72,6 +72,22 @@
       <input type="text" name="notas" placeholder="Ex.: comorbidades, cognição, precauções"
              value="{{ ficha.get('notas') or '' }}">
 
+      <h2 style="margin-top:20px">Consentimento (LGPD)</h2>
+      <div class="proto-do" style="background:rgba(59,130,246,.06)">
+        <label class="check-row">
+          <input type="checkbox" name="consentimento" value="1"
+                 {{ 'checked' if ficha.get('consentimento') }}>
+          <span>O paciente (ou responsável legal) <b>autoriza</b> o registro e o
+          tratamento dos seus dados de saúde para fins de acompanhamento
+          terapêutico, ciente de que pode solicitar acesso, correção ou exclusão
+          a qualquer momento.</span>
+        </label>
+        {% if ficha.get('consentimento') and ficha.get('consentimento_data') %}
+        <p class="hint" style="margin-top:6px">✓ Consentimento registrado em
+          {{ ficha.get('consentimento_data')[:10] }}.</p>
+        {% endif %}
+      </div>
+
       <button type="submit" style="margin-top:16px">{{ '➕ Cadastrar paciente' if novo else '💾 Salvar ficha' }}</button>
     </form>
 

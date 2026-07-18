@@ -1121,7 +1121,8 @@ def neuro_laudo_pdf(patient):
     try:
         reportpro.write_neuro_pdf(
             tmp, patient, sessoes, prog, chart_png,
-            neuro.MODALIDADES, neuro.ESCALAS_NUM)
+            neuro.MODALIDADES, neuro.ESCALAS_NUM,
+            ficha=history.get_neuro_profile(patient))
         with open(tmp, "rb") as f:
             data = f.read()
     finally:
@@ -1149,6 +1150,7 @@ def neuro_excluir_sessao(session_id):
 def neuro_emg():
     return render_template(
         "neuro_emg.html", avaliacao=neuro.AVALIACAO,
+        nomes_pacientes=[p["patient"] for p in history.neuro_patients()],
         paciente=(request.args.get("paciente") or ""))
 
 

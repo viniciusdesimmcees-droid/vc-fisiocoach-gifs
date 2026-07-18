@@ -38,6 +38,11 @@
         {% if ficha.responsavel %}<tr><th>Responsável</th><td>{{ ficha.responsavel }}</td></tr>{% endif %}
         {% if ficha.contato %}<tr><th>Contato</th><td>{{ ficha.contato }}</td></tr>{% endif %}
         {% if ficha.notas %}<tr><th>Notas</th><td>{{ ficha.notas }}</td></tr>{% endif %}
+        <tr><th>Consentimento (LGPD)</th><td>
+          {% if ficha.consentimento %}✅ Autorizado{% if ficha.consentimento_data %}
+            em {{ ficha.consentimento_data[:10] }}{% endif %}
+          {% else %}<span style="color:#dc2626">⚠️ Pendente</span>{% endif %}
+        </td></tr>
       </table>
       {% else %}
       <p class="note">Sem ficha ainda. <a href="{{ url_for('paciente_ficha', patient=patient) }}">Cadastrar dados clínicos →</a></p>

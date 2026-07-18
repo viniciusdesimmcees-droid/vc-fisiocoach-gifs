@@ -158,6 +158,12 @@ def init_db() -> None:
                 notas TEXT, created_at TEXT, updated_at TEXT
             )"""
         )
+        # migração: consentimento informado (LGPD) para dado de saúde
+        npcols = {r["name"] for r in c.execute("PRAGMA table_info(neuro_profiles)")}
+        if "consentimento" not in npcols:
+            c.execute("ALTER TABLE neuro_profiles ADD COLUMN consentimento INTEGER DEFAULT 0")
+        if "consentimento_data" not in npcols:
+            c.execute("ALTER TABLE neuro_profiles ADD COLUMN consentimento_data TEXT")
         # configurações do operador (ex.: métricas excluídas da leitura)
         c.execute(
             """CREATE TABLE IF NOT EXISTS settings (
@@ -654,21 +660,30 @@ def save_neuro_profile(patient: str, data: dict) -> None:
         return
     now = datetime.now(timezone.utc).isoformat()
     vals = {k: (data.get(k) or "").strip() for k in _NEURO_PROFILE_FIELDS}
+    consent = 1 if (data.get("consentimento") in ("1", "on", "true", True)) else 0
     with _conn() as c:
-        exists = c.execute("SELECT 1 FROM neuro_profiles WHERE patient = ?",
-                           (patient,)).fetchone()
-        if exists:
-            sets = ", ".join(f"{k} = ?" for k in _NEURO_PROFILE_FIELDS)
+        prev = c.execute("SELECT consentimento, consentimento_data FROM "
+                         "neuro_profiles WHERE patient = ?", (patient,)).fetchone()
+        # carimba a data do consentimento na 1ª vez que é dado; mantém se já existia
+        if consent:
+            consent_data = (prev["consentimento_data"] if (prev and prev["consentimento"]
+                            and prev["consentimento_data"]) else now)
+        else:
+            consent_data = None
+        cols = _NEURO_PROFILE_FIELDS + ("consentimento", "consentimento_data")
+        allvals = [vals[k] for k in _NEURO_PROFILE_FIELDS] + [consent, consent_data]
+        if prev is not None:
+            sets = ", ".join(f"{k} = ?" for k in cols)
             c.execute(
                 f"UPDATE neuro_profiles SET {sets}, updated_at = ? WHERE patient = ?",
-                (*[vals[k] for k in _NEURO_PROFILE_FIELDS], now, patient))
+                (*allvals, now, patient))
         else:
-            cols = ", ".join(_NEURO_PROFILE_FIELDS)
-            ph = ", ".join("?" for _ in _NEURO_PROFILE_FIELDS)
+            colnames = ", ".join(cols)
+            ph = ", ".join("?" for _ in cols)
             c.execute(
-                f"INSERT INTO neuro_profiles (patient, {cols}, created_at, updated_at) "
+                f"INSERT INTO neuro_profiles (patient, {colnames}, created_at, updated_at) "
                 f"VALUES (?, {ph}, ?, ?)",
-                (patient, *[vals[k] for k in _NEURO_PROFILE_FIELDS], now, now))
+                (patient, *allvals, now, now))
     _sync()
 
 
