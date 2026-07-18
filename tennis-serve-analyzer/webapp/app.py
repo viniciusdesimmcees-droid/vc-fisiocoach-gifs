@@ -55,6 +55,7 @@ import avatar  # noqa: E402
 import bodymap  # noqa: E402
 import manual  # noqa: E402
 import movetests  # noqa: E402
+import neuro  # noqa: E402
 
 history.init_db()
 
@@ -984,6 +985,32 @@ def manual_pdf():
 @app.route("/protocolo")
 def protocolo():
     return render_template("protocolo.html")
+
+
+@app.route("/neuro", endpoint="neuro")
+def neuro_page():
+    return render_template(
+        "neuro.html",
+        avaliacao=neuro.AVALIACAO,
+        absolutas=neuro.CONTRAINDICACOES_ABSOLUTAS,
+        relativas=neuro.CONTRAINDICACOES_RELATIVAS,
+        modalidades=neuro.MODALIDADES,
+        paciente="",
+    )
+
+
+@app.route("/neuro/prescrever", methods=["POST"])
+def neuro_prescrever():
+    campos = [c for c in neuro.AVALIACAO if not neuro.AVALIACAO[c].get("multiplo")]
+    av = {c: request.form.get(c, "") for c in campos}
+    # campos de múltipla escolha (checkbox)
+    for c, campo in neuro.AVALIACAO.items():
+        if campo.get("multiplo"):
+            av[c] = request.form.getlist(c)
+    flags_contra = request.form.getlist("contra")
+    paciente = (request.form.get("paciente") or "").strip()
+    resultado = neuro.prescrever(av, flags_contra)
+    return render_template("neuro_result.html", r=resultado, paciente=paciente)
 
 
 @app.route("/validacao")

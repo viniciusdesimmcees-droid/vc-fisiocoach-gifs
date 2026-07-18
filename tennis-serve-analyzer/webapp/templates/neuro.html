@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NeuroFES — Eletroterapia para recuperação motora</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VC Fisiocoach">
+    <div>
+      <h1>NeuroFES</h1>
+      <span>Eletroterapia guiada por evidência — paresia/plegia após AVC</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <a class="back" href="{{ url_for('index') }}">← Voltar</a>
+
+    <div class="card">
+      <h2>🧠 O que este módulo faz</h2>
+      <p class="note">A partir da avaliação do paciente, o sistema faz a <b>triagem de
+      segurança</b>, <b>ranqueia as modalidades</b> de eletroestimulação pela melhor
+      evidência atual e monta o <b>protocolo aplicável</b> completo — parâmetros,
+      colocação de eletrodos, passo a passo, dosagem e escalas de reavaliação.</p>
+      <p class="note" style="margin-top:8px">Fundamento clínico: FES sincronizada com a
+      tentativa ativa e a tarefa é a 1ª escolha para recuperar movimento (meta-análise
+      em rede: 1º em Fugl-Meyer e independência). TEAS lidera o controle da espasticidade.
+      EMG-triggered e CCFES são opções avançadas. NMES cíclica prepara os casos graves.</p>
+    </div>
+
+    <div class="aviso-box">
+      <b>⚠️ Ferramenta de apoio à decisão — não é dispositivo médico</b>
+      <p>Não substitui a avaliação e a supervisão presencial de fisioterapeuta ou
+      profissional habilitado. Toda aplicação em paciente neurológico deve ser
+      conduzida ou supervisionada por profissional.</p>
+    </div>
+
+    <form class="card" action="{{ url_for('neuro_prescrever') }}" method="post">
+      <h2>1 · Avaliação do paciente</h2>
+      <label>Nome do paciente (opcional)</label>
+      <input type="text" name="paciente" placeholder="Ex.: Maria — MSE" value="{{ paciente or '' }}">
+
+      {% for chave, campo in avaliacao.items() %}
+      <label style="margin-top:14px">{{ campo.rotulo }}</label>
+      {% if campo.ajuda %}<div class="hint">{{ campo.ajuda }}</div>{% endif %}
+      {% if campo.multiplo %}
+        <div class="proto-grid" style="margin-top:6px">
+          {% for val, txt in campo.opcoes %}
+          <label class="check-row"><input type="checkbox" name="{{ chave }}" value="{{ val }}"
+            {{ 'checked' if loop.first }}> {{ txt }}</label>
+          {% endfor %}
+        </div>
+      {% else %}
+        <select name="{{ chave }}">
+          {% for val, txt in campo.opcoes %}
+          <option value="{{ val }}">{{ txt }}</option>
+          {% endfor %}
+        </select>
+      {% endif %}
+      {% endfor %}
+
+      <h2 style="margin-top:22px">2 · Triagem de segurança</h2>
+      <div class="hint">Marque tudo que se aplica. Itens em vermelho <b>bloqueiam</b> a
+      estimulação na região (ou exigem liberação médica).</div>
+
+      <div class="proto-dont" style="margin-top:10px">
+        <h3>🚫 Contraindicações absolutas</h3>
+        {% for chave, txt in absolutas %}
+        <label class="check-row"><input type="checkbox" name="contra" value="{{ chave }}"> {{ txt }}</label>
+        {% endfor %}
+      </div>
+
+      <div class="proto-do" style="margin-top:10px; background:rgba(234,179,8,.10)">
+        <h3>⚠️ Contraindicações relativas (cautela)</h3>
+        {% for chave, txt in relativas %}
+        <label class="check-row"><input type="checkbox" name="contra" value="{{ chave }}"> {{ txt }}</label>
+        {% endfor %}
+      </div>
+
+      <button type="submit" style="margin-top:18px">🔬 Gerar prescrição</button>
+    </form>
+
+    <div class="card">
+      <h2>📚 Modalidades cobertas</h2>
+      <ul class="mod-list">
+        {% for chave, m in modalidades.items() %}
+        <li><b>{{ m.icone }} {{ m.sigla }}</b> — {{ m.nome }}<br>
+          <span class="hint">{{ m.evidencia }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% with nav_ativo='neuro' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+</body>
+</html>

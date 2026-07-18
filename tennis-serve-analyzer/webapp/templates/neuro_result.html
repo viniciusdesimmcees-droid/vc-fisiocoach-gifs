@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prescrição NeuroFES{% if paciente %} — {{ paciente }}{% endif %}</title>
+  <meta name="theme-color" content="#2ecc55">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="manifest" href="{{ url_for('manifest') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="VC Fisiocoach">
+    <div>
+      <h1>Prescrição NeuroFES</h1>
+      <span>{% if paciente %}{{ paciente }} — {% endif %}{{ r.versao }}</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div style="display:flex; gap:10px; flex-wrap:wrap">
+      <a class="back" href="{{ url_for('neuro') }}">← Nova avaliação</a>
+      <a class="back" href="javascript:window.print()">🖨️ Imprimir / PDF</a>
+    </div>
+
+    <!-- SEGURANÇA -->
+    {% set seg = r.seguranca %}
+    {% if seg.nivel == 'bloqueado' %}
+    <div class="proto-dont" style="border-width:2px">
+      <h3>🚫 ESTIMULAÇÃO BLOQUEADA — contraindicação absoluta</h3>
+      <p>Não aplicar a eletroestimulação na região sem resolver / obter liberação médica:</p>
+      <ul>{% for k, txt in seg.absolutas %}<li>{{ txt }}</li>{% endfor %}</ul>
+    </div>
+    {% elif seg.nivel == 'cautela' %}
+    <div class="proto-do" style="background:rgba(234,179,8,.10)">
+      <h3>⚠️ Prosseguir com CAUTELA — contraindicações relativas</h3>
+      <ul>{% for k, txt in seg.relativas %}<li>{{ txt }}</li>{% endfor %}</ul>
+    </div>
+    {% else %}
+    <div class="proto-do">
+      <h3>✅ Triagem de segurança sem impedimentos registrados</h3>
+      <p class="hint">Ainda assim, aplique com supervisão profissional e vigilância contínua.</p>
+    </div>
+    {% endif %}
+
+    <!-- MODALIDADE PRINCIPAL -->
+    {% if r.principal %}
+    {% set p = r.principal %}
+    <div class="card" style="border-color:var(--green)">
+      <div class="pill" style="background:var(--green); color:#04210f">MODALIDADE PRINCIPAL</div>
+      <h2 style="margin-top:8px">{{ p.icone }} {{ p.nome }}</h2>
+      <p class="note"><b>Evidência:</b> {{ p.evidencia }}</p>
+      <p class="note" style="margin-top:6px">{{ p.mecanismo }}</p>
+      {% if p.motivos %}
+      <details style="margin-top:8px">
+        <summary class="hint">Por que foi escolhida para este paciente</summary>
+        <ul>{% for m in p.motivos %}<li>{{ m }}</li>{% endfor %}</ul>
+      </details>
+      {% endif %}
+      <h3 style="margin-top:12px">Parâmetros iniciais (individualizáveis)</h3>
+      <table class="param-tbl">
+        {% for chave, val in p.params.items() %}
+        <tr><th>{{ chave }}</th><td>{{ val }}</td></tr>
+        {% endfor %}
+      </table>
+      <p class="hint" style="margin-top:8px">A intensidade não é um número fixo de mA:
+      varia com aparelho, eletrodo, pele, atrofia e localização motora. Objetivo:
+      <b>movimento visível, funcional e confortável</b>, sem compensações nem aumento
+      persistente do tônus.</p>
+    </div>
+    {% endif %}
+
+    <!-- PROTOCOLOS APLICÁVEIS -->
+    {% for proto in r.protocolos %}
+    <div class="card">
+      <div class="pill">PROTOCOLO APLICÁVEL</div>
+      <h2 style="margin-top:8px">{{ proto.titulo }}</h2>
+
+      <h3>Indicação</h3>
+      <ul>{% for i in proto.indicacao %}<li>{{ i }}</li>{% endfor %}</ul>
+
+      <h3>Músculos-alvo</h3>
+      <ul>{% for m in proto.musculos %}<li>{{ m }}</li>{% endfor %}</ul>
+
+      <h3>Posicionamento</h3>
+      <ul>{% for x in proto.posicionamento %}<li>{{ x }}</li>{% endfor %}</ul>
+
+      <h3>Colocação dos eletrodos</h3>
+      <ol>{% for x in proto.eletrodos %}<li>{{ x }}</li>{% endfor %}</ol>
+
+      <h3>Passo a passo</h3>
+      <ol class="proto-steps">{% for x in proto.passos %}<li>{{ x }}</li>{% endfor %}</ol>
+
+      <h3>Dosagem</h3>
+      <ul>{% for x in proto.dosagem %}<li>{{ x }}</li>{% endfor %}</ul>
+    </div>
+    {% endfor %}
+
+    <!-- COMPLEMENTOS -->
+    {% if r.complementos %}
+    <div class="card">
+      <h2>➕ Modalidades complementares</h2>
+      <p class="note">Somam-se à principal no mesmo plano terapêutico.</p>
+      {% for c in r.complementos %}
+      <div class="proto-do" style="margin-top:10px; background:rgba(59,130,246,.08)">
+        <h3>{{ c.icone }} {{ c.sigla }} — {{ c.nome }}</h3>
+        <p class="hint">{{ c.razao }}</p>
+        <table class="param-tbl">
+          {% for chave, val in c.params.items() %}
+          <tr><th>{{ chave }}</th><td>{{ val }}</td></tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- RANKING COMPLETO -->
+    <div class="card">
+      <h2>📊 Ranking das modalidades (este paciente)</h2>
+      <table class="param-tbl">
+        <tr><th>#</th><th>Modalidade</th><th>Score</th></tr>
+        {% for m in r.ranking %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ m.icone }} {{ m.sigla }} — {{ m.nome }}</td>
+          <td>{{ m.score }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <p class="hint" style="margin-top:8px">Score relativo de adequação ao quadro
+      informado — não é um valor clínico absoluto.</p>
+    </div>
+
+    <!-- REAVALIAÇÃO -->
+    <div class="card">
+      <h2>📏 Reavaliação objetiva</h2>
+      <p class="note">{{ r.cronograma }}</p>
+      <table class="param-tbl">
+        {% for sigla, desc in r.escalas %}
+        <tr><th>{{ sigla }}</th><td>{{ desc }}</td></tr>
+        {% endfor %}
+      </table>
+      <p class="hint" style="margin-top:8px">Continuar o tratamento enquanto houver
+      melhora da força ou da capacidade de praticar tarefas (manter amplitude, segurar
+      e soltar objetos).</p>
+    </div>
+
+    <!-- SEGURANÇA: SINAIS DE PARADA -->
+    <div class="proto-dont">
+      <h3>🛑 Interromper a sessão imediatamente se ocorrer</h3>
+      <ul>{% for s in seg.sinais_parada %}<li>{{ s }}</li>{% endfor %}</ul>
+    </div>
+
+    {% with nav_ativo='neuro' %}{% include '_nav.html' %}{% endwith %}
+  </div>
+</body>
+</html>

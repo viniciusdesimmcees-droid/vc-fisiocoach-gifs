@@ -856,3 +856,35 @@ details summary { cursor: pointer; padding: 6px 0; }
 .ex-como li { margin: 3px 0; line-height: 1.35; }
 .ex-benef { font-size: 10.5px; color: var(--green-dark); margin: 4px 0 0; }
 .ex-evitar { font-size: 10.5px; color: #b45309; margin: 3px 0 0; }
+
+/* ── NeuroFES (eletroterapia) ───────────────────────────────── */
+.pill {
+  display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .04em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+  background: var(--bg); color: var(--green-dark); border: 1px solid var(--line);
+}
+table.param-tbl { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13.5px; }
+table.param-tbl th, table.param-tbl td {
+  text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+table.param-tbl th { width: 42%; color: var(--green-dark); font-weight: 700; }
+.check-row {
+  display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px;
+  font-weight: 400; margin: 7px 0; line-height: 1.4; cursor: pointer;
+}
+.check-row input { width: auto; margin: 3px 0 0; flex: none; }
+.mod-list { margin: 4px 0 0; padding-left: 18px; }
+.mod-list li { margin: 9px 0; line-height: 1.4; }
+
+@media print {
+  header, .bottomnav, .back, form button { display: none !important; }
+  body { background: #fff; }
+  .wrap { max-width: 100%; padding: 0; }
+  .card, .proto-do, .proto-dont { break-inside: avoid; box-shadow: none; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .pill { background: #1b2820; }
+  table.param-tbl th { color: var(--neon); }
+}
